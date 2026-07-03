@@ -528,7 +528,7 @@ int NPC_WeaponsForTeam( team_t team, int spawnflags, const char *NPC_type )
 	switch(team)
 	{
 //	case TEAM_IMPERIAL:
-	case NPCTEAM_ENEMY:
+	case (int)NPCTEAM_ENEMY:
 		if ( Q_stricmp( "tavion", NPC_type ) == 0 ||
 			Q_strncmp( "reborn", NPC_type, 6 ) == 0 ||
 			Q_stricmp( "desann", NPC_type ) == 0 ||
@@ -670,7 +670,7 @@ int NPC_WeaponsForTeam( team_t team, int spawnflags, const char *NPC_type )
 		return ( 1 << WP_BLASTER);
 		break;
 
-	case NPCTEAM_PLAYER:
+	case (int)NPCTEAM_PLAYER:
 
 		if(spawnflags & SFB_RIFLEMAN)
 			return ( 1 << WP_REPEATER);
