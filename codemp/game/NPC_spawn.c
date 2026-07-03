@@ -312,7 +312,7 @@ void NPC_SetMiscDefaultData( gentity_t *ent )
 	//***I'm not sure whether I should leave this as a TEAM_ switch, I think NPC_class may be more appropriate - dmv
 	switch(ent->client->playerTeam)
 	{
-	case NPCTEAM_PLAYER:
+	case (int)NPCTEAM_PLAYER:
 		//ent->flags |= FL_NO_KNOCKBACK;
 		if ( ent->client->NPC_class == CLASS_JEDI || ent->client->NPC_class == CLASS_LUKE )
 		{//good jedi
@@ -370,7 +370,7 @@ void NPC_SetMiscDefaultData( gentity_t *ent )
 		}
 		break;
 
-	case NPCTEAM_NEUTRAL:
+	case (int)NPCTEAM_NEUTRAL:
 
 		if ( Q_stricmp( ent->NPC_type, "gonk" ) == 0 )
 		{
@@ -396,7 +396,7 @@ void NPC_SetMiscDefaultData( gentity_t *ent )
 		}
 		break;
 
-	case NPCTEAM_ENEMY:
+	case (int)NPCTEAM_ENEMY:
 		{
 			ent->NPC->defaultBehavior = BS_DEFAULT;
 			if ( ent->client->NPC_class == CLASS_SHADOWTROOPER )
@@ -701,7 +701,7 @@ int NPC_WeaponsForTeam( team_t team, int spawnflags, const char *NPC_type )
 		return ( 1 << WP_BLASTER);
 		break;
 
-	case NPCTEAM_NEUTRAL:
+	case (int)NPCTEAM_NEUTRAL:
 
 		if ( Q_stricmp( "mark1", NPC_type ) == 0 )
 		{
