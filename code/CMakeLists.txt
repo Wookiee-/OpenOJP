@@ -59,7 +59,7 @@ if(BuildSPEngine OR BuildJK2SPEngine)
 		if(UseInternalOpenAL)
 			# There's a libs/OpenAL32.lib
 			# (mrw) TODO Is this actually required on windows? It is loaded at runtime, should not be linked?
-			find_library(OpenALLibrary NAMES OpenAL32 PATHS "${OpenJKLibDir}")
+			find_library(OpenALLibrary NAMES OpenAL32 PATHS "${OpenOJPLibDir}")
 			if(NOT OpenALLibrary)
 				message(FATAL_ERROR "UseInternalOpenAL enabled, but lib/OpenAL32.lib not found!")
 			endif(NOT OpenALLibrary)
@@ -82,20 +82,20 @@ if(BuildSPEngine OR BuildJK2SPEngine)
 		if(CMAKE_SIZEOF_VOID_P EQUAL 4)
 			set(SPEngineLibraries
 				${SPEngineLibraries}
-				${OpenJKLibDir}/SDL2/lib/x86/SDL2main.lib
-				${OpenJKLibDir}/SDL2/lib/x86/SDL2.lib
+				${OpenOJPLibDir}/SDL2/lib/x86/SDL2main.lib
+				${OpenOJPLibDir}/SDL2/lib/x86/SDL2.lib
 				)
 		else()
 			set(SPEngineLibraries
 				${SPEngineLibraries}
-				${OpenJKLibDir}/SDL2/lib/x64/SDL2main.lib
-				${OpenJKLibDir}/SDL2/lib/x64/SDL2.lib
+				${OpenOJPLibDir}/SDL2/lib/x64/SDL2main.lib
+				${OpenOJPLibDir}/SDL2/lib/x64/SDL2.lib
 				)
 		endif()
 
 		set(SPEngineIncludeDirectories
 			${SPEngineIncludeDirectories}
-			${OpenJKLibDir}/SDL2/include
+			${OpenOJPLibDir}/SDL2/include
 			)
 	else()
 		find_package(SDL2 REQUIRED CONFIG)
@@ -388,11 +388,11 @@ if(BuildSPEngine OR BuildJK2SPEngine)
 			if(UseInternalSDL2)
 				if(CMAKE_SIZEOF_VOID_P EQUAL 4)
 					set(SPEngineExtraInstallFiles
-						${OpenJKLibDir}/SDL2/bin/x86/SDL2.dll
+						${OpenOJPLibDir}/SDL2/bin/x86/SDL2.dll
 						)
 				else()
 					set(SPEngineExtraInstallFiles
-						${OpenJKLibDir}/SDL2/bin/x64/SDL2.dll
+						${OpenOJPLibDir}/SDL2/bin/x64/SDL2.dll
 						)
 				endif()
 			endif()

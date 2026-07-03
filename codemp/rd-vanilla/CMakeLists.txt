@@ -17,9 +17,9 @@
 #============================================================================
 
 # Make sure the user is not executing this script directly
-if(NOT InOpenJK)
+if(NOT InOpenOJP AND NOT InOpenJK)
 	message(FATAL_ERROR "Use the top-level cmake script!")
-endif(NOT InOpenJK)
+endif(NOT InOpenOJP AND NOT InOpenJK)
 
 # Check for dependencies first
 
@@ -131,7 +131,7 @@ find_package(OpenGL REQUIRED)
 set(MPVanillaRendererIncludeDirectories ${MPVanillaRendererIncludeDirectories} ${OPENGL_INCLUDE_DIR})
 set(MPVanillaRendererLibraries ${MPVanillaRendererLibraries} ${OPENGL_LIBRARIES})
 
-set(MPVanillaRendererIncludeDirectories ${MPVanillaRendererIncludeDirectories} ${OpenJKLibDir})
+set(MPVanillaRendererIncludeDirectories ${MPVanillaRendererIncludeDirectories} ${OpenOJPLibDir})
 add_library(${MPVanillaRenderer} SHARED ${MPVanillaRendererFiles})
 
 if(NOT MSVC)

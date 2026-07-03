@@ -17,9 +17,9 @@
 #============================================================================
 
 # Make sure the user is not executing this script directly
-if(NOT InOpenJK)
+if(NOT InOpenOJP AND NOT InOpenJK)
 	message(FATAL_ERROR "Use the top-level cmake script!")
-endif(NOT InOpenJK)
+endif(NOT InOpenOJP AND NOT InOpenJK)
 
 set(MPSharedDefines ${SharedDefines})
 
@@ -369,7 +369,7 @@ if(BuildMPEngine)
 		if(UseInternalOpenAL)
 			# There's a libs/OpenAL32.lib
 			# (mrw) TODO Is this actually required on windows? It is loaded at runtime, should not be linked?
-			find_library(OpenALLibrary NAMES OpenAL32 PATHS ${OpenJKLibDir})
+			find_library(OpenALLibrary NAMES OpenAL32 PATHS ${OpenOJPLibDir})
 			if(NOT OpenALLibrary)
 				message(FATAL_ERROR "UseInternalOpenAL enabled, but lib/OpenAL32.lib not found!")
 			endif(NOT OpenALLibrary)
@@ -385,20 +385,20 @@ if(BuildMPEngine)
 		if(CMAKE_SIZEOF_VOID_P EQUAL 4)
 			set(MPEngineLibraries
 				${MPEngineLibraries}
-				${OpenJKLibDir}/SDL2/lib/x86/SDL2main.lib
-				${OpenJKLibDir}/SDL2/lib/x86/SDL2.lib
+				${OpenOJPLibDir}/SDL2/lib/x86/SDL2main.lib
+				${OpenOJPLibDir}/SDL2/lib/x86/SDL2.lib
 				)
 		else()
 			set(MPEngineLibraries
 				${MPEngineLibraries}
-				${OpenJKLibDir}/SDL2/lib/x64/SDL2main.lib
-				${OpenJKLibDir}/SDL2/lib/x64/SDL2.lib
+				${OpenOJPLibDir}/SDL2/lib/x64/SDL2main.lib
+				${OpenOJPLibDir}/SDL2/lib/x64/SDL2.lib
 				)
 		endif()
 
 		set(MPEngineIncludeDirectories
 			${MPEngineIncludeDirectories}
-			${OpenJKLibDir}/SDL2/include
+			${OpenOJPLibDir}/SDL2/include
 			)
 	else()
 		find_package(SDL2 REQUIRED CONFIG)
@@ -570,11 +570,11 @@ if(BuildMPEngine)
 		if(UseInternalSDL2)
 			if(CMAKE_SIZEOF_VOID_P EQUAL 4)
 				set(MPEngineExtraInstallFiles
-					${OpenJKLibDir}/SDL2/bin/x86/SDL2.dll
+					${OpenOJPLibDir}/SDL2/bin/x86/SDL2.dll
 					)
 			else()
 				set(MPEngineExtraInstallFiles
-					${OpenJKLibDir}/SDL2/bin/x64/SDL2.dll
+					${OpenOJPLibDir}/SDL2/bin/x64/SDL2.dll
 					)
 			endif()
 		endif()

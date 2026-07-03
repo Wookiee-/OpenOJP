@@ -1,7 +1,7 @@
 # Make sure the user is not executing this script directly
-if(NOT InOpenJK)
+if(NOT InOpenOJP AND NOT InOpenJK)
 	message(FATAL_ERROR "Use the top-level cmake script!")
-endif(NOT InOpenJK)
+endif(NOT InOpenOJP AND NOT InOpenJK)
 
 set(MPRend2IncludeDirectories
 	"${SharedDir}"
@@ -146,7 +146,7 @@ set(MPRend2Files
 	${CMAKE_CURRENT_BINARY_DIR}/glsl_shaders.h
 	${CMAKE_CURRENT_BINARY_DIR}/glsl_shaders.cpp)
 
-set(MPRend2IncludeDirectories ${MPRend2IncludeDirectories} ${OpenJKLibDir})
+set(MPRend2IncludeDirectories ${MPRend2IncludeDirectories} ${OpenOJPLibDir})
 add_library(${MPRend2} SHARED ${MPRend2Files})
 
 if(NOT MSVC)

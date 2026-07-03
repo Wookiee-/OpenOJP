@@ -23,7 +23,7 @@ set(CMAKE_OSX_DEPLOYMENT_TARGET "10.9" CACHE STRING "Minimum OS X deployment ver
 
 set(InOpenJK ON)
 
-set(ProjectName "OpenJK" CACHE STRING "Project Name")
+set(ProjectName "OpenOJP" CACHE STRING "Project Name")
 project(${ProjectName})
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
@@ -35,15 +35,15 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 #=============================================================================
 option(BuildPortableVersion "Build portable version (does not read or write files from your user/home directory" OFF)
 
-option(BuildMPEngine "Whether to create projects for the MP client (openjk.exe)" ON)
+option(BuildMPEngine "Whether to create projects for the MP client (openojp.exe)" ON)
 option(BuildMPRdVanilla "Whether to create projects for the MP default renderer (rd-vanilla_x86.dll)" ON)
-option(BuildMPDed "Whether to create projects for the MP dedicated server (openjkded.exe)" ON)
+option(BuildMPDed "Whether to create projects for the MP dedicated server (openojpded.exe)" ON)
 option(BuildMPGame "Whether to create projects for the MP server-side gamecode (jampgamex86.dll)" ON)
 option(BuildMPCGame "Whether to create projects for the MP clientside gamecode (cgamex86.dll)" ON)
 option(BuildMPUI "Whether to create projects for the MP UI code (uix86.dll)" ON)
 option(BuildMPRend2 "Whether to create projects for the EXPERIMENTAL MP rend2 renderer (rd-rend2_x86.dll)" ON)
 
-option(BuildSPEngine "Whether to create projects for the SP engine (openjk_sp.exe)" ON)
+option(BuildSPEngine "Whether to create projects for the SP engine (openojp_sp.exe)" ON)
 option(BuildSPGame "Whether to create projects for the SP gamecode (jagamex86.dll)" ON)
 option(BuildSPRdVanilla "Whether to create projects for the SP default renderer (rdsp-vanilla_x86.dll)" ON)
 
@@ -163,7 +163,7 @@ endif()
 # Binary names
 #
 #=============================================================================
-set(SPEngine "openjk_sp.${Architecture}")
+set(SPEngine "openojp_sp.${Architecture}")
 set(SPGame "jagame${Architecture}")
 set(SPRDVanillaRenderer "rdsp-vanilla_${Architecture}")
 set(MPEngine "openojp.${Architecture}")
@@ -176,7 +176,7 @@ set(MPRend2 "rd-rend2_${Architecture}")
 set(JK2SPEngine "openjo_sp.${Architecture}")
 set(JK2SPGame "jospgame${Architecture}")
 set(JK2SPVanillaRenderer "rdjosp-vanilla_${Architecture}")
-set(AssetsPk3 "openjk-${Architecture}.pk3")
+set(AssetsPk3 "openojp-${Architecture}.pk3")
 # Library names
 set(MPBotLib "botlib")
 set(SharedLib "shared")
@@ -190,6 +190,7 @@ set(SPDir "${CMAKE_SOURCE_DIR}/code")
 set(MPDir "${CMAKE_SOURCE_DIR}/codemp")
 set(JK2SPDir "${CMAKE_SOURCE_DIR}/codeJK2")
 set(SharedDir ${CMAKE_SOURCE_DIR}/shared)
+set(OpenOJPLibDir "${CMAKE_SOURCE_DIR}/lib")
 set(OpenJKLibDir "${CMAKE_SOURCE_DIR}/lib")
 set(GSLIncludeDirectory "${OpenJKLibDir}/gsl-lite/include")
 
