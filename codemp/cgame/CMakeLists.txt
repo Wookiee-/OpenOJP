@@ -161,7 +161,7 @@ endif()
 if(MakeApplicationBundles AND BuildMPEngine)
 	install(TARGETS ${MPCGame}
 		LIBRARY
-		DESTINATION "${JKAInstallDir}/${MPEngine}.app/Contents/MacOS/OpenJK"
+		DESTINATION "${JKAInstallDir}/${MPEngine}.app/Contents/MacOS/OpenOJP"
 		COMPONENT ${JKAMPCoreComponent})
 	install(TARGETS ${MPCGame}
 		LIBRARY
@@ -170,10 +170,10 @@ if(MakeApplicationBundles AND BuildMPEngine)
 elseif(WIN32)
 	install(TARGETS ${MPCGame}
 		RUNTIME
-		DESTINATION "${JKAInstallDir}/OpenJK"
+		DESTINATION "${JKAInstallDir}/OpenOJP"
 		COMPONENT ${JKAMPCoreComponent})
 
-	# Use OpenJK modules as default
+	# Use OpenOJP modules as default
 	install(TARGETS ${MPCGame}
 		RUNTIME
 		DESTINATION "${JKAInstallDir}/base"
@@ -181,7 +181,7 @@ elseif(WIN32)
 else()
 	install(TARGETS ${MPCGame}
 		LIBRARY
-		DESTINATION "${JKAInstallDir}/OpenJK"
+		DESTINATION "${JKAInstallDir}/OpenOJP"
 		COMPONENT ${JKAMPCoreComponent})
 	install(TARGETS ${MPCGame}
 		LIBRARY
@@ -192,7 +192,7 @@ endif()
 set_target_properties(${MPCGame} PROPERTIES COMPILE_DEFINITIONS "${MPCGameDefines}")
 
 # Hide symbols not explicitly marked public.
-set_property(TARGET ${MPCGame} APPEND PROPERTY COMPILE_OPTIONS ${OPENJK_VISIBILITY_FLAGS})
+set_property(TARGET ${MPCGame} APPEND PROPERTY COMPILE_OPTIONS ${OPENOJP_VISIBILITY_FLAGS})
 
 set_target_properties(${MPCGame} PROPERTIES INCLUDE_DIRECTORIES "${MPCGameIncludeDirectories}")
 set_target_properties(${MPCGame} PROPERTIES PROJECT_LABEL "MP Client Game Library")

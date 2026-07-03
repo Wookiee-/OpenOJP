@@ -85,7 +85,7 @@ BEGIN
             VALUE "FileVersion", VERSION_STRING
             VALUE "InternalName", "JK MP"
             VALUE "OriginalFilename", "OpenJK.exe"
-            VALUE "ProductName", "OpenJK"
+            VALUE "ProductName", "OpenOJP"
             VALUE "ProductVersion", VERSION_STRING
         END
     END

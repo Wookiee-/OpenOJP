@@ -76,7 +76,7 @@ BEGIN
             VALUE "FileVersion", VERSION_STRING
             VALUE "InternalName", "game"
             VALUE "OriginalFilename", "game.dll"
-            VALUE "ProductName", "OpenJK"
+            VALUE "ProductName", "OpenOJP"
             VALUE "ProductVersion", VERSION_STRING
         END
     END

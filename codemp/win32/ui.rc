@@ -76,7 +76,7 @@ BEGIN
             VALUE "FileVersion", VERSION_STRING
             VALUE "InternalName", "ui"
             VALUE "OriginalFilename", "ui.dll"
-            VALUE "ProductName", "OpenJK"
+            VALUE "ProductName", "OpenOJP"
             VALUE "ProductVersion", VERSION_STRING
         END
     END
