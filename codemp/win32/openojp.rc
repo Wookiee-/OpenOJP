@@ -81,10 +81,10 @@ BEGIN
         BLOCK "040904b0"
         BEGIN
             VALUE "Comments", "OpenJK Contributors"
-            VALUE "FileDescription", "OpenJK Multiplayer"
+            VALUE "FileDescription", "OpenOJP Multiplayer"
             VALUE "FileVersion", VERSION_STRING
             VALUE "InternalName", "JK MP"
-            VALUE "OriginalFilename", "OpenJK.exe"
+            VALUE "OriginalFilename", "OpenOJP.exe"
             VALUE "ProductName", "OpenOJP"
             VALUE "ProductVersion", VERSION_STRING
         END
