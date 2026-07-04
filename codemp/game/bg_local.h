@@ -113,10 +113,21 @@ void PM_FinishWeaponChange( void );
 
 void PM_SetAnim(int setAnimParts,int anim,int setAnimFlags);
 
+// OJP movement system defines
+#define LEDGEGRABMINHEIGHT 24
+#define LEDGEGRABMAXHEIGHT 72
+#define LEDGEGRABDISTANCE 48
+#define LEDGEGRABHEIGHT 36
+#define LEDGEVERTOFFSET 4
+#define LEDGEHOROFFSET 4
+#define FORCEFALLVELOCITY -200
+#define FORCEFALLDEBOUNCE 500
+
 void PM_WeaponLightsaber(void);
 void PM_SetSaberMove(short newMove);
 
 void PM_SetForceJumpZStart(float value);
+void PM_GrabWallForJump(int anim);
 
 void BG_CycleInven(playerState_t *ps, int direction);
 

@@ -1807,6 +1807,13 @@ typedef enum //# animNumber_e
 	BOTH_CIN_49,		//# Level specific cinematic
 	BOTH_CIN_50,		//# Level specific cinematic
 
+	// OJP ledge grab animations
+	BOTH_LEDGE_GRAB,
+	BOTH_LEDGE_HOLD,
+	BOTH_LEDGE_LEFT,
+	BOTH_LEDGE_RIGHT,
+	BOTH_LEDGE_MERCPULL,
+
 	//# #eol
 	MAX_ANIMATIONS,
 	MAX_TOTALANIMATIONS,
