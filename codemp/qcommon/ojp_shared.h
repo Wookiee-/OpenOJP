@@ -72,6 +72,11 @@ typedef enum {
 #define Vector4Copy(a,b) ((b)[0]=(a)[0],(b)[1]=(a)[1],(b)[2]=(a)[2],(b)[3]=(a)[3])
 #endif
 
+// Additional FLAG constants for userInt3
+#define FLAG_PREBLOCK_OJP 9
+#define FLAG_FATIGUED_HEAVY_OJP 8
+#define FLAG_DODGEROLL_OJP 10
+
 // GAME_INLINE
 #ifndef GAME_INLINE
 #if defined(_WIN32)
