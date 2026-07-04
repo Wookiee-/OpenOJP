@@ -192,4 +192,13 @@ XCVAR_DEF( ui_tm2_c4_cnt,						"0",					NULL,					CVAR_ROM|CVAR_INTERNAL )
 XCVAR_DEF( ui_tm2_c5_cnt,						"0",					NULL,					CVAR_ROM|CVAR_INTERNAL )
 XCVAR_DEF( ui_tm2_cnt,							"0",					NULL,					CVAR_ROM|CVAR_INTERNAL )
 XCVAR_DEF( ui_tm3_cnt,							"0",					NULL,					CVAR_ROM|CVAR_INTERNAL )
+
+// OJP cvars
+XCVAR_DEF( ojp_sabermelee,					"0",					NULL,					CVAR_ARCHIVE )
+XCVAR_DEF( ojp_teamrgbsabers,				"0",					NULL,					CVAR_ARCHIVE )
+XCVAR_DEF( ojp_holsteredweapons,			"2",					NULL,					CVAR_ARCHIVE )
+XCVAR_DEF( ojp_holsterdebug,				"0",					NULL,					CVAR_NONE )
+XCVAR_DEF( ojp_holsterdebug_boneindex,		"0",					NULL,					CVAR_NONE )
+XCVAR_DEF( ojp_holsterdebug_posoffset,		"0.0 0.0 0.0",			NULL,					CVAR_NONE )
+XCVAR_DEF( ojp_holsterdebug_angoffset,		"0.0 0.0 0.0",			NULL,					CVAR_NONE )
 #undef XCVAR_DEF

@@ -181,4 +181,18 @@ XCVAR_DEF( sv_fps,						"40",			NULL,						CVAR_ARCHIVE|CVAR_SERVERINFO,					qtr
 XCVAR_DEF( sv_maxclients,				"8",			NULL,						CVAR_SERVERINFO|CVAR_LATCH|CVAR_ARCHIVE,		qfalse )
 XCVAR_DEF( timelimit,					"0",			NULL,						CVAR_SERVERINFO|CVAR_ARCHIVE|CVAR_NORESTART,	qtrue )
 
+// OJP cvars
+XCVAR_DEF( ojp_allowBodyDodge,			"1",			NULL,						CVAR_SERVERINFO|CVAR_ARCHIVE,					qtrue )
+XCVAR_DEF( ojp_trueBalance,				"1",			NULL,						CVAR_ARCHIVE|CVAR_LATCH,						qtrue )
+XCVAR_DEF( ojp_chatProtectTime,			"1000",			NULL,						CVAR_ARCHIVE,									qfalse )
+XCVAR_DEF( ojp_ffaRespawnTimer,			"1",			NULL,						CVAR_ARCHIVE,									qtrue )
+XCVAR_DEF( ojp_modelscaleEnabled,		"1",			NULL,						CVAR_ARCHIVE,									qtrue )
+XCVAR_DEF( ojp_lastmanstanding,			"0",			NULL,						CVAR_LATCH,										qtrue )
+XCVAR_DEF( ojp_lmslives,				"1",			NULL,						CVAR_LATCH,										qtrue )
+XCVAR_DEF( ojp_clientMOTD,				"",				NULL,						CVAR_ARCHIVE,									qfalse )
+XCVAR_DEF( ojp_MOTD,					"This server is running OJP Enhanced...", NULL,	CVAR_ARCHIVE,									qfalse )
+XCVAR_DEF( ojp_skipcutscenes,			"0",			NULL,						CVAR_SERVERINFO|CVAR_ARCHIVE,					qtrue )
+XCVAR_DEF( bot_thinklevel,				"3",			NULL,						CVAR_ARCHIVE,									qfalse )
+XCVAR_DEF( bot_cpu_usage,				"0",			NULL,						CVAR_NONE,										qfalse )
+
 #undef XCVAR_DEF
