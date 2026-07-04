@@ -1,105 +1,120 @@
-# OpenJK
+# OpenOJP
 
-OpenJK is a community effort to maintain and improve the game and engine powering Jedi Academy and Jedi Outcast, while maintaining _full backwards compatibility_ with the existing games and mods.  
-This project does not intend to add major features, rebalance, or otherwise modify core gameplay.
+OpenOJP is a mod for Star Wars Jedi Knight: Jedi Academy based on the OpenJK engine, porting the full feature set of the **Open Jedi Project (OJP) Enhanced** into a modern, maintained codebase.
 
-Our aims are to:
+## Features
 
-- Improve the stability of the engine by fixing bugs and improving performance.
-- Support more hardware (x86_64, Arm, Apple Silicon) and software platforms (Linux, macOS)
-- Provide a clean base from which new code modifications can be made.
+### Saber Combat System
+- Directional blocking and parrying (quadrant-based block detection)
+- Saber block cost system per style (fast/medium/strong/dual/staff/desann/tavion)
+- Attack parry, quick parry, and attack fake mechanics
+- Mishap/balance system with slow bounces and heavy slow bounces
+- Saber lock input system with directional advances
+- Saber knockdown and stun animations
+- Back-blocking with force defense level 3
+- Roll balance and mishap rolling
+- Dodge kick countering
 
-[![discord](https://img.shields.io/badge/discord-join-7289DA.svg?logo=discord&longCache=true&style=flat)](https://discord.gg/dPNCfeQ)
-[![forum](https://img.shields.io/badge/forum-JKHub.org%20OpenJK-brightgreen.svg)](https://jkhub.org/forums/forum/49-openjk/)
+### Dodge & Movement System
+- Full body dodge system with directional dodging (hop forward/back/left/right)
+- Partial dodge damage scaling
+- Dodge roll safety checks
+- Ledge grab and wall run system with shimmy and pull-up
+- Force fall braking (slow fall with the force)
+- Knockdown getup rolls (forward/back/left/right)
+- Force getup animations
+- Crouch getup from knockdown
+- Air kicking animations
 
-[![build](https://github.com/JACoders/OpenJK/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/JACoders/OpenJK/actions/workflows/build.yml?query=branch%3Amaster)
-[![coverity](https://scan.coverity.com/projects/1153/badge.svg)](https://scan.coverity.com/projects/1153)
+### Dynamic Music System
+- DMS (Dynamic Music Set) transitions between explore, action, and boss music
+- Music length data and exit point synchronization
+- Per-map music file loading
 
-## Supported Games
+### Cinematic Camera System
+- Move, pan, zoom, and fade camera effects
+- Camera shake with intensity and duration
+- Camera smoothing
+- ROFF (Relative Offset File) camera animation
+- Letterbox bar fading
+- Camera following and tracking
 
-| Game | Single Player | Multi Player |
-| - | - | - |
-| Jedi Academy | ✅ Stable | ✅ Stable |
-| Jedi Outcast | 😧 Works, needs attention | 🙅 Not supported - consider [JK2MV](https://jk2mv.org) |
+### ROFF Animation System
+- Relative Offset File playback for scripted entity animation
+- ROFF caching and management
+- Per-entity ROFF playback with frame timing
 
-Please direct support queries, discussions and feature requests to the JKHub sub-forum or Discord linked above.
+### Waypoint Navigator / Pathfinding
+- Waypoint graph navigation with neighbor linking
+- Route finding with distance-based path selection
+- Closest waypoint queries
 
-## License
+### Domination Game Mode
+- Flag-based territory control
+- Capture and hold scoring system
+- Domination NPC support
+- Dynamic spawn system based on controlled territory
 
-OpenJK is licensed under GPLv2 as free software. You are free to use, modify and redistribute OpenJK following the terms in [LICENSE.txt](https://github.com/JACoders/OpenJK/blob/master/LICENSE.txt)
+### Force Holocron System (AOTC)
+- Holocron item placement and pickup
+- Force power granting from holocrons
 
-## For players
+### AI Behavior Types
+- **AOTC AI** — Attack-aware combat with saber hit reactions
+- **Hybrid AI** — Mix of ranged and melee combat tactics
+- **TAB AI** — Full tactical behavior system with objectives, orders, scanning, strafing, and saber duel challenging
 
-To install OpenJK, you will first need Jedi Academy installed. If you don't already own the game you can buy it from online stores such as [Steam](https://store.steampowered.com/app/6020/), [Amazon](https://www.amazon.com/Star-Wars-Jedi-Knight-Academy-Pc/dp/B0000A2MCN) or [GOG](https://www.gog.com/game/star_wars_jedi_knight_jedi_academy).
+### New NPC Types
+- **Assassin Droid** — Strafe-shooting blaster combat
+- **Civilian** — Flee-based survival behavior
+- **Rocket Trooper** — Rocket launcher combat with range management
+- **Saber Droid** — Melee saber combat
+- **Sand Creature** — Burrowing ambush combat
+- **Vehicle NPC** — Vehicle-based combat with ranged attacks
 
-Download the [latest build](https://github.com/JACoders/OpenJK/releases/tag/latest) ([alt link](https://builds.openjk.org)) for your operating system.
+### Game Systems
+- **Arena Tournament** — Post-game scoreboard with accuracy tracking
+- **Autosave** — Periodic automatic save creation
+- **Breakable Objects** — Destructible environment pieces with radius damage
+- **Crash Physics** — High-speed collision damage
+- **ICARUS Stubs** — Script system compatibility layer
+- **Extended Saber Colors** — White, black, RGB, pimp, and scripted saber colors
+- **Skills System** — Experience-based skill progression (weapon skills, saber styles, equipment)
 
-Installing and running OpenJK:
+### CGame Additions
+- Camera system with cinematic effects
+- Weapon holster system
+- Dynamic lights with lifetime management
+- Holocron icon rendering
 
-1. Extract the contents of the file into the Jedi Academy `GameData/` folder. For Steam users, this will be in `<Steam Folder>/steamapps/common/Jedi Academy/GameData/`.
-1. Run `openjk.x86.exe` (Windows), `openjk.i386` (Linux 32-bit), `openjk.x86_64` (Linux 64-bit) or the `OpenJK` app bundle (macOS), depending on your operating system.
+### Ghoul2 & Utility
+- G2 API wrapper layer for bolt matrix, bone angles, and ragdoll
+- C++ vector math library (CVec3)
+- Real trace system for accurate saber/ghoul2 collision detection
+- Saber ballistics (thrown saber physics with stick/bounce)
 
-### Linux Instructions
+## Building
 
-If you do not have an existing JKA installation and need to download the base game:
+OpenOJP uses the CMake build system from OpenJK. See `OPENJK.md` for build instructions.
 
-1. Download and Install SteamCMD [SteamCMD](https://developer.valvesoftware.com/wiki/SteamCMD#Linux).
-1. Set the download path using steamCMD: `force_install_dir /path/to/install/jka/`
-1. Using SteamCMD Set the platform to windows to download any windows game on steam. @sSteamCmdForcePlatformType "windows"
-1. Using SteamCMD download the game, `app_update 6020`.
+### Build Dependencies
+- CMake 3.10+
+- Visual Studio (Windows) or GCC/Clang (Linux/macOS)
+- SDL2
 
-Extract the contents of the file into the Jedi Academy `GameData/` folder. For Steam users, this will be in `<Steam Folder>/steamapps/common/Jedi Academy/GameData/`.
+### Quick Start (Windows)
+```
+cd build
+cmake .. -G "Visual Studio 17 2022"
+cmake --build . --config Release
+```
 
-### macOS Instructions
+## Installation
 
-If you have the Mac App Store Version of Jedi Academy, follow these steps to get OpenJK runnning under macOS:
+Place the compiled DLLs (`jampgamex86.dll`, `cgamex86.dll`, `uix86.dll`) and the `zz_ojp_assets.pk3` from the `ojp/ojpenhanced/` directory into the `OpenOJP/` folder in your Jedi Academy installation directory.
 
-1. Install [Homebrew](https://brew.sh/) if you don't have it.
-1. Open the Terminal app, and enter the command `brew install sdl2`.
-1. Extract the contents of the OpenJK DMG into the game directory `/Applications/Star Wars Jedi Knight: Jedi Academy.app/Contents/`
-1. Run `OpenJK.app` or `OpenJK SP.app`
-1. Savegames, Config Files and Log Files are stored in `/Users/$USER/Library/Application Support/OpenJK/`
+## Credits
 
-## For Developers
-
-### Building OpenJK
-
-- [Compilation guide](https://github.com/JACoders/OpenJK/wiki/Compilation-guide)
-- [Debugging guide](https://github.com/JACoders/OpenJK/wiki/Debugging)
-
-### Contributing to OpenJK
-
-- [Fork](https://github.com/JACoders/OpenJK/fork) the project on GitHub
-- Create a new branch and make your changes
-- Send a [pull request](https://help.github.com/articles/creating-a-pull-request) to upstream (JACoders/OpenJK)
-
-### Using OpenJK as a base for a new mod
-
-- [Fork](https://github.com/JACoders/OpenJK/fork) the project on GitHub
-- Change the JK_VERSION define in codemp/qcommon/game_version.h from "OpenJK" to your project name
-- If you make a nice change, please consider back-porting to upstream via pull request as described above. This is so everyone benefits without having to reinvent the wheel for every project.
-
-## Maintainers (full list: [@JACoders](https://github.com/orgs/JACoders/people))
-
-Leads:
-
-- [Ensiform](https://github.com/ensiform)
-- [razor](https://github.com/Razish)
-- [Xycaleth](https://github.com/xycaleth)
-
-## Significant contributors ([full list](https://github.com/JACoders/OpenJK/graphs/contributors))
-
-- [bibendovsky](https://github.com/bibendovsky) (save games, platform support)
-- [BobaFett](https://github.com/Lrns123)
-- [BSzili](https://github.com/BSzili) (JK2, platform support)
-- [Cat](https://github.com/deepy) (infra)
-- [Didz](https://github.com/dionrhys)
-- [eezstreet](https://github.com/eezstreet)
-- exidl (SDL2, platform support)
-- [ImperatorPrime](https://github.com/ImperatorPrime) (JK2)
-- [mrwonko](https://github.com/mrwonko)
-- [redsaurus](https://github.com/redsaurus)
-- [Scooper](https://github.com/xScooper)
-- [Sil](https://github.com/TheSil)
-- [smcv](https://github.com/smcv) (debian packaging)
-- [Tristamus](https://tristamus.com>) (icon)
+- **OpenJK Team** — Engine and base code
+- **OJP Enhanced Team** — Original OJP modifications and assets
+- **Raven Software** — Jedi Academy game
