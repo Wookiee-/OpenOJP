@@ -8,6 +8,9 @@
 extern int RealTraceContent_ent[8];
 extern int RealTraceContent_val[8];
 
+extern qboolean G_G2TraceCollide(trace_t *tr, vec3_t lastValidStart, vec3_t lastValidEnd, vec3_t traceMins, vec3_t traceMaxs);
+extern qboolean G_SaberCollide(gentity_t *atk, gentity_t *def, vec3_t atkStart, vec3_t atkEnd, vec3_t atkMins, vec3_t atkMaxs, vec3_t impactPoint);
+
 static float ojp_CalcTraceFraction(vec3_t Start, vec3_t End, vec3_t Endpos)
 {
 	float fulldist = Distance(Start, End);
