@@ -578,6 +578,14 @@ typedef struct renderInfo_s
 	int			boltValidityTime;
 } renderInfo_t;
 
+// OJP: saber impact debounce tracking
+typedef struct {
+	int EntityNum;
+	int Debounce;
+	int SaberNum;
+	int BladeNum;
+} ojp_sabimpact_t;
+
 // this structure is cleared on each ClientSpawn(),
 // except for 'client->pers' and 'client->sess'
 struct gclient_s {
@@ -717,6 +725,15 @@ struct gclient_s {
 	qboolean	fjDidJump;
 
 	qboolean	ikStatus;
+
+	// OJP: saber combat additions
+	int			lastSaberCollided;
+	int			lastBladeCollided;
+	ojp_sabimpact_t sabimpact[2][8];
+	int			SaberBlockTime;
+	int			DodgeDebounce;
+	int			ManualDodgeDebounce;
+	int			MishapDebounce;
 
 	int			throwingIndex;
 	int			beingThrown;
