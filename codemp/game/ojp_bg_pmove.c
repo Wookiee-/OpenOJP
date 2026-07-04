@@ -88,7 +88,8 @@ int ojp_InvertQuad(int quad)
 
 void ojp_InitRealTraceContent(void)
 {
-	for (int i = 0; i < MAX_REAL_PASSTHRU; i++) {
+	int i;
+	for (i = 0; i < MAX_REAL_PASSTHRU; i++) {
 		RealTraceContent_ent[i] = REALTRACEDATADEFAULT;
 		RealTraceContent_val[i] = REALTRACEDATADEFAULT;
 	}
@@ -96,8 +97,9 @@ void ojp_InitRealTraceContent(void)
 
 qboolean ojp_AddRealTraceContent(int entityNum)
 {
+	int i;
 	if (entityNum == ENTITYNUM_WORLD || entityNum == ENTITYNUM_NONE) return qtrue;
-	for (int i = 0; i < MAX_REAL_PASSTHRU; i++) {
+	for (i = 0; i < MAX_REAL_PASSTHRU; i++) {
 		if (RealTraceContent_ent[i] == REALTRACEDATADEFAULT && RealTraceContent_val[i] == REALTRACEDATADEFAULT) {
 			RealTraceContent_ent[i] = entityNum;
 			RealTraceContent_val[i] = g_entities[entityNum].r.contents;
@@ -110,7 +112,8 @@ qboolean ojp_AddRealTraceContent(int entityNum)
 
 void ojp_RestoreRealTraceContent(void)
 {
-	for (int i = 0; i < MAX_REAL_PASSTHRU; i++) {
+	int i;
+	for (i = 0; i < MAX_REAL_PASSTHRU; i++) {
 		if (RealTraceContent_ent[i] != REALTRACEDATADEFAULT) {
 			if (RealTraceContent_val[i] != REALTRACEDATADEFAULT) {
 				g_entities[RealTraceContent_ent[i]].r.contents = RealTraceContent_val[i];

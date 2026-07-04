@@ -1,15 +1,50 @@
 #include "g_local.h"
 #include "w_saber.h"
-#include "qcommon/ojp_shared.h"
-#include "ojp_saberbeh.h"
 
-#define REALTRACE_SABERBLOCKHIT 2
+#define OJP_MAX_REAL_PASSTHRU 8
+#define OJP_REALTRACEDATADEFAULT -9999
+#define OJP_REALTRACE_SABERBLOCKHIT 2
 
-extern int RealTraceContent_ent[8];
-extern int RealTraceContent_val[8];
+static int ojp_RealTraceContent_ent[OJP_MAX_REAL_PASSTHRU];
+static int ojp_RealTraceContent_val[OJP_MAX_REAL_PASSTHRU];
 
-extern qboolean G_G2TraceCollide(trace_t *tr, vec3_t lastValidStart, vec3_t lastValidEnd, vec3_t traceMins, vec3_t traceMaxs);
-extern qboolean G_SaberCollide(gentity_t *atk, gentity_t *def, vec3_t atkStart, vec3_t atkEnd, vec3_t atkMins, vec3_t atkMaxs, vec3_t impactPoint);
+static void ojp_InitRealTraceContent(void)
+{
+	int i;
+	for (i = 0; i < OJP_MAX_REAL_PASSTHRU; i++) {
+		ojp_RealTraceContent_ent[i] = OJP_REALTRACEDATADEFAULT;
+		ojp_RealTraceContent_val[i] = OJP_REALTRACEDATADEFAULT;
+	}
+}
+
+static qboolean ojp_AddRealTraceContent(int entityNum)
+{
+	int i;
+	if (entityNum == ENTITYNUM_WORLD || entityNum == ENTITYNUM_NONE) return qtrue;
+	for (i = 0; i < OJP_MAX_REAL_PASSTHRU; i++) {
+		if (ojp_RealTraceContent_ent[i] == OJP_REALTRACEDATADEFAULT && ojp_RealTraceContent_val[i] == OJP_REALTRACEDATADEFAULT) {
+			ojp_RealTraceContent_ent[i] = entityNum;
+			ojp_RealTraceContent_val[i] = g_entities[entityNum].r.contents;
+			g_entities[entityNum].r.contents = 0;
+			return qtrue;
+		}
+	}
+	return qfalse;
+}
+
+static void ojp_RestoreRealTraceContent(void)
+{
+	int i;
+	for (i = 0; i < OJP_MAX_REAL_PASSTHRU; i++) {
+		if (ojp_RealTraceContent_ent[i] != OJP_REALTRACEDATADEFAULT) {
+			if (ojp_RealTraceContent_val[i] != OJP_REALTRACEDATADEFAULT) {
+				g_entities[ojp_RealTraceContent_ent[i]].r.contents = ojp_RealTraceContent_val[i];
+				ojp_RealTraceContent_ent[i] = OJP_REALTRACEDATADEFAULT;
+				ojp_RealTraceContent_val[i] = OJP_REALTRACEDATADEFAULT;
+			}
+		} else break;
+	}
+}
 
 static float ojp_CalcTraceFraction(vec3_t Start, vec3_t End, vec3_t Endpos)
 {
@@ -42,12 +77,31 @@ static void ojp_TraceClear(trace_t *tr, vec3_t end)
 	VectorCopy(end, tr->endpos);
 }
 
+qboolean ojp_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, vec3_t point, int rSaberNum, int rBladeNum)
+{
+	if (!self || !self->client || !atk) return qfalse;
+	if (!self->client->ps.saberEntityNum || self->client->ps.saberInFlight) return qfalse;
+	if (self->client->ps.saberHolstered >= 2) return qfalse;
+	if (self->client->ps.weapon != WP_SABER) return qfalse;
+	if (PM_InKnockDown(&self->client->ps)) return qfalse;
+	if (self->client->ps.forceHandExtend == HANDEXTEND_DODGE) return qfalse;
+	if (!InFront(point, self->client->ps.origin, self->client->ps.viewangles, -0.2f)) {
+		if (self->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE] >= FORCE_LEVEL_3) return qtrue;
+		return qfalse;
+	}
+	return qtrue;
+}
+
 int ojp_G_RealTrace(gentity_t *attacker, trace_t *tr, vec3_t start, vec3_t mins, vec3_t maxs, vec3_t end, int passEntityNum, int contentmask, int rSaberNum, int rBladeNum)
 {
-	vec3_t currentStart;
+	vec3_t currentStart, currentEndPos, impactPoint;
 	trace_t closestTrace;
 	float closestFraction = 1.1f;
-	qboolean atkIsSaberer = (attacker && attacker->client && attacker->client->ps.weapon == WP_SABER) ? qtrue : qfalse;
+	int misses, currentEntityNum;
+	gentity_t *currentEnt, *saberOwner;
+	qboolean atkIsSaberer;
+
+	atkIsSaberer = (attacker && attacker->client && attacker->client->ps.weapon == WP_SABER) ? qtrue : qfalse;
 
 	ojp_InitRealTraceContent();
 
@@ -59,9 +113,7 @@ int ojp_G_RealTrace(gentity_t *attacker, trace_t *tr, vec3_t start, vec3_t mins,
 	ojp_TraceClear(&closestTrace, end);
 	VectorCopy(start, currentStart);
 
-	for (int misses = 0; misses < 8; misses++) {
-		vec3_t currentEndPos;
-		int currentEntityNum;
+	for (misses = 0; misses < OJP_MAX_REAL_PASSTHRU; misses++) {
 
 		trap_Trace(tr, currentStart, mins, maxs, end, passEntityNum, contentmask);
 		VectorCopy(tr->endpos, currentEndPos);
@@ -80,7 +132,7 @@ int ojp_G_RealTrace(gentity_t *attacker, trace_t *tr, vec3_t start, vec3_t mins,
 			return tr->entityNum;
 		}
 
-		gentity_t *currentEnt = &g_entities[tr->entityNum];
+		currentEnt = &g_entities[tr->entityNum];
 
 		if (currentEnt->inuse && currentEnt->client) {
 			if (attacker && ojp_SaberCanBlock(currentEnt, attacker, qtrue, tr->endpos, rSaberNum, rBladeNum)) {
@@ -89,19 +141,23 @@ int ojp_G_RealTrace(gentity_t *attacker, trace_t *tr, vec3_t start, vec3_t mins,
 				if (tr->fraction < closestFraction) {
 					ojp_RestoreRealTraceContent();
 					tr->entityNum = currentEnt->client->saberStoredIndex;
-					return REALTRACE_SABERBLOCKHIT;
+					return OJP_REALTRACE_SABERBLOCKHIT;
 				} else {
 					if (closestTrace.fraction < tr->fraction) ojp_TraceCopy(&closestTrace, tr);
 					ojp_RestoreRealTraceContent();
 					return tr->entityNum;
 				}
 			}
+			extern qboolean G_G2TraceCollide(trace_t *t, vec3_t s, vec3_t e, vec3_t mi, vec3_t ma);
 			G_G2TraceCollide(tr, currentStart, end, mins, maxs);
 		} else if ((currentEnt->r.contents & CONTENTS_LIGHTSABER) && currentEnt->r.contents != -1 && currentEnt->inuse) {
-			gentity_t *saberOwner = &g_entities[currentEnt->r.ownerNum];
-			G_SaberCollide((atkIsSaberer ? attacker : NULL), saberOwner, currentStart, end, mins, maxs, tr);
+			saberOwner = &g_entities[currentEnt->r.ownerNum];
+			VectorCopy(tr->endpos, impactPoint);
+			extern qboolean G_SaberCollide(gentity_t *a, gentity_t *d, vec3_t s, vec3_t e, vec3_t mi, vec3_t ma, vec3_t ip);
+			G_SaberCollide((atkIsSaberer ? attacker : NULL), saberOwner, currentStart, end, mins, maxs, impactPoint);
 		} else if (tr->entityNum < ENTITYNUM_WORLD) {
 			if (currentEnt->inuse && currentEnt->ghoul2) {
+				extern qboolean G_G2TraceCollide(trace_t *t, vec3_t s, vec3_t e, vec3_t mi, vec3_t ma);
 				G_G2TraceCollide(tr, currentStart, end, mins, maxs);
 			} else {
 				if (!VectorCompare(start, currentStart))
@@ -134,10 +190,10 @@ int ojp_G_RealTrace(gentity_t *attacker, trace_t *tr, vec3_t start, vec3_t mins,
 
 void ojp_WP_SaberBlockNonRandom(gentity_t *self, vec3_t hitloc, qboolean missileBlock)
 {
-	vec3_t diff, fwdangles = { 0, 0, 0 }, right, clEye;
+	vec3_t diff, fwdangles, right, clEye;
 	float rightdot, zdiff;
-	qboolean inFront = InFront(hitloc, self->client->ps.origin, self->client->ps.viewangles, -0.2f);
 
+	VectorClear(fwdangles);
 	VectorCopy(self->client->ps.origin, clEye);
 	clEye[2] += self->client->ps.viewheight;
 	VectorSubtract(hitloc, clEye, diff);
@@ -160,9 +216,8 @@ void ojp_WP_SaberBlockNonRandom(gentity_t *self, vec3_t hitloc, qboolean missile
 		if (rightdot >= 0) self->client->ps.saberBlocked = BLOCKED_LOWER_RIGHT;
 		else self->client->ps.saberBlocked = BLOCKED_LOWER_LEFT;
 	}
-
-	if (missileBlock)
+	if (missileBlock) {
+		extern int WP_MissileBlockForBlock(int sb);
 		self->client->ps.saberBlocked = WP_MissileBlockForBlock(self->client->ps.saberBlocked);
-
-	self->client->ps.userInt3 &= ~(1 << FLAG_PREBLOCK_OJP);
+	}
 }

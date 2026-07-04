@@ -186,6 +186,7 @@ set(MPGameGameFiles
 	"${MPDir}/game/ojp_headers.h"
 	"${MPDir}/game/ojp_syn.h"
 	"${MPDir}/game/ojp_bg_pmove.c"
+	"${MPDir}/game/ojp_w_saber.c"
 	"${MPDir}/game/ojp_bot_ai.c"
 	)
 source_group("game" FILES ${MPGameGameFiles})

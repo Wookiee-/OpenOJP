@@ -2094,8 +2094,10 @@ static QINLINE qboolean WP_GetSaberDeflectionAngle( gentity_t *attacker, gentity
 				}
 #endif
 				attacker->client->ps.saberBlocked = BLOCKED_BOUNCE_MOVE;
-				return qtrue;
-			}
+	return qtrue;
+}
+
+
 		}
 	}
 	else
@@ -2312,7 +2314,7 @@ static QINLINE qboolean G_ClientIdleInWorld(gentity_t *ent)
 	return qfalse;
 }
 
-static QINLINE qboolean G_G2TraceCollide(trace_t *tr, vec3_t lastValidStart, vec3_t lastValidEnd, vec3_t traceMins, vec3_t traceMaxs)
+QINLINE qboolean G_G2TraceCollide(trace_t *tr, vec3_t lastValidStart, vec3_t lastValidEnd, vec3_t traceMins, vec3_t traceMaxs)
 { //Hit the ent with the normal trace, try the collision trace.
 	G2Trace_t		G2Trace;
 	gentity_t		*g2Hit;
@@ -2676,7 +2678,7 @@ static QINLINE qboolean G_SaberFaceCollisionCheck(int fNum, saberFace_t *fList, 
 }
 
 //check for collision of 2 blades -rww
-static QINLINE qboolean G_SaberCollide(gentity_t *atk, gentity_t *def, vec3_t atkStart,
+QINLINE qboolean G_SaberCollide(gentity_t *atk, gentity_t *def, vec3_t atkStart,
 						vec3_t atkEnd, vec3_t atkMins, vec3_t atkMaxs, vec3_t impactPoint)
 {
 	static int i, j;

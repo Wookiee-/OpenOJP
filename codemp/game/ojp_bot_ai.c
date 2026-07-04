@@ -20,8 +20,9 @@ float ojp_VectorDistance(vec3_t v1, vec3_t v2)
 
 float ojp_DistancetoClosestPlayer(vec3_t position, int enemyTeam)
 {
+	int i;
 	float bestdist = 9999;
-	for (int i = 0; i < MAX_CLIENTS; i++) {
+	for (i = 0; i < MAX_CLIENTS; i++) {
 		gentity_t *player = &g_entities[i];
 		if (!player || !player->client || !player->inuse ||
 			player->client->pers.connected != CON_CONNECTED ||
@@ -59,7 +60,8 @@ qboolean ojp_DontBlockAllies(bot_state_t *bs)
 		Distance(bs->origin, bs->squadLeader->r.currentOrigin) < 64)
 		return qtrue;
 	if (bs->lovednum > 0) {
-		for (int i = 0; i < bs->lovednum; i++) {
+		int i;
+		for (i = 0; i < bs->lovednum; i++) {
 			if (bs->loved[i].level >= 2) return qtrue;
 		}
 	}

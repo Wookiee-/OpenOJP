@@ -76,22 +76,6 @@ int ojp_SaberBlockCost(gentity_t *defender, gentity_t *attacker, vec3_t hitLoc)
 	return (int)saberBlockCost;
 }
 
-int ojp_SaberCanBlock(gentity_t *self, gentity_t *atk, qboolean checkBBoxBlock, vec3_t point, int rSaberNum, int rBladeNum)
-{
-	if (!self || !self->client || !atk) return 0;
-	if (!self->client->ps.saberEntityNum || self->client->ps.saberInFlight) return 0;
-	if (BG_SabersOff(&self->client->ps)) return 0;
-	if (self->client->ps.weapon != WP_SABER) return 0;
-	if (PM_InKnockDown(&self->client->ps)) return 0;
-	if (self->client->ps.forceHandExtend == HANDEXTEND_DODGE) return 0;
-	if (self->client->ps.stats[STAT_DODGE_OJP] < ojp_SaberBlockCost(self, atk, point)) return 0;
-	if (!InFront(point, self->client->ps.origin, self->client->ps.viewangles, -0.2f)) {
-		if (self->client->ps.fd.forcePowerLevel[FP_SABER_DEFENSE] >= FORCE_LEVEL_3) return 1;
-		return 0;
-	}
-	return 1;
-}
-
 qboolean ojp_BlockIsParry(gentity_t *self, gentity_t *attacker, vec3_t hitLoc)
 {
 	vec3_t pAngles, pRight, parrierMove, hitPos, hitFlat;
