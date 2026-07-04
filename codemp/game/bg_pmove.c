@@ -234,7 +234,401 @@ qboolean BG_SabersOff( playerState_t *ps )
 			return qfalse;
 		}
 	}
+}
+
+// === OJP Movement System Additions ===
+static qboolean ojp_BG_InLedgeMove(int anim)
+{
+	switch (anim) {
+	case BOTH_LEDGE_GRAB: case BOTH_LEDGE_HOLD: case BOTH_LEDGE_LEFT:
+	case BOTH_LEDGE_RIGHT: case BOTH_LEDGE_MERCPULL: return qtrue;
+	}
+	return qfalse;
+}
+
+static float ojp_BG_GetLegsAnimPoint(playerState_t *ps, int AnimIndex)
+{
+	float attackAnimLength = 0, currentPoint = 0, animSpeedFactor = 1.0f;
+	int numFrames = bgAllAnims[AnimIndex].anims[ps->legsAnim].numFrames;
+	int frameLerp = abs(bgAllAnims[AnimIndex].anims[ps->legsAnim].frameLerp);
+	if (numFrames < 2) attackAnimLength = (float)frameLerp * (1.0f / animSpeedFactor);
+	else attackAnimLength = (float)((numFrames - 1) * frameLerp) * (1.0f / animSpeedFactor);
+	if (attackAnimLength > 1) attackAnimLength--;
+	currentPoint = (float)ps->legsTimer;
+	if (attackAnimLength > 0) return currentPoint / attackAnimLength;
+	return 0;
+}
+
+#ifndef FLAG_FATIGUED_HEAVY_OJP
+#define FLAG_FATIGUED_HEAVY_OJP 8
+#endif
+
+static qboolean LedgeGrabableEntity(int entityNum)
+{
+	bgEntity_t *ent = PM_BGEntForNum(entityNum);
+	switch (ent->s.eType) {
+	case ET_PLAYER: case ET_ITEM: case ET_MISSILE:
+	case ET_SPECIAL: case ET_HOLOCRON: case ET_NPC:
+		return qfalse;
+	default:
+		return qtrue;
+	}
+}
+
+static qboolean LedgeTrace(trace_t *trace, vec3_t dir, float *lerpup, float *lerpfwd, float *lerpyaw)
+{
+	vec3_t traceTo, traceFrom, wallangles;
+	VectorMA(pm->ps->origin, LEDGEGRABDISTANCE, dir, traceTo);
+	VectorCopy(pm->ps->origin, traceFrom);
+	traceFrom[2] += LEDGEGRABMINHEIGHT;
+	traceTo[2] += LEDGEGRABMINHEIGHT;
+	pm->trace(trace, traceFrom, NULL, NULL, traceTo, pm->ps->clientNum, pm->tracemask);
+
+	if (trace->fraction < 1 && LedgeGrabableEntity(trace->entityNum)) {
+		VectorMA(trace->endpos, 0.5f, dir, traceTo);
+		VectorCopy(traceTo, traceFrom);
+		traceFrom[2] += (LEDGEGRABMAXHEIGHT - LEDGEGRABMINHEIGHT);
+		pm->trace(trace, traceFrom, NULL, NULL, traceTo, pm->ps->clientNum, pm->tracemask);
+		if (trace->fraction == 1.0f || trace->startsolid || !LedgeGrabableEntity(trace->entityNum))
+			return qfalse;
+	}
+
+	vectoangles(trace->plane.normal, wallangles);
+	if (wallangles[PITCH] > -45) return qfalse;
+
+	VectorCopy(trace->endpos, traceTo);
+	*lerpup = trace->endpos[2] - pm->ps->origin[2] - LEDGEVERTOFFSET;
+	VectorCopy(pm->ps->origin, traceFrom);
+	traceTo[2] -= 1;
+	traceFrom[2] = traceTo[2];
+	pm->trace(trace, traceFrom, NULL, NULL, traceTo, pm->ps->clientNum, pm->tracemask);
+	vectoangles(trace->plane.normal, wallangles);
+	if (trace->fraction == 1.0f || wallangles[PITCH] > 20 || wallangles[PITCH] < -20 || !LedgeGrabableEntity(trace->entityNum))
+		return qfalse;
+
+	*lerpfwd = Distance(trace->endpos, traceFrom) - LEDGEHOROFFSET;
+	*lerpyaw = vectoyaw(trace->plane.normal) + 180;
 	return qtrue;
+}
+
+void PM_CheckGrab(void)
+{
+	vec3_t checkDir, traceTo, fwdAngles;
+	trace_t trace;
+	float lerpup = 0, lerpfwd = 0, lerpyaw = 0;
+	qboolean skipcmdtrace = qfalse;
+
+	if (pm->ps->groundEntityNum != ENTITYNUM_NONE && pm->ps->inAirAnim) return;
+	if (pm->ps->pm_type == PM_JETPACK) return;
+	if (ojp_BG_InLedgeMove(pm->ps->legsAnim) || pm->ps->pm_type == PM_SPECTATOR || BG_InSpecialJump(pm->ps->legsAnim)) return;
+	if (pm->ps->velocity[0] == 0 && pm->ps->velocity[1] == 0) return;
+
+	VectorSet(fwdAngles, 0, pm->ps->viewangles[YAW], 0.0f);
+	AngleVectors(fwdAngles, checkDir, NULL, NULL);
+
+	if (!VectorCompare(pm->ps->velocity, vec3_origin)) {
+		if (LedgeTrace(&trace, checkDir, &lerpup, &lerpfwd, &lerpyaw))
+			skipcmdtrace = qtrue;
+	}
+
+	if (!skipcmdtrace) {
+		if (!pm->cmd.rightmove && !pm->cmd.forwardmove) return;
+		if (pm->cmd.rightmove) {
+			AngleVectors(fwdAngles, NULL, checkDir, NULL);
+			if (pm->cmd.rightmove < 0) VectorScale(checkDir, -1, checkDir);
+		} else if (pm->cmd.forwardmove > 0) return;
+		else if (pm->cmd.forwardmove < 0) {
+			AngleVectors(fwdAngles, checkDir, NULL, NULL);
+			VectorScale(checkDir, -1, checkDir);
+		}
+		VectorNormalize(checkDir);
+		if (!LedgeTrace(&trace, checkDir, &lerpup, &lerpfwd, &lerpyaw)) return;
+	}
+
+	VectorCopy(pm->ps->origin, traceTo);
+	VectorMA(pm->ps->origin, lerpfwd, checkDir, traceTo);
+	traceTo[2] += lerpup;
+	pm->trace(&trace, pm->ps->origin, pm->mins, pm->maxs, traceTo, pm->ps->clientNum, MASK_PLAYERSOLID);
+	if (trace.fraction != 1 || trace.startsolid) return;
+
+	pm->ps->viewangles[YAW] = lerpyaw;
+	pm->ps->weaponTime = 0;
+	pm->ps->saberMove = 0;
+	pm->cmd.upmove = 0;
+	pm->ps->saberHolstered = 2;
+	VectorCopy(trace.endpos, pm->ps->origin);
+	VectorCopy(vec3_origin, pm->ps->velocity);
+	PM_GrabWallForJump(BOTH_LEDGE_GRAB);
+	pm->ps->weaponTime = pm->ps->legsTimer;
+}
+
+void BG_LetGoofLedge(playerState_t *ps)
+{
+	ps->pm_flags &= ~PMF_STUCK_TO_WALL;
+	ps->torsoTimer = 0;
+	ps->legsTimer = 0;
+}
+
+static void PM_SetVelocityforLedgeMove(playerState_t *ps, int anim)
+{
+	vec3_t fwdAngles, moveDir;
+	float animationpoint = ojp_BG_GetLegsAnimPoint(ps, pm_entSelf->localAnimIndex);
+
+	switch (anim) {
+	case BOTH_LEDGE_GRAB: case BOTH_LEDGE_HOLD:
+		VectorClear(ps->velocity); return;
+	case BOTH_LEDGE_LEFT:
+		if (animationpoint > .333f && animationpoint < .666f) {
+			VectorSet(fwdAngles, 0, pm->ps->viewangles[YAW], 0);
+			AngleVectors(fwdAngles, NULL, moveDir, NULL);
+			VectorScale(moveDir, -30, moveDir);
+			VectorCopy(moveDir, ps->velocity);
+		} else VectorClear(ps->velocity);
+		break;
+	case BOTH_LEDGE_RIGHT:
+		if (animationpoint > .333f && animationpoint < .666f) {
+			VectorSet(fwdAngles, 0, pm->ps->viewangles[YAW], 0);
+			AngleVectors(fwdAngles, NULL, moveDir, NULL);
+			VectorScale(moveDir, 30, moveDir);
+			VectorCopy(moveDir, ps->velocity);
+		} else VectorClear(ps->velocity);
+		break;
+	case BOTH_LEDGE_MERCPULL:
+		if (animationpoint > .8f && animationpoint < .925f) {
+			ps->velocity[0] = 0; ps->velocity[1] = 0; ps->velocity[2] = 154;
+		} else if (animationpoint > .7f && animationpoint < .75f) {
+			ps->velocity[0] = 0; ps->velocity[1] = 0; ps->velocity[2] = 26;
+		} else if (animationpoint > .375f && animationpoint < .7f) {
+			ps->velocity[0] = 0; ps->velocity[1] = 0; ps->velocity[2] = 140;
+		} else if (animationpoint < .375f) {
+			VectorSet(fwdAngles, 0, pm->ps->viewangles[YAW], 0);
+			AngleVectors(fwdAngles, moveDir, NULL, NULL);
+			VectorScale(moveDir, 140, moveDir);
+			VectorCopy(moveDir, ps->velocity);
+		} else VectorClear(ps->velocity);
+		break;
+	default: VectorClear(ps->velocity); return;
+	}
+}
+
+void PM_AdjustAngleForWallGrap(playerState_t *ps, usercmd_t *ucmd)
+{
+	if (!(ps->pm_flags & PMF_STUCK_TO_WALL) || !ojp_BG_InLedgeMove(ps->legsAnim)) return;
+
+	if (ps->legsAnim != BOTH_LEDGE_MERCPULL) {
+		vec3_t traceTo, traceFrom, fwd, fwdAngles;
+		trace_t trace;
+		VectorSet(fwdAngles, 0, pm->ps->viewangles[YAW], 0);
+		AngleVectors(fwdAngles, fwd, NULL, NULL);
+		VectorCopy(ps->origin, traceFrom);
+		traceFrom[2] += LEDGEGRABHEIGHT - 1;
+		VectorMA(traceFrom, LEDGEGRABDISTANCE, fwd, traceTo);
+		pm->trace(&trace, traceFrom, NULL, NULL, traceTo, ps->clientNum, pm->tracemask);
+		if (trace.fraction == 1 || !LedgeGrabableEntity(trace.entityNum)) {
+			BG_LetGoofLedge(ps);
+			return;
+		}
+		ps->viewangles[YAW] = vectoyaw(trace.plane.normal) + 180;
+	}
+
+	if (ps->legsTimer <= 50) {
+		if (ps->legsAnim == BOTH_LEDGE_MERCPULL) {
+			ps->pm_flags &= ~PMF_STUCK_TO_WALL;
+		} else {
+			PM_SetAnim(SETANIM_BOTH, BOTH_LEDGE_HOLD, SETANIM_FLAG_OVERRIDE);
+			ps->torsoTimer = 500; ps->legsTimer = 500; ps->weaponTime = ps->legsTimer;
+		}
+	} else if (ps->legsAnim == BOTH_LEDGE_HOLD) {
+		if (ucmd->rightmove) {
+			PM_SetAnim(SETANIM_BOTH, ucmd->rightmove < 0 ? BOTH_LEDGE_LEFT : BOTH_LEDGE_RIGHT, SETANIM_FLAG_OVERRIDE);
+			ps->weaponTime = ps->legsTimer;
+		} else if (ucmd->forwardmove < 0) { BG_LetGoofLedge(ps); }
+		else if (ucmd->forwardmove > 0) {
+			PM_SetAnim(SETANIM_BOTH, BOTH_LEDGE_MERCPULL, SETANIM_FLAG_OVERRIDE | SETANIM_FLAG_HOLD | SETANIM_FLAG_HOLDLESS);
+			ps->weaponTime = ps->legsTimer;
+		} else { ps->torsoTimer = 500; ps->legsTimer = 500; ps->weaponTime = ps->legsTimer; }
+	}
+
+	PM_SetVelocityforLedgeMove(ps, ps->legsAnim);
+	ucmd->rightmove = 0; ucmd->upmove = 0; ucmd->forwardmove = 0;
+}
+
+static int ForceFallBrakeRate[NUM_FORCE_POWER_LEVELS] = { 0, 50, 60, 70 };
+
+qboolean PM_CanForceFall(void)
+{
+	return (!BG_InRoll(pm->ps, pm->ps->legsAnim) && !PM_InKnockDown(pm->ps) && !BG_InDeathAnim(pm->ps->legsAnim) &&
+		!BG_SaberInSpecialAttack(pm->ps->torsoAnim) && !BG_SaberInAttack(pm->ps->saberMove) &&
+		BG_CanUseFPNow(pm->gametype, pm->ps, pm->cmd.serverTime, FP_HEAL) && !(pm->ps->pm_flags & PMF_JUMP_HELD) &&
+		pm->cmd.upmove > 10 && pm->ps->velocity[2] < FORCEFALLVELOCITY && pm->ps->groundEntityNum == ENTITYNUM_NONE &&
+		pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_1 && pm->ps->fd.forcePower > 5 &&
+		pm->waterlevel < 2 && pm->ps->gravity > 0);
+}
+
+qboolean PM_InForceFall(void)
+{
+	int ForceManaModifier = 0;
+	int FFDebounce = pm->ps->fd.forcePowerDebounce[FP_LEVITATION] - (pm->ps->fd.forcePowerLevel[FP_LEVITATION] * 100);
+	if (PM_CanForceFall()) {
+		if (pm->ps->weapon == WP_MELEE || pm->ps->weapon == WP_SABER)
+			PM_SetAnim(SETANIM_BOTH, BOTH_FORCEINAIR1, SETANIM_FLAG_OVERRIDE | SETANIM_FLAG_HOLD);
+		if (FFDebounce + FORCEFALLDEBOUNCE < pm->cmd.serverTime && pm->ps->velocity[2] < FORCEFALLVELOCITY) {
+			if ((FORCEFALLVELOCITY - pm->ps->velocity[2]) < ForceFallBrakeRate[pm->ps->fd.forcePowerLevel[FP_LEVITATION]])
+				pm->ps->velocity[2] = FORCEFALLVELOCITY;
+			else
+				pm->ps->velocity[2] += ForceFallBrakeRate[pm->ps->fd.forcePowerLevel[FP_LEVITATION]];
+		}
+		pm->ps->powerups[PW_SPEED] = pm->cmd.serverTime + 100;
+		if (pm->ps->fd.forcePowerDebounce[FP_LEVITATION] < pm->cmd.serverTime) {
+			if (pm->gametype == GT_DUEL || pm->gametype == GT_POWERDUEL) ForceManaModifier = -4;
+			BG_ForcePowerDrain(pm->ps, FP_HEAL, 5 + ForceManaModifier);
+			pm->ps->fd.forcePowerDebounce[FP_LEVITATION] = pm->cmd.serverTime + (pm->ps->fd.forcePowerLevel[FP_LEVITATION] * 100);
+		}
+		return qtrue;
+	}
+	return qfalse;
+}
+
+static int PM_MinGetUpTime(playerState_t *ps)
+{
+	if (ps->legsAnim == BOTH_PLAYER_PA_3_FLY || ps->legsAnim == BOTH_LK_DL_ST_T_SB_1_L || ps->legsAnim == BOTH_RELEASED)
+		return 200;
+	if (ps->clientNum < MAX_CLIENTS) {
+		int getUpTime = 400;
+		if (ps->fd.forcePowerLevel[FP_LEVITATION] >= FORCE_LEVEL_3) return getUpTime + 400;
+		if (ps->fd.forcePowerLevel[FP_LEVITATION] == FORCE_LEVEL_2) return getUpTime + 200;
+		if (ps->fd.forcePowerLevel[FP_LEVITATION] == FORCE_LEVEL_1) return getUpTime + 100;
+		return getUpTime;
+	}
+	return 200;
+}
+
+static qboolean PM_CheckRollSafety(int anim, float testDist)
+{
+	vec3_t forward, right, testPos, angles;
+	trace_t trace;
+	int contents = CONTENTS_SOLID | CONTENTS_BOTCLIP;
+	if (pm->ps->clientNum < MAX_CLIENTS) contents |= CONTENTS_PLAYERCLIP;
+	else contents |= CONTENTS_MONSTERCLIP;
+
+	angles[PITCH] = angles[ROLL] = 0; angles[YAW] = pm->ps->viewangles[YAW];
+	AngleVectors(angles, forward, right, NULL);
+
+	switch (anim) {
+	case BOTH_GETUP_BROLL_R: case BOTH_GETUP_FROLL_R: VectorMA(pm->ps->origin, testDist, right, testPos); break;
+	case BOTH_GETUP_BROLL_L: case BOTH_GETUP_FROLL_L: VectorMA(pm->ps->origin, -testDist, right, testPos); break;
+	case BOTH_GETUP_BROLL_F: case BOTH_GETUP_FROLL_F: VectorMA(pm->ps->origin, testDist, forward, testPos); break;
+	case BOTH_GETUP_BROLL_B: case BOTH_GETUP_FROLL_B: VectorMA(pm->ps->origin, -testDist, forward, testPos); break;
+	default: return qtrue;
+	}
+	pm->trace(&trace, pm->ps->origin, pm->mins, pm->maxs, testPos, pm->ps->clientNum, contents);
+	return (trace.fraction >= 1.0f && !trace.allsolid && !trace.startsolid) ? qtrue : qfalse;
+}
+
+static qboolean PM_CrouchGetup(float crouchheight)
+{
+	int anim = -1;
+	pm->maxs[2] = crouchheight;
+	pm->ps->viewheight = crouchheight + STANDARD_VIEWHEIGHT_OFFSET;
+
+	switch (pm->ps->legsAnim) {
+	case BOTH_KNOCKDOWN1: case BOTH_KNOCKDOWN2: case BOTH_KNOCKDOWN4:
+	case BOTH_RELEASED: case BOTH_PLAYER_PA_3_FLY:
+		anim = BOTH_GETUP_CROUCH_B1; break;
+	case BOTH_KNOCKDOWN3: case BOTH_KNOCKDOWN5: case BOTH_LK_DL_ST_T_SB_1_L:
+		anim = BOTH_GETUP_CROUCH_F1; break;
+	}
+	if (anim == -1) { pm->ps->legsTimer = 100; return qfalse; }
+	PM_SetAnim(SETANIM_BOTH, anim, SETANIM_FLAG_OVERRIDE | SETANIM_FLAG_HOLD | SETANIM_FLAG_HOLDLESS);
+	pm->ps->saberMove = LS_READY;
+	pm->ps->saberBlocked = BLOCKED_NONE;
+	return qtrue;
+}
+
+static qboolean PM_CheckRollGetup(void)
+{
+	if (pm->ps->legsAnim == BOTH_KNOCKDOWN1 || pm->ps->legsAnim == BOTH_KNOCKDOWN2 ||
+		pm->ps->legsAnim == BOTH_KNOCKDOWN3 || pm->ps->legsAnim == BOTH_KNOCKDOWN4 ||
+		pm->ps->legsAnim == BOTH_KNOCKDOWN5 || pm->ps->legsAnim == BOTH_LK_DL_ST_T_SB_1_L ||
+		pm->ps->legsAnim == BOTH_PLAYER_PA_3_FLY || pm->ps->legsAnim == BOTH_RELEASED) {
+		if ((pm->ps->clientNum < MAX_CLIENTS && !(pm->ps->userInt3 & (1 << FLAG_FATIGUED_HEAVY_OJP)) &&
+			(pm->cmd.rightmove || (pm->cmd.forwardmove && pm->ps->fd.forcePowerLevel[FP_LEVITATION] > FORCE_LEVEL_0)))) {
+			int anim;
+			if (pm->cmd.forwardmove > 0) {
+				anim = (pm->ps->legsAnim == BOTH_KNOCKDOWN3 || pm->ps->legsAnim == BOTH_KNOCKDOWN5 || pm->ps->legsAnim == BOTH_LK_DL_ST_T_SB_1_L) ? BOTH_GETUP_FROLL_F : BOTH_GETUP_BROLL_F;
+			} else if (pm->cmd.forwardmove < 0) {
+				anim = (pm->ps->legsAnim == BOTH_KNOCKDOWN3 || pm->ps->legsAnim == BOTH_KNOCKDOWN5 || pm->ps->legsAnim == BOTH_LK_DL_ST_T_SB_1_L) ? BOTH_GETUP_FROLL_B : BOTH_GETUP_BROLL_B;
+			} else if (pm->cmd.rightmove > 0) {
+				anim = (pm->ps->legsAnim == BOTH_KNOCKDOWN3 || pm->ps->legsAnim == BOTH_KNOCKDOWN5 || pm->ps->legsAnim == BOTH_LK_DL_ST_T_SB_1_L) ? BOTH_GETUP_FROLL_R : BOTH_GETUP_BROLL_R;
+			} else if (pm->cmd.rightmove < 0) {
+				anim = (pm->ps->legsAnim == BOTH_KNOCKDOWN3 || pm->ps->legsAnim == BOTH_KNOCKDOWN5 || pm->ps->legsAnim == BOTH_LK_DL_ST_T_SB_1_L) ? BOTH_GETUP_FROLL_L : BOTH_GETUP_BROLL_L;
+			} else return qfalse;
+
+			if (pm->ps->clientNum >= MAX_CLIENTS && !PM_CheckRollSafety(anim, 64)) return qfalse;
+			pm->cmd.rightmove = pm->cmd.forwardmove = 0;
+			PM_SetAnim(SETANIM_BOTH, anim, SETANIM_FLAG_OVERRIDE | SETANIM_FLAG_HOLD | SETANIM_FLAG_HOLDLESS);
+				pm->ps->weaponTime = pm->ps->torsoTimer - 300;
+			pm->ps->saberMove = LS_READY;
+			pm->ps->saberBlocked = BLOCKED_NONE;
+			return qtrue;
+		}
+	}
+	return qfalse;
+}
+
+qboolean PM_GettingUpFromKnockDown(float standheight, float crouchheight)
+{
+	if (PM_InKnockDown(pm->ps)) {
+		int minTimeLeft = PM_MinGetUpTime(pm->ps);
+		if (pm->ps->legsTimer <= minTimeLeft) {
+			if (PM_CheckRollGetup()) { pm->cmd.rightmove = pm->cmd.forwardmove = 0; return qtrue; }
+		}
+		if (!pm->ps->legsTimer || (pm->ps->legsTimer <= minTimeLeft && (pm->cmd.upmove > 0))) {
+			if (pm->cmd.upmove < 0) return PM_CrouchGetup(crouchheight);
+			trace_t trace;
+			pm->maxs[2] = standheight;
+			pm->trace(&trace, pm->ps->origin, pm->mins, pm->maxs, pm->ps->origin, pm->ps->clientNum, pm->tracemask);
+			if (!trace.allsolid) {
+				int anim = BOTH_GETUP1;
+				switch (pm->ps->legsAnim) {
+				case BOTH_KNOCKDOWN1: case BOTH_KNOCKDOWN2: case BOTH_PLAYER_PA_3_FLY: anim = BOTH_GETUP1; break;
+				case BOTH_KNOCKDOWN3: anim = BOTH_GETUP3; break;
+				case BOTH_KNOCKDOWN4: case BOTH_RELEASED: anim = BOTH_GETUP4; break;
+				case BOTH_KNOCKDOWN5: case BOTH_LK_DL_ST_T_SB_1_L: anim = BOTH_GETUP5; break;
+				}
+				pm->maxs[2] = standheight;
+				pm->ps->viewheight = standheight + STANDARD_VIEWHEIGHT_OFFSET;
+PM_SetAnim(SETANIM_BOTH, anim, SETANIM_FLAG_OVERRIDE | SETANIM_FLAG_HOLD | SETANIM_FLAG_HOLDLESS);
+				pm->ps->saberMove = LS_READY;
+				pm->ps->saberBlocked = BLOCKED_NONE;
+				return qtrue;
+			} else return PM_CrouchGetup(crouchheight);
+		} else {
+			pm->cmd.rightmove = pm->cmd.forwardmove = 0;
+		}
+	}
+	return qfalse;
+}
+
+void PM_MoveLock(void)
+{
+	if (pm->ps->userInt1) {
+		if ((pm->ps->userInt1 & 1) && pm->cmd.rightmove > 0) pm->cmd.rightmove = 0;
+		if ((pm->ps->userInt1 & 2) && pm->cmd.rightmove < 0) pm->cmd.rightmove = 0;
+		if ((pm->ps->userInt1 & 4) && pm->cmd.forwardmove > 0) pm->cmd.forwardmove = 0;
+		if ((pm->ps->userInt1 & 8) && pm->cmd.forwardmove < 0) pm->cmd.forwardmove = 0;
+		if ((pm->ps->userInt1 & 16) && pm->cmd.upmove > 0) pm->cmd.upmove = 0;
+		if ((pm->ps->userInt1 & 32) && pm->cmd.upmove < 0) pm->cmd.upmove = 0;
+	}
+}
+
+static void PM_FallToDeath(void)
+{
+	if (BG_HasAnimation(pm_entSelf->localAnimIndex, BOTH_FALLDEATH1))
+		PM_SetAnim(SETANIM_LEGS, BOTH_FALLDEATH1, SETANIM_FLAG_OVERRIDE | SETANIM_FLAG_HOLD);
+	else
+		PM_SetAnim(SETANIM_LEGS, BOTH_DEATH1, SETANIM_FLAG_OVERRIDE | SETANIM_FLAG_HOLD);
+	pm->ps->eFlags |= EF_DEAD;
 }
 
 qboolean BG_KnockDownable(playerState_t *ps)

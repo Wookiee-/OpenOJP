@@ -9490,3 +9490,109 @@ qboolean HasSetSaberOnly(void)
 
 	return qtrue;
 }
+
+// === OJP Saber Ballistics ===
+#define OJP_BALLISTICSABER_BOUNCECOUNT 3
+#define OJP_MAX_LEAVE_TIME 15000
+#define OJP_FRAMETIME 100
+
+void SaberBallisticsTouch(gentity_t *saberent, gentity_t *other, trace_t *trace)
+{
+	if (other && other->s.number == saberent->r.ownerNum) return;
+	if (saberent->s.eFlags & EF_MISSILE_STICK) return;
+	saberKnockDown(saberent, &g_entities[saberent->r.ownerNum], other);
+}
+
+void SaberBallisticsThink(gentity_t *saberEnt)
+{
+	saberEnt->nextthink = level.time;
+
+	if (saberEnt->s.eFlags & EF_MISSILE_STICK) {
+		gentity_t *saberOwner = &g_entities[saberEnt->r.ownerNum];
+		vec3_t dir;
+		VectorSubtract(saberOwner->r.currentOrigin, saberEnt->r.currentOrigin, dir);
+		float ownerLen = VectorLength(dir);
+
+		if (ownerLen <= 32) {
+			G_Sound(saberEnt, CHAN_AUTO, G_SoundIndex("sound/weapons/saber/saber_catch.wav"));
+			saberEnt->s.eFlags &= ~EF_MISSILE_STICK;
+			saberReactivate(saberEnt, saberOwner);
+			saberEnt->speed = 0;
+			saberEnt->nextthink = level.time;
+			saberEnt->r.contents = CONTENTS_LIGHTSABER;
+			saberOwner->client->ps.saberInFlight = qfalse;
+			saberOwner->client->ps.saberEntityState = 0;
+			saberOwner->client->ps.saberCanThrow = qfalse;
+			saberOwner->client->ps.saberThrowDelay = level.time + 300;
+			saberEnt->touch = SaberGotHit;
+			saberEnt->think = SaberUpdateSelf;
+			saberEnt->nextthink = level.time + 50;
+			WP_SaberRemoveG2Model(saberEnt);
+			saberOwner->client->ps.saberEntityNum = saberOwner->client->saberStoredIndex;
+			return;
+		} else if (saberOwner->client->saberKnockedTime < level.time &&
+			((saberOwner->client->buttons & BUTTON_FORCEPOWER &&
+				saberOwner->client->ps.fd.forcePowerSelected == FP_SABERTHROW) ||
+				saberOwner->client->buttons & BUTTON_ALT_ATTACK ||
+				saberOwner->client->ps.forceHandExtend == HANDEXTEND_SABERPULL)) {
+			saberEnt->s.eFlags &= ~EF_MISSILE_STICK;
+			saberReactivate(saberEnt, saberOwner);
+			saberEnt->touch = SaberGotHit;
+			saberEnt->think = saberBackToOwner;
+			saberEnt->speed = 0;
+			saberEnt->nextthink = level.time;
+			saberEnt->r.contents = CONTENTS_LIGHTSABER;
+		} else if ((level.time - saberOwner->client->saberKnockedTime) > OJP_MAX_LEAVE_TIME) {
+			VectorClear(saberEnt->s.pos.trDelta);
+			VectorClear(saberEnt->s.apos.trDelta);
+			saberEnt->speed = 0;
+			saberKnockDown(saberEnt, saberOwner, saberOwner);
+		}
+	} else {
+		if (saberEnt->bounceCount != OJP_BALLISTICSABER_BOUNCECOUNT) {
+			gentity_t *saberOwn = &g_entities[saberEnt->r.ownerNum];
+			saberKnockDown(saberEnt, saberOwn, saberOwn);
+		} else {
+			G_RunObject(saberEnt);
+		}
+	}
+}
+
+void thrownSaberBallistics(gentity_t *saberEnt, gentity_t *saberOwn, qboolean stuck)
+{
+	if (stuck) {
+		VectorClear(saberEnt->s.pos.trDelta);
+		VectorClear(saberEnt->s.apos.trDelta);
+		saberEnt->s.eFlags = EF_MISSILE_STICK;
+		saberEnt->s.pos.trType = TR_STATIONARY;
+		saberEnt->s.apos.trType = TR_STATIONARY;
+		saberOwn->client->saberKnockedTime = level.time + 3000;
+		saberEnt->s.loopSound = saberOwn->client->saber[0].soundLoop;
+		saberEnt->s.loopIsSoundset = qfalse;
+		saberEnt->bounceCount = 0;
+	} else {
+		saberEnt->s.apos.trType = TR_LINEAR;
+		saberEnt->s.apos.trDelta[0] = 0;
+		saberEnt->s.apos.trDelta[1] = 800;
+		saberEnt->s.apos.trDelta[2] = 0;
+		saberEnt->s.pos.trType = TR_GRAVITY;
+		saberEnt->s.eFlags = 0;
+		saberEnt->bounceCount = OJP_BALLISTICSABER_BOUNCECOUNT;
+	}
+
+	saberEnt->flags |= FL_BOUNCE_HALF;
+	saberEnt->s.apos.trTime = level.time;
+	VectorCopy(saberEnt->r.currentAngles, saberEnt->s.apos.trBase);
+	saberEnt->s.pos.trTime = level.time;
+	VectorCopy(saberEnt->r.currentOrigin, saberEnt->s.pos.trBase);
+	saberOwn->client->ps.saberEntityNum = 0;
+	saberEnt->think = SaberBallisticsThink;
+	saberEnt->touch = SaberBallisticsTouch;
+	saberEnt->nextthink = level.time + OJP_FRAMETIME;
+	trap_LinkEntity(saberEnt);
+	WP_SaberAddG2Model(saberEnt, saberOwn->client->saber[0].model, saberOwn->client->saber[0].skin);
+	saberEnt->s.modelGhoul2 = 1;
+	saberEnt->s.g2radius = 20;
+	saberEnt->s.eType = ET_MISSILE;
+	saberEnt->s.weapon = WP_SABER;
+}
