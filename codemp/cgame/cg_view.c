@@ -2642,6 +2642,15 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 			VectorCopy(camAng, cg.refdef.viewangles);
 	}
 
+	// OJP TrueView eye position shift
+	if (cg_trueeyeposition.value != 0.0f && !cg.renderingThirdPerson &&
+		(cg.predictedPlayerState.weapon == WP_SABER || cg.predictedPlayerState.weapon == WP_MELEE))
+	{
+		vec3_t fwd;
+		AngleVectors(cg.refdef.viewangles, fwd, NULL, NULL);
+		VectorMA(cg.refdef.vieworg, cg_trueeyeposition.value, fwd, cg.refdef.vieworg);
+	}
+
 	if (cg_linearFogOverride)
 	{
 		trap->R_SetRangedFog(-cg_linearFogOverride);
