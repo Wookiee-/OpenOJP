@@ -504,6 +504,8 @@ typedef struct clientPersistant_s {
 	int			vote, teamvote; // 0 = none, 1 = yes, 2 = no
 
 	char		guid[33];
+	int			ojpLMSLives; // OJP: Last Man Standing lives
+	qboolean	ojpClientPlugIn; // OJP: client has OJP plugin
 } clientPersistant_t;
 
 typedef struct renderInfo_s
