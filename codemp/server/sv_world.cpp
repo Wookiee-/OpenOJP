@@ -26,7 +26,6 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "server.h"
 #include "ghoul2/ghoul2_shared.h"
 #include "qcommon/cm_public.h"
-#include "duel_cull.h"
 /*
 ================
 SV_ClipHandleForEntity
@@ -609,10 +608,6 @@ static void SV_ClipMoveToEntities( moveclip_t *clip ) {
 		if ((clip->contentmask == (MASK_SHOT|CONTENTS_LIGHTSABER) || clip->contentmask == MASK_SHOT) && (touch->r.contents > 0 && (touch->r.contents & CONTENTS_NOSHOT)))
 		{
 			continue;
-		}
-		
-		if ( DuelCull(SV_GentityNum(clip->passEntityNum), touch) == 2 ) {
-			continue; 
 		}
 
 		// might intersect, so do an exact clip
