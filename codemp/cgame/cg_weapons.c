@@ -1663,7 +1663,18 @@ void CG_WeaponClean_f( void ) {
 	{
 		if (cg.snap->ps.weaponTime < 1)
 		{
-			trap->SendConsoleCommand("sv_saberswitch\n");
+			if (ojp_sabermelee.integer && !cg.snap->ps.saberHolstered && CG_WeaponSelectable(WP_MELEE))
+			{
+				num = WP_MELEE;
+				cg.weaponSelectTime = cg.time;
+				if (cg.weaponSelect != num)
+					trap->S_MuteSound(cg.snap->ps.clientNum, CHAN_WEAPON);
+				cg.weaponSelect = num;
+			}
+			else
+			{
+				trap->SendConsoleCommand("sv_saberswitch\n");
+			}
 		}
 		return;
 	}
