@@ -400,4 +400,6 @@ void CG_InitConsoleCommands( void ) {
 	//
 	for( i = 0; i < numgcmds; i++ )
 		trap->AddCommand( gcmds[i] );
+
+	trap->AddCommand("togglesaber");
 }
