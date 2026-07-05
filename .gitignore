@@ -199,4 +199,5 @@ cmake-build-*
 ## OJP assets & local files
 #############
 ojp/
+OpenOJPAssets/
 opencode.txt
