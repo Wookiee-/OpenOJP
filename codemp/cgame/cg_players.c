@@ -663,6 +663,24 @@ retryModel:
 	//We need a lower lumbar bolt for footsteps
 	ci->bolt_llumbar = trap->G2API_AddBolt(ci->ghoul2Model, 0, "lower_lumbar");
 
+	// OJP holster bolt registrations
+	ci->holster_saber = trap->G2API_AddBolt(ci->ghoul2Model, 0, "*holster_saber");
+	ci->saber_holstered = qfalse;
+	ci->holster_saber2 = trap->G2API_AddBolt(ci->ghoul2Model, 0, "*holster_saber2");
+	ci->saber2_holstered = qfalse;
+	ci->holster_staff = trap->G2API_AddBolt(ci->ghoul2Model, 0, "*holster_staff");
+	ci->staff_holstered = qfalse;
+	ci->holster_blaster = trap->G2API_AddBolt(ci->ghoul2Model, 0, "*holster_blaster");
+	ci->blaster_holstered = 0;
+	ci->holster_blaster2 = trap->G2API_AddBolt(ci->ghoul2Model, 0, "*holster_blaster2");
+	ci->blaster2_holstered = 0;
+	ci->holster_golan = trap->G2API_AddBolt(ci->ghoul2Model, 0, "*holster_golan");
+	ci->golan_holstered = qfalse;
+	ci->holster_launcher = trap->G2API_AddBolt(ci->ghoul2Model, 0, "*holster_launcher");
+	ci->launcher_holstered = 0;
+	ci->bolt_rfemurYZ = trap->G2API_AddBolt(ci->ghoul2Model, 0, "rfemurYZ");
+	ci->bolt_lfemurYZ = trap->G2API_AddBolt(ci->ghoul2Model, 0, "lfemurYZ");
+
 	if (ci->bolt_rhand == -1 || ci->bolt_lhand == -1 || ci->bolt_head == -1 || ci->bolt_motion == -1 || ci->bolt_llumbar == -1)
 	{
 		badModel = qtrue;
