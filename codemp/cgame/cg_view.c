@@ -1170,6 +1170,9 @@ static int CG_CalcFov( void ) {
 			} else if ( fov_x > 160 ) {
 				fov_x = 160;
 			}
+		// OJP TrueView FOV override
+		if ( cg_truefov.integer && !cg.renderingThirdPerson && (cg.predictedPlayerState.weapon == WP_SABER || cg.predictedPlayerState.weapon == WP_MELEE) )
+			fov_x = cg_truefov.value;
 		}
 
 		if (cg.predictedPlayerState.zoomMode == 2)
