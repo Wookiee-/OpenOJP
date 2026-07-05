@@ -194,5 +194,9 @@ XCVAR_DEF( ojp_MOTD,					"This server is running OJP Enhanced...", NULL,	CVAR_AR
 XCVAR_DEF( ojp_skipcutscenes,			"0",			NULL,						CVAR_SERVERINFO|CVAR_ARCHIVE,					qtrue )
 XCVAR_DEF( bot_thinklevel,				"3",			NULL,						CVAR_ARCHIVE,									qfalse )
 XCVAR_DEF( bot_cpu_usage,				"0",			NULL,						CVAR_NONE,										qfalse )
+XCVAR_DEF( g_autoKickKillSpammers,		"0",			NULL,						CVAR_ARCHIVE,									qfalse )
+XCVAR_DEF( g_autoBanKillSpammers,		"0",			NULL,						CVAR_ARCHIVE,									qfalse )
+XCVAR_DEF( g_autoKickTKSpammers,		"0",			NULL,						CVAR_ARCHIVE,									qfalse )
+XCVAR_DEF( g_autoBanTKSpammers,			"0",			NULL,						CVAR_ARCHIVE,									qfalse )
 
 #undef XCVAR_DEF

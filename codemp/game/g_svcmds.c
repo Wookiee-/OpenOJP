@@ -478,6 +478,8 @@ int svcmdcmp( const void *a, const void *b ) {
 	return Q_stricmp( (const char *)a, ((svcmd_t*)b)->name );
 }
 
+extern void ojp_CenterSay( void );
+
 svcmd_t svcmds[] = {
 	{ "addbot",						Svcmd_AddBot_f,						qfalse },
 	{ "addip",						Svcmd_AddIP_f,						qfalse },
@@ -490,6 +492,7 @@ svcmd_t svcmds[] = {
 	{ "say",						Svcmd_Say_f,						qtrue },
 	{ "toggleallowvote",			Svcmd_ToggleAllowVote_f,			qfalse },
 	{ "toggleuserinfovalidation",	Svcmd_ToggleUserinfoValidation_f,	qfalse },
+	{ "centersay",					ojp_CenterSay,						qtrue },
 };
 static const size_t numsvcmds = ARRAY_LEN( svcmds );
 

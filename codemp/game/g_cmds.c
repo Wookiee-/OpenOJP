@@ -535,6 +535,7 @@ Cmd_Kill_f
 */
 void Cmd_Kill_f( gentity_t *ent ) {
 	G_Kill( ent );
+	ojp_CheckKillSpam( ent );
 }
 
 void Cmd_KillOther_f( gentity_t *ent )

@@ -95,6 +95,13 @@ Contributions are welcome. If you find a bug or have a small improvement, feel f
 - Dynamic lights with lifetime management
 - Holocron icon rendering
 
+### Admin System
+- **`centersay`** — Server console command to send center-printed messages to all players
+- **IP Ban Management** — `addip`, `removeip`, `listip` commands with persistent bans via `banip.txt`
+- **Auto-Kick/Auto-Ban** — Automatic enforcement for team-kill and kill spamming with configurable thresholds (`g_autoKickTKSpammers`, `g_autoBanTKSpammers`, `g_autoKickKillSpammers`, `g_autoBanKillSpammers`)
+- **Chat Spam Protection** — Configurable debounce timer (`ojp_chatProtectTime`)
+- **All admin features accessible via RCON** — No additional admin plugin required
+
 ### Ghoul2 & Utility
 - G2 API wrapper layer for bolt matrix, bone angles, and ragdoll
 - C++ vector math library (CVec3)

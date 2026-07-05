@@ -4925,6 +4925,7 @@ void G_Damage( gentity_t *targ, gentity_t *inflictor, gentity_t *attacker, vec3_
 			&& client) {
 		if ( OnSameTeam( targ, attacker ) ) {
 			attacker->client->ps.persistant[PERS_HITS]--;
+			ojp_CheckTKAutoKickBan( attacker );
 		} else {
 			attacker->client->ps.persistant[PERS_HITS]++;
 		}
