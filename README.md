@@ -101,6 +101,14 @@ Contributions are welcome. If you find a bug or have a small improvement, feel f
 - Non-duelists and spectators see everything normally
 - Map, items, effects, and projectiles render normally for all players
 
+### Game Mode Features
+- **Last Man Standing** — LMS mode with configurable lives per player
+- **Swap Sides / Auto-Balance** — Team force balancing with TrueBalance system
+- **FFA Respawn Timer** — Configurable respawn delay in free-for-all modes
+- **MOTD System** — Separate messages for OJP-enabled and base clients
+- **Model Scale** — Per-player model scaling support
+- **Client Plugin Detection** — Detects OJP client plugin for enhanced features
+
 ### Admin System
 - **`centersay`** — Server console command to send center-printed messages to all players
 - **IP Ban Management** — `addip`, `removeip`, `listip` commands with persistent bans via `banip.txt`
