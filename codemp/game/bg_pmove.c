@@ -234,6 +234,7 @@ qboolean BG_SabersOff( playerState_t *ps )
 			return qfalse;
 		}
 	}
+	return qtrue;
 }
 
 // === OJP Movement System Additions ===
