@@ -56,11 +56,9 @@ void ojp_LoadDynamicMusic(void)
 
 	len = trap_FS_FOpenFile("ext_data/dms.dat", &f, FS_READ);
 	if (!f) {
-		G_Printf("LoadDynamicMusic() Error: Couldn't open ext_data/dms.dat\n");
 		return;
 	}
 	if (len >= DMS_INFO_SIZE_OJP) {
-		G_Printf("LoadDynamicMusic() Error: dms.dat too big.\n");
 		trap_FS_FCloseFile(f);
 		return;
 	}
