@@ -200,4 +200,5 @@ cmake-build-*
 #############
 ojp/
 OpenOJPAssets/
+server.cfg
 opencode.txt
