@@ -1500,6 +1500,13 @@ void CG_DrawHUD(centity_t	*cent)
 		{
 			//trap->Error( ERR_DROP, "CG_ChatBox_ArrayInsert: unable to locate HUD menu file ");
 		}
+
+		// OJP HUD bars
+		if (cg.predictedPlayerState.pm_type != PM_SPECTATOR)
+		{
+			ojp_CG_DrawDodge();
+			ojp_CG_DrawBalance();
+		}
 	}
 }
 

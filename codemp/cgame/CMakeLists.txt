@@ -107,6 +107,7 @@ set(MPCGameCgameFiles
 	"${MPDir}/cgame/ojp_cg_strap.c"
 	"${MPDir}/cgame/ojp_holocronicons.c"
 	"${MPDir}/cgame/ojp_holocronicons.h"
+	"${MPDir}/cgame/ojp_cg_draw.c"
 	)
 source_group("cgame" FILES ${MPCGameCgameFiles})
 set(MPCGameFiles ${MPCGameFiles} ${MPCGameCgameFiles})
