@@ -313,6 +313,29 @@ typedef struct clientInfo_s {
 
 	int			superSmoothTime; //do crazy amount of smoothing
 
+	// OJP additions
+	vec3_t		rgb1;
+	vec3_t		rgb2;
+	void		*ghoul2HolsterWeapons[MAX_SABERS];
+	qhandle_t	holster_saber;
+	qboolean	saber_holstered;
+	qhandle_t	holster_saber2;
+	qboolean	saber2_holstered;
+	qhandle_t	holster_staff;
+	qboolean	staff_holstered;
+	qhandle_t	holster_blaster;
+	int			blaster_holstered;
+	qhandle_t	holster_blaster2;
+	int			blaster2_holstered;
+	qhandle_t	holster_golan;
+	qboolean	golan_holstered;
+	qhandle_t	holster_launcher;
+	int			launcher_holstered;
+	qhandle_t	bolt_rfemurYZ;
+	qhandle_t	bolt_lfemurYZ;
+	int			saberLockFxDebounce;
+	int			saberLockSoundDebounce;
+
 } clientInfo_t;
 
 //rww - cheap looping sound struct
@@ -456,6 +479,7 @@ typedef struct centity_s {
 	qboolean		cloaked;
 
 	int				vChatTime;
+	int				weapons; // OJP: visual weapons tracking
 } centity_t;
 
 
@@ -640,6 +664,7 @@ typedef struct score_s {
 	int				captures;
 	qboolean	perfect;
 	int				team;
+	int				skill; // OJP: skill level
 } score_t;
 
 
@@ -956,6 +981,8 @@ typedef struct cg_s {
 	int			forceHUDTotalFlashTime;
 	int			forceHUDNextFlashTime;
 	qboolean	forceHUDActive;				// Flag to show force hud is off/on
+	int			dodgeHUDNextFlashTime;		// OJP: dodge HUD flash
+	qboolean	dodgeHUDActive;				// OJP: dodge HUD state
 
 	// development tool
 	refEntity_t		testModelEntity;
@@ -1141,6 +1168,55 @@ typedef struct cgMedia_s {
 	qhandle_t	purpleSaberCoreShader;
 	qhandle_t	saberBlurShader;
 	qhandle_t	swordTrailShader;
+	// OJP saber shaders
+	qhandle_t	rgbSaberGlowShader;
+	qhandle_t	rgbSaberCoreShader;
+	qhandle_t	rgbSaberCore2Shader;
+	qhandle_t	blackSaberGlowShader;
+	qhandle_t	blackSaberTrail;
+	qhandle_t	sfxSaberTrailShader;
+	qhandle_t	sfxSaberBladeShader;
+	qhandle_t	sfxSaberBlade2Shader;
+	qhandle_t	sfxSaberEndShader;
+	qhandle_t	sfxSaberEnd2Shader;
+	qhandle_t	otSaberCoreShader;
+	qhandle_t	redOTGlowShader;
+	qhandle_t	orangeOTGlowShader;
+	qhandle_t	yellowOTGlowShader;
+	qhandle_t	greenOTGlowShader;
+	qhandle_t	blueOTGlowShader;
+	qhandle_t	purpleOTGlowShader;
+	qhandle_t	ep1SaberCoreShader;
+	qhandle_t	redEp1GlowShader;
+	qhandle_t	orangeEp1GlowShader;
+	qhandle_t	yellowEp1GlowShader;
+	qhandle_t	greenEp1GlowShader;
+	qhandle_t	blueEp1GlowShader;
+	qhandle_t	purpleEp1GlowShader;
+	qhandle_t	ep2SaberCoreShader;
+	qhandle_t	whiteIgniteFlare;
+	qhandle_t	blackIgniteFlare;
+	qhandle_t	redEp2GlowShader;
+	qhandle_t	orangeEp2GlowShader;
+	qhandle_t	yellowEp2GlowShader;
+	qhandle_t	greenEp2GlowShader;
+	qhandle_t	blueEp2GlowShader;
+	qhandle_t	purpleEp2GlowShader;
+	qhandle_t	ep3SaberCoreShader;
+	qhandle_t	whiteIgniteFlare02;
+	qhandle_t	blackIgniteFlare02;
+	qhandle_t	redIgniteFlare;
+	qhandle_t	greenIgniteFlare;
+	qhandle_t	purpleIgniteFlare;
+	qhandle_t	blueIgniteFlare;
+	qhandle_t	orangeIgniteFlare;
+	qhandle_t	yellowIgniteFlare;
+	qhandle_t	redEp3GlowShader;
+	qhandle_t	orangeEp3GlowShader;
+	qhandle_t	yellowEp3GlowShader;
+	qhandle_t	greenEp3GlowShader;
+	qhandle_t	blueEp3GlowShader;
+	qhandle_t	purpleEp3GlowShader;
 
 	qhandle_t	yellowDroppedSaberShader;
 
@@ -1473,6 +1549,8 @@ typedef struct cgEffects_s {
 	fxHandle_t	mSaberBloodSparks;
 	fxHandle_t	mSaberBloodSparksSmall;
 	fxHandle_t	mSaberBloodSparksMid;
+	fxHandle_t	mSaberFriction; // OJP: saber lock friction
+	fxHandle_t	flamethrower; // OJP: flamethrower effect
 	fxHandle_t	mSpawn;
 	fxHandle_t	mJediSpawn;
 	fxHandle_t	mBlasterDeflect;
@@ -1621,6 +1699,7 @@ typedef struct cgs_s {
 
 	// effects
 	cgEffects_t		effects;
+	char			mapURL[MAX_QPATH]; // OJP: map download URL
 
 	int					numMiscStaticModels;
 	cg_staticmodel_t	miscStaticModels[MAX_STATIC_MODELS];
