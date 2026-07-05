@@ -2639,6 +2639,7 @@ Ghoul2 Insert End
 	CG_InitSiegeMode();
 
 	ojp_TrueViewInit();
+	ojp_CGCam_Init();
 
 	CG_RegisterSounds();
 

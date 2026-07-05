@@ -1173,6 +1173,10 @@ static int CG_CalcFov( void ) {
 		// OJP TrueView FOV override
 		if ( cg_truefov.integer && !cg.renderingThirdPerson && (cg.predictedPlayerState.weapon == WP_SABER || cg.predictedPlayerState.weapon == WP_MELEE) )
 			fov_x = cg_truefov.value;
+
+	// OJP Camera FOV override
+		if ( ojp_CGCam_IsEnabled() )
+			fov_x = 90.0f;
 		}
 
 		if (cg.predictedPlayerState.zoomMode == 2)
@@ -2625,6 +2629,18 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 	// build cg.refdef
 	inwater = CG_CalcViewValues();
 	CG_SetupFrustum();
+
+	// OJP camera position/angles override
+	if (ojp_CGCam_IsEnabled()) {
+		vec3_t camAng, camOrg;
+		ojp_CGCam_Update();
+		ojp_CGCam_GetPosition(camOrg);
+		ojp_CGCam_GetAngles(camAng);
+		if (camOrg[0] || camOrg[1] || camOrg[2])
+			VectorCopy(camOrg, cg.refdef.vieworg);
+		if (camAng[0] || camAng[1] || camAng[2])
+			VectorCopy(camAng, cg.refdef.viewangles);
+	}
 
 	if (cg_linearFogOverride)
 	{

@@ -142,3 +142,13 @@ void ojp_CGCam_Smooth(float intensity, int duration)
 void ojp_CGCam_FollowUpdate(void)
 {
 }
+
+void ojp_CGCam_GetPosition(vec3_t org)
+{
+	VectorCopy(ojp_cgCamOrigin, org);
+}
+
+void ojp_CGCam_GetAngles(vec3_t ang)
+{
+	VectorCopy(ojp_cgCamAngles, ang);
+}

@@ -24,3 +24,5 @@ void ojp_CGCam_StartRoff(char *roff);
 void ojp_CGCam_Smooth(float intensity, int duration);
 void ojp_CGCam_FollowUpdate(void);
 qboolean ojp_CGCam_IsEnabled(void);
+void ojp_CGCam_GetPosition(vec3_t org);
+void ojp_CGCam_GetAngles(vec3_t ang);

@@ -21,7 +21,10 @@ qboolean ojp_AllPlayersHaveClientPlugin(void)
 // ============================================================
 int ojp_PointSpread(void)
 {
-	return 100;
+	int spread = 100;
+	if (level.gametype >= GT_TEAM) spread = 50;
+	if (level.gametype == GT_DUEL || level.gametype == GT_POWERDUEL) spread = 10;
+	return spread;
 }
 
 // ============================================================
