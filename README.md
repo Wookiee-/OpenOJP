@@ -95,6 +95,12 @@ Contributions are welcome. If you find a bug or have a small improvement, feel f
 - Dynamic lights with lifetime management
 - Holocron icon rendering
 
+### Duel Culling
+- **Client-side only** — no engine modifications
+- Duelists cannot see non-opponent players or NPCs during a duel
+- Non-duelists and spectators see everything normally
+- Map, items, effects, and projectiles render normally for all players
+
 ### Admin System
 - **`centersay`** — Server console command to send center-printed messages to all players
 - **IP Ban Management** — `addip`, `removeip`, `listip` commands with persistent bans via `banip.txt`
