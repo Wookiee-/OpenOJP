@@ -2,6 +2,14 @@
 
 OpenOJP is a mod for Star Wars Jedi Knight: Jedi Academy based on the OpenJK engine, porting the full feature set of the **Open Jedi Project (OJP) Enhanced** into a modern, maintained codebase.
 
+## Direction
+
+OpenOJP is focused on **bug fixing, minor tweaks, and quality-of-life improvements** to the OJP Enhanced experience. This is a community-maintained project that aims to keep OJP's unique gameplay alive and stable.
+
+This is **not** a replacement for MovieBattles 2 or any other large-scale modification. OpenOJP preserves the core Jedi Academy gameplay with OJP's enhancements — improved saber combat, dodge mechanics, bot AI, and game mode additions — without redefining the game into something entirely new.
+
+Contributions are welcome. If you find a bug or have a small improvement, feel free to open an issue or pull request.
+
 ## Features
 
 ### Saber Combat System
