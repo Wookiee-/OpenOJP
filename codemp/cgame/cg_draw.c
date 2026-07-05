@@ -56,7 +56,7 @@ char teamChat2[256];
 // The time at which you died and the time it will take for you to rejoin game.
 int cg_siegeDeathTime = 0;
 
-#define MAX_HUD_TICS 4
+#define MAX_HUD_TICS 8
 const char *armorTicName[MAX_HUD_TICS] =
 {
 "armor_tic1",

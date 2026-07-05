@@ -2601,6 +2601,15 @@ void CG_DrawActiveFrame( int serverTime, stereoFrame_t stereoView, qboolean demo
 		{ //always force first person when zoomed
 			cg.renderingThirdPerson = 0;
 		}
+
+		// OJP TrueView invert saber
+		if (cg_trueinvertsaber.integer && (cg.predictedPlayerState.weapon == WP_SABER || cg.predictedPlayerState.weapon == WP_MELEE))
+		{
+			if (cg_trueinvertsaber.integer == 2)
+				cg.renderingThirdPerson = 1;
+			else
+				cg.renderingThirdPerson = !cg.renderingThirdPerson;
+		}
 	}
 
 	if (cg.predictedPlayerState.pm_type == PM_SPECTATOR)

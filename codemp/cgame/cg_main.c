@@ -2638,6 +2638,8 @@ Ghoul2 Insert End
 	//make sure saber data is loaded before this! (so we can precache the appropriate hilts)
 	CG_InitSiegeMode();
 
+	ojp_TrueViewInit();
+
 	CG_RegisterSounds();
 
 //	CG_LoadingString( "graphics" );
