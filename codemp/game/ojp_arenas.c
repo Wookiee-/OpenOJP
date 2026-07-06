@@ -91,7 +91,7 @@ void ojp_ScoreboardMessage(gentity_t *ent)
 	char entry[1024];
 	char string[14000];
 	int stringlength = 0;
-	int i, j;
+	int i;
 	int numSorted;
 
 	CalculateRanks();

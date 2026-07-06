@@ -1229,6 +1229,10 @@ void WP_FireBlasterMissile( gentity_t *ent, vec3_t start, vec3_t dir, qboolean a
 //
 extern int	BMS_START;
 extern int	BMS_MID;
+
+// OJP compatibility: trap functions from g_syscalls.c
+void trap_SendConsoleCommand( int exec_when, const char *text );
+void trap_SendServerCommand( int clientNum, const char *text );
 extern int	BMS_END;
 
 #define SPF_BUTTON_USABLE		1
