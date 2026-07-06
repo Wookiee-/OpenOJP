@@ -380,7 +380,7 @@ static void CG_CalcBiLerp( vec3_t verts[4], vec3_t subVerts[4], vec2_t uv[4] )
 	VectorMA( temp,			uv[3][1],			subVerts[3], subVerts[3] );
 }
 // bilinear
-//f(p',q') = (1 - y) × {[(1 - x) × f(p,q)] + [x × f(p,q+1)]} + y × {[(1 - x) × f(p+1,q)] + [x × f(p+1,q+1)]}.
+//f(p',q') = (1 - y) ï¿½ {[(1 - x) ï¿½ f(p,q)] + [x ï¿½ f(p,q+1)]} + y ï¿½ {[(1 - x) ï¿½ f(p+1,q)] + [x ï¿½ f(p+1,q+1)]}.
 
 
 static void CG_CalcHeightWidth( vec3_t verts[4], float *height, float *width )
@@ -1084,7 +1084,7 @@ localEntity_t *CG_MakeExplosion( vec3_t origin, vec3_t dir,
 			if ( !(flags & LEF_NO_RANDOM_ROTATE) )
 				ang = rand() % 360;
 			VectorCopy( dir, ex->refEntity.axis[0] );
-			RotateAroundDirection( ex->refEntity.axis, ang );
+			RotateAroundDirection( (matrix3_t)&ex->refEntity.axis, ang );
 		}
 	}
 

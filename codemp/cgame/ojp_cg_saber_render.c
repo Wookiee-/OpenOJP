@@ -7,7 +7,7 @@ void ojp_CG_DoPrequelSaber(vec3_t blade_muz, vec3_t blade_tip, vec3_t trail_tip,
 {
 	vec3_t dif, mid, blade_dir, end_dir, trail_dir, base_dir;
 	float radiusmult, effectradius, coreradius, effectalpha, AngleScale;
-	float blade_len, end_len, trail_len, base_len, DisTip, DisMuz, DisDif;
+	float blade_len, end_len, base_len, DisTip, DisMuz, DisDif;
 	float glowscale = 0.5f;
 	float v1, v2, len;
 	vec3_t rgb = { 1, 1, 1 };
@@ -18,7 +18,6 @@ void ojp_CG_DoPrequelSaber(vec3_t blade_muz, vec3_t blade_tip, vec3_t trail_tip,
 	VectorSubtract(blade_tip, blade_muz, blade_dir);
 	VectorSubtract(trail_tip, trail_muz, trail_dir);
 	blade_len = VectorLength(blade_dir);
-	trail_len = VectorLength(trail_dir);
 	VectorNormalize(blade_dir);
 	VectorNormalize(trail_dir);
 

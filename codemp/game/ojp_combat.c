@@ -27,7 +27,7 @@ extern qboolean PM_SaberInBrokenParry(int move);
 #define STAFF_KICK_RANGE_OJP 48.0f
 
 // Basic dodge costs by damage mod
-static int BasicDodgeCosts_OJP[MOD_UNKNOWN + 1] = { 0 };
+static int BasicDodgeCosts_OJP[MOD_MAX] = { 0 };
 static qboolean dodgeCostsInit_OJP = qfalse;
 static void InitDodgeCosts_OJP(void)
 {

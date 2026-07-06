@@ -27,7 +27,6 @@ qboolean ojp_BG_SaberInFullDamageMove(playerState_t *ps)
 qboolean ojp_BG_SaberInTransitionDamageMove(playerState_t *ps)
 {
 	if (!ps) return qfalse;
-	int move = ps->saberMove;
 	return qfalse;
 }
 

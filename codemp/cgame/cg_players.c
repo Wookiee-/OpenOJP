@@ -724,7 +724,7 @@ retryModel:
 		char iconName[1024];
 		strcpy(iconName, "icon_");
 		j = strlen(iconName);
-		while (skinName[i] && skinName[i] != '|' && j < 1024)
+		while (skinName[i] && skinName[i] != '|' && j < (int)sizeof(iconName) - 1)
 		{
             iconName[j] = skinName[i];
 			j++;
@@ -1688,7 +1688,7 @@ void CG_NewClientInfo( int clientNum, qboolean entitiesInitialized ) {
 
 		if ( cgs.gametype >= GT_TEAM ) {
 			// keep skin name
-			slash = strchr( v, '/' );
+			slash = (char *)strchr( v, '/' );
 			if ( slash ) {
 				Q_strncpyz( newInfo.skinName, slash + 1, sizeof( newInfo.skinName ) );
 			}

@@ -42,28 +42,6 @@ void ojp_ClearRoute(gentity_t *self)
 	self->NPC->lastGoalEntity = NULL;
 }
 
-static void ojp_FavoriteWeapon(gentity_t *self)
-{
-	if (!self || !self->client) return;
-	int bestWeapon = WP_SABER;
-	float bestDist = 999999.0f;
-
-	if (!self->enemy) return;
-	float dist = Distance(self->r.currentOrigin, self->enemy->r.currentOrigin);
-
-	if (dist < 200.0f && self->client->ps.weapon == WP_SABER) {
-		bestWeapon = WP_SABER;
-	} else if (dist < 500.0f) {
-		bestWeapon = WP_BLASTER;
-	} else {
-		bestWeapon = WP_BLASTER;
-	}
-
-	if (self->client->ps.weapon != bestWeapon) {
-		self->client->ps.weapon = bestWeapon;
-	}
-}
-
 void ojp_SaberCombatHandling(gentity_t *self)
 {
 	if (!self || !self->client || !self->enemy) return;

@@ -2665,11 +2665,7 @@ void WP_PlaceLaserTrap( gentity_t *ent, qboolean alt_fire )
 		if ( removeMe != -1 )
 		{
 			//remove it... or blow it?
-			if ( &g_entities[foundLaserTraps[removeMe]] == NULL )
-			{
-				break;
-			}
-			else
+			if ( g_entities[foundLaserTraps[removeMe]].inuse )
 			{
 				G_FreeEntity( &g_entities[foundLaserTraps[removeMe]] );
 			}
@@ -3039,11 +3035,7 @@ void WP_DropDetPack( gentity_t *ent, qboolean alt_fire )
 		if ( removeMe != -1 )
 		{
 			//remove it... or blow it?
-			if ( &g_entities[foundDetPacks[removeMe]] == NULL )
-			{
-				break;
-			}
-			else
+			if ( g_entities[foundDetPacks[removeMe]].inuse )
 			{
 				if (!CheatsOn())
 				{ //Let them have unlimited if cheats are enabled

@@ -6940,7 +6940,8 @@ void StandardBotAI(bot_state_t *bs, float thinktime)
 		}
 		else
 		{
-			VectorCopy(bs->currentEnemy->client->ps.origin, headlevel);
+			VectorCopy(bs->currentEnemy->r.currentOrigin, headlevel);
+			headlevel[2] += DEFAULT_VIEWHEIGHT;
 		}
 
 		if (!bs->frame_Enemy_Vis)

@@ -317,14 +317,14 @@ qboolean NAV_ClearPathToPoint( gentity_t *self, vec3_t pmins, vec3_t pmaxs, vec3
 		{
 			if ( NAVDEBUG_showCollision )
 			{
-				if ( trace.entityNum < ENTITYNUM_WORLD && (&g_entities[trace.entityNum] != NULL) && g_entities[trace.entityNum].s.eType != ET_MOVER )
-				{
-					vec3_t	p1, p2;
-					G_DrawEdge( point, trace.endpos, EDGE_PATH );
-					VectorAdd(g_entities[trace.entityNum].r.mins, g_entities[trace.entityNum].r.currentOrigin, p1);
-					VectorAdd(g_entities[trace.entityNum].r.maxs, g_entities[trace.entityNum].r.currentOrigin, p2);
-					G_CubeOutline( p1, p2, FRAMETIME, 0x0000ff, 0.5 );
-				}
+			if ( trace.entityNum < ENTITYNUM_WORLD && g_entities[trace.entityNum].s.eType != ET_MOVER )
+			{
+				vec3_t	p1, p2;
+				G_DrawEdge( point, trace.endpos, EDGE_PATH );
+				VectorAdd(g_entities[trace.entityNum].r.mins, g_entities[trace.entityNum].r.currentOrigin, p1);
+				VectorAdd(g_entities[trace.entityNum].r.maxs, g_entities[trace.entityNum].r.currentOrigin, p2);
+				G_CubeOutline( p1, p2, FRAMETIME, 0x0000ff, 0.5 );
+			}
 				//FIXME: if it is a bmodel, light up the surf?
 			}
 		}
@@ -350,7 +350,7 @@ qboolean NAV_ClearPathToPoint( gentity_t *self, vec3_t pmins, vec3_t pmaxs, vec3
 
 		if ( NAVDEBUG_showCollision )
 		{
-			if ( trace.entityNum < ENTITYNUM_WORLD && (&g_entities[trace.entityNum] != NULL) && g_entities[trace.entityNum].s.eType != ET_MOVER )
+			if ( trace.entityNum < ENTITYNUM_WORLD && g_entities[trace.entityNum].s.eType != ET_MOVER )
 			{
 				vec3_t	p1, p2;
 				G_DrawEdge( self->r.currentOrigin, trace.endpos, EDGE_PATH );

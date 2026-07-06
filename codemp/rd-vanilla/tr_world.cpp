@@ -612,7 +612,10 @@ void RE_GetBModelVerts( int bmodelIndex, vec3_t *verts, vec3_t normal )
 		face = ( srfSurfaceFace_t *)surfs->data;
 
 		// It seems that the safest way to handle this is by finding the area of the faces
-		dist = GetQuadArea( face->points[0], face->points[1], face->points[2], face->points[3] );
+		{
+			float(*p)[VERTEXSIZE] = (float(*)[VERTEXSIZE])face->points;
+			dist = GetQuadArea( p[0], p[1], p[2], p[3] );
+		}
 
 		// Check against the highest max
 		if ( dist > maxDist[0] )
