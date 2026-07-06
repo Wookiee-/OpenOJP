@@ -36,6 +36,7 @@ extern void BG_ClearRocketLock( playerState_t *ps );
 void BotDamageNotification(gclient_t *bot, gentity_t *attacker);
 //end rww
 
+void ojp_CheckTKAutoKickBan(gentity_t *ent);
 void ThrowSaberToAttacker(gentity_t *self, gentity_t *attacker);
 
 void ObjectDie (gentity_t *self, gentity_t *inflictor, gentity_t *attacker, int damage, int meansOfDeath )
