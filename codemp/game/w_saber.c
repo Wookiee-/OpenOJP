@@ -2678,10 +2678,10 @@ static QINLINE qboolean G_SaberFaceCollisionCheck(int fNum, saberFace_t *fList, 
 }
 
 //check for collision of 2 blades -rww
-QINLINE qboolean G_SaberCollide(gentity_t *atk, gentity_t *def, vec3_t atkStart,
+static QINLINE qboolean G_SaberCollide(gentity_t *atk, gentity_t *def, vec3_t atkStart,
 						vec3_t atkEnd, vec3_t atkMins, vec3_t atkMaxs, vec3_t impactPoint)
 {
-	static int i, j;
+	int i, j;
 
 	if (!g_saberBladeFaces.integer)
 	{ //detailed check not enabled
@@ -9589,7 +9589,7 @@ void thrownSaberBallistics(gentity_t *saberEnt, gentity_t *saberOwn, qboolean st
 	saberEnt->think = SaberBallisticsThink;
 	saberEnt->touch = SaberBallisticsTouch;
 	saberEnt->nextthink = level.time + OJP_FRAMETIME;
-	trap_LinkEntity(saberEnt);
+	trap->LinkEntity((sharedEntity_t *)saberEnt);
 	WP_SaberAddG2Model(saberEnt, saberOwn->client->saber[0].model, saberOwn->client->saber[0].skin);
 	saberEnt->s.modelGhoul2 = 1;
 	saberEnt->s.g2radius = 20;
