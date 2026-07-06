@@ -5257,6 +5257,16 @@ static void UI_UpdateSaberCvars ( void )
 	colorI = TranslateSaberColor( UI_Cvar_VariableString ( "ui_saber2_color" ) );
 	trap->Cvar_Set ( "color2", va("%d",colorI) );
 	trap->Cvar_Set ( "g_saber2_color", UI_Cvar_VariableString ( "ui_saber2_color" ));
+
+	// RGB saber colors
+	trap->Cvar_Set( "rgb_saber1", va("%i,%i,%i",
+		(int)trap->Cvar_VariableValue("ui_sab1_r"),
+		(int)trap->Cvar_VariableValue("ui_sab1_g"),
+		(int)trap->Cvar_VariableValue("ui_sab1_b")) );
+	trap->Cvar_Set( "rgb_saber2", va("%i,%i,%i",
+		(int)trap->Cvar_VariableValue("ui_sab2_r"),
+		(int)trap->Cvar_VariableValue("ui_sab2_g"),
+		(int)trap->Cvar_VariableValue("ui_sab2_b")) );
 }
 
 // More hard coded goodness for the menus.
@@ -5426,6 +5436,24 @@ static void UI_GetSaberCvars ( void )
 
 	trap->Cvar_Set ( "ui_saber_color", UI_Cvar_VariableString ( "g_saber_color" ) );
 	trap->Cvar_Set ( "ui_saber2_color", UI_Cvar_VariableString ( "g_saber2_color" ) );
+
+	// RGB saber colors - parse stored values into UI sliders
+	{
+		int r1, g1, b1, r2, g2, b2;
+		char buf[64];
+		trap->Cvar_VariableStringBuffer("rgb_saber1", buf, sizeof(buf));
+		if (sscanf(buf, "%i,%i,%i", &r1, &g1, &b1) >= 3) {
+			trap->Cvar_Set("ui_sab1_r", va("%i", r1));
+			trap->Cvar_Set("ui_sab1_g", va("%i", g1));
+			trap->Cvar_Set("ui_sab1_b", va("%i", b1));
+		}
+		trap->Cvar_VariableStringBuffer("rgb_saber2", buf, sizeof(buf));
+		if (sscanf(buf, "%i,%i,%i", &r2, &g2, &b2) >= 3) {
+			trap->Cvar_Set("ui_sab2_r", va("%i", r2));
+			trap->Cvar_Set("ui_sab2_g", va("%i", g2));
+			trap->Cvar_Set("ui_sab2_b", va("%i", b2));
+		}
+	}
 }
 
 extern qboolean ItemParse_model_g2anim_go( itemDef_t *item, const char *animName );
