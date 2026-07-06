@@ -5393,6 +5393,7 @@ void CG_DoSaber( vec3_t origin, vec3_t dir, float length, float lengthMax, float
 	float radiusmult;
 	float radiusRange;
 	float radiusStart;
+	unsigned char ojpRgba[4] = {255, 255, 255, 255};
 
 	if ( length < 0.5f )
 	{
@@ -5430,10 +5431,25 @@ void CG_DoSaber( vec3_t origin, vec3_t dir, float length, float lengthMax, float
 			blade = cgs.media.purpleSaberCoreShader;
 			break;
 		case 7: // SABER_WHITE
+			ojpRgba[0] = 255; ojpRgba[1] = 255; ojpRgba[2] = 255; ojpRgba[3] = 255;
+			goto UseOjpSaber;
 		case 8: // SABER_BLACK
+			ojpRgba[0] = 25; ojpRgba[1] = 25; ojpRgba[2] = 25; ojpRgba[3] = 255;
+			goto UseOjpSaber;
 		case 9: // SABER_RGB
 		case 10: // SABER_PIMP
 		case 11: // SABER_SCRIPTED
+		{
+			char rgbBuf[64];
+			int r=255, g=255, b=255;
+			trap->Cvar_VariableStringBuffer("rgb_saber1", rgbBuf, sizeof(rgbBuf));
+			if (rgbBuf[0]) {
+				sscanf(rgbBuf, "%i,%i,%i", &r, &g, &b);
+			}
+			ojpRgba[0] = r; ojpRgba[1] = g; ojpRgba[2] = b; ojpRgba[3] = 255;
+		}
+			goto UseOjpSaber;
+		UseOjpSaber:
 			if (cgs.media.rgbSaberGlowShader) {
 				glow = cgs.media.rgbSaberGlowShader;
 				blade = cgs.media.rgbSaberCoreShader;
@@ -5487,7 +5503,7 @@ void CG_DoSaber( vec3_t origin, vec3_t dir, float length, float lengthMax, float
 	VectorCopy( dir, saber.axis[0] );
 	saber.reType = RT_SABER_GLOW;
 	saber.customShader = glow;
-	saber.shaderRGBA[0] = saber.shaderRGBA[1] = saber.shaderRGBA[2] = saber.shaderRGBA[3] = 0xff;
+	saber.shaderRGBA[0] = ojpRgba[0]; saber.shaderRGBA[1] = ojpRgba[1]; saber.shaderRGBA[2] = ojpRgba[2]; saber.shaderRGBA[3] = ojpRgba[3];
 	saber.renderfx = rfx;
 
 	trap->R_AddRefEntityToScene( &saber );
@@ -5505,7 +5521,7 @@ void CG_DoSaber( vec3_t origin, vec3_t dir, float length, float lengthMax, float
 //	saber.radius = (1.0 + Q_flrand(-1.0f, 1.0f) * 0.2f)*radiusmult;
 
 	saber.shaderTexCoord[0] = saber.shaderTexCoord[1] = 1.0f;
-	saber.shaderRGBA[0] = saber.shaderRGBA[1] = saber.shaderRGBA[2] = saber.shaderRGBA[3] = 0xff;
+	saber.shaderRGBA[0] = ojpRgba[0]; saber.shaderRGBA[1] = ojpRgba[1]; saber.shaderRGBA[2] = ojpRgba[2]; saber.shaderRGBA[3] = ojpRgba[3];
 
 	trap->R_AddRefEntityToScene( &saber );
 }
