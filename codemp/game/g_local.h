@@ -1239,6 +1239,18 @@ void trap_Cvar_Register( vmCvar_t *cvar, const char *var_name, const char *value
 int trap_FS_FOpenFile( const char *qpath, fileHandle_t *f, fsMode_t mode );
 void trap_FS_Read( void *buffer, int len, fileHandle_t f );
 void trap_FS_FCloseFile( fileHandle_t f );
+qboolean trap_G2API_GetBoltMatrix(void *ghoul2, const int modelIndex, const int boltIndex, mdxaBone_t *matrix, const vec3_t angles, const vec3_t position, const int frameNum, qhandle_t *modelList, vec3_t scale);
+qboolean trap_G2API_GetBoltMatrix_NoReconstruct(void *ghoul2, const int modelIndex, const int boltIndex, mdxaBone_t *matrix, const vec3_t angles, const vec3_t position, const int frameNum, qhandle_t *modelList, vec3_t scale);
+qboolean trap_G2API_GetBoltMatrix_NoRecNoRot(void *ghoul2, const int modelIndex, const int boltIndex, mdxaBone_t *matrix, const vec3_t angles, const vec3_t position, const int frameNum, qhandle_t *modelList, vec3_t scale);
+qboolean trap_G2API_SetBoneAngles(void *ghoul2, int modelIndex, const char *boneName, const vec3_t angles, const int flags, const int up, const int right, const int forward, qhandle_t *modelList, int blendTime, int currentTime);
+qboolean trap_G2API_SetBoneAnim(void *ghoul2, const int modelIndex, const char *boneName, const int startFrame, const int endFrame, const int flags, const float animSpeed, const int currentTime, const float setFrame, const int blendTime);
+qboolean trap_G2API_GetBoneAnim(void *ghoul2, const char *boneName, const int currentTime, float *currentFrame, int *startFrame, int *endFrame, int *flags, float *animSpeed, int *modelList, const int modelIndex);
+void trap_G2API_SetRagDoll(void *ghoul2, sharedRagDollParams_t *params);
+void trap_G2API_AnimateG2Models(void *ghoul2, int time, sharedRagDollUpdateParams_t *params);
+qboolean trap_G2API_SetBoneIKState(void *ghoul2, int time, const char *boneName, int ikState, sharedSetBoneIKStateParams_t *params);
+qboolean trap_G2API_IKMove(void *ghoul2, int time, sharedIKMoveParams_t *params);
+void trap_TrueMalloc(void **ptr, int size);
+void trap_TrueFree(void **ptr);
 extern int	BMS_END;
 
 #define SPF_BUTTON_USABLE		1
