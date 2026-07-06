@@ -6803,6 +6803,7 @@ void Item_ValidateTypeData(itemDef_t *item)
 		case ITEM_TYPE_YESNO:
 		case ITEM_TYPE_BIND:
 		case ITEM_TYPE_SLIDER:
+		case ITEM_TYPE_INTSLIDER:
 		{
 			item->typeData.edit = (editFieldDef_t *)UI_Alloc(sizeof(editFieldDef_t));
 			memset(item->typeData.edit, 0, sizeof(editFieldDef_t));
