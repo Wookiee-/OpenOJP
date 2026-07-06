@@ -53,10 +53,17 @@ static void R_LocalFree(void *ptr)
 
 #define STBI_TEMP_ON_STACK
 #define STBI_ONLY_HDR
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4068)
+#endif
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-function"
 #include <stb_image.h>
 #pragma GCC diagnostic pop
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #define IMG_BYTE 0
 #define IMG_FLOAT 1
