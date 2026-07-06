@@ -5283,6 +5283,17 @@ static void CG_RGBForSaberColor( saber_colors_t color, vec3_t rgb )
 		case SABER_PURPLE:
 			VectorSet( rgb, 0.9f, 0.2f, 1.0f );
 			break;
+		case 7: // SABER_WHITE
+			VectorSet( rgb, 1.0f, 1.0f, 1.0f );
+			break;
+		case 8: // SABER_BLACK
+			VectorSet( rgb, 0.1f, 0.1f, 0.1f );
+			break;
+		case 9: // SABER_RGB
+		case 10: // SABER_PIMP
+		case 11: // SABER_SCRIPTED
+			VectorSet( rgb, 1.0f, 1.0f, 1.0f );
+			break;
 		default:
 			break;
 	}
@@ -5417,6 +5428,19 @@ void CG_DoSaber( vec3_t origin, vec3_t dir, float length, float lengthMax, float
 		case SABER_PURPLE:
 			glow = cgs.media.purpleSaberGlowShader;
 			blade = cgs.media.purpleSaberCoreShader;
+			break;
+		case 7: // SABER_WHITE
+		case 8: // SABER_BLACK
+		case 9: // SABER_RGB
+		case 10: // SABER_PIMP
+		case 11: // SABER_SCRIPTED
+			if (cgs.media.rgbSaberGlowShader) {
+				glow = cgs.media.rgbSaberGlowShader;
+				blade = cgs.media.rgbSaberCoreShader;
+			} else {
+				glow = cgs.media.blueSaberGlowShader;
+				blade = cgs.media.blueSaberCoreShader;
+			}
 			break;
 		default:
 			glow = cgs.media.blueSaberGlowShader;
