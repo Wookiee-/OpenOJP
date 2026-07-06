@@ -1,4 +1,5 @@
 #include "g_local.h"
+#include "b_local.h"
 #include "ai_main.h"
 #include "w_saber.h"
 #include "qcommon/ojp_shared.h"

@@ -42,7 +42,7 @@ void ojp_ROFF_Cache(const char *fileName)
 	if (!fileName || !fileName[0]) return;
 	int h = ojp_ROFF_HashKey(fileName);
 
-	for (int i = 0; i < ojp_numRoffFiles; i++) {
+	int i;`r`n	for (i = 0; i < ojp_numRoffFiles; i++) {
 		if (!Q_stricmp(ojp_roffFiles[i].fileName, fileName)) return;
 	}
 
@@ -59,7 +59,7 @@ qboolean ojp_ROFF_Play(int entNum, const char *fileName, qboolean doTranslation)
 	if (!fileName || !fileName[0]) return qfalse;
 
 	int roffIdx = -1;
-	for (int i = 0; i < ojp_numRoffFiles; i++) {
+	int i;`r`n	for (i = 0; i < ojp_numRoffFiles; i++) {
 		if (!Q_stricmp(ojp_roffFiles[i].fileName, fileName)) {
 			roffIdx = i;
 			break;
@@ -71,7 +71,7 @@ qboolean ojp_ROFF_Play(int entNum, const char *fileName, qboolean doTranslation)
 	}
 
 	int slot = -1;
-	for (int i = 0; i < MAX_ROFF_PLAYERS_OJP; i++) {
+	int i;`r`n	for (i = 0; i < MAX_ROFF_PLAYERS_OJP; i++) {
 		if (!ojp_roffPlayers[i].inuse) { slot = i; break; }
 		if (ojp_roffPlayers[i].entNum == entNum) { slot = i; break; }
 	}
@@ -91,7 +91,7 @@ qboolean ojp_ROFF_Play(int entNum, const char *fileName, qboolean doTranslation)
 void ojp_ROFF_Update(gentity_t *ent)
 {
 	if (!ent) return;
-	for (int i = 0; i < MAX_ROFF_PLAYERS_OJP; i++) {
+	int i;`r`n	for (i = 0; i < MAX_ROFF_PLAYERS_OJP; i++) {
 		if (!ojp_roffPlayers[i].inuse) continue;
 		if (ojp_roffPlayers[i].entNum != ent->s.number) continue;
 
@@ -115,7 +115,7 @@ void ojp_ROFF_Update(gentity_t *ent)
 
 void ojp_ROFF_Stop(int entNum)
 {
-	for (int i = 0; i < MAX_ROFF_PLAYERS_OJP; i++) {
+	int i;`r`n	for (i = 0; i < MAX_ROFF_PLAYERS_OJP; i++) {
 		if (ojp_roffPlayers[i].inuse && ojp_roffPlayers[i].entNum == entNum) {
 			ojp_roffPlayers[i].inuse = qfalse;
 			return;
@@ -125,10 +125,11 @@ void ojp_ROFF_Stop(int entNum)
 
 qboolean ojp_ROFF_IsPlaying(int entNum)
 {
-	for (int i = 0; i < MAX_ROFF_PLAYERS_OJP; i++) {
+	int i;`r`n	for (i = 0; i < MAX_ROFF_PLAYERS_OJP; i++) {
 		if (ojp_roffPlayers[i].inuse && ojp_roffPlayers[i].entNum == entNum) {
 			return qtrue;
 		}
 	}
 	return qfalse;
 }
+

@@ -12,7 +12,8 @@ void ojp_AIMod_Jump(gentity_t *self)
 qboolean ojp_ScanForEnemies(gentity_t *self)
 {
 	if (!self || !self->client || !self->NPC) return qfalse;
-	for (int i = 0; i < level.num_entities; i++) {
+	int i;
+	for (i = 0; i < level.num_entities; i++) {
 		gentity_t *ent = &g_entities[i];
 		if (!ent->inuse || !ent->client) continue;
 		if (ent == self) continue;

@@ -72,7 +72,7 @@ qboolean ojp_Dom_CaptureFlag(int flagIndex, int entNum, int team)
 
 void ojp_Dom_Update(void)
 {
-	for (int i = 0; i < ojp_numDomFlags; i++) {
+	int i;`r`n	for (i = 0; i < ojp_numDomFlags; i++) {
 		if (!ojp_domFlags[i].active) {
 			if (ojp_domFlags[i].respawnTime && level.time > ojp_domFlags[i].respawnTime) {
 				ojp_domFlags[i].active = qtrue;
@@ -82,7 +82,7 @@ void ojp_Dom_Update(void)
 			continue;
 		}
 
-		for (int j = 0; j < level.num_entities; j++) {
+		int j;`r`n	for (j = 0; j < level.num_entities; j++) {
 			gentity_t *ent = &g_entities[j];
 			if (!ent->inuse || !ent->client) continue;
 			if (ent->health <= 0) continue;
@@ -101,10 +101,11 @@ void ojp_Dom_Update(void)
 int ojp_Dom_GetTeamScore(int team)
 {
 	int score = 0;
-	for (int i = 0; i < ojp_numDomFlags; i++) {
+	int i;`r`n	for (i = 0; i < ojp_numDomFlags; i++) {
 		if (ojp_domFlags[i].active && ojp_domFlags[i].team == team) {
 			score++;
 		}
 	}
 	return score;
 }
+
