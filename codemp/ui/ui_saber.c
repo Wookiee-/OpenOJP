@@ -53,6 +53,20 @@ static qhandle_t blueSaberCoreShader;
 static qhandle_t purpleSaberGlowShader;
 static qhandle_t purpleSaberCoreShader;
 
+// OJP saber shaders
+static qhandle_t rgbSaberGlowShader;
+static qhandle_t rgbSaberCoreShader;
+static qhandle_t blackSaberGlowShader;
+static qhandle_t blackSaberCoreShader;
+
+static void UI_CacheOjpSaberGlowGraphics( void )
+{
+	rgbSaberGlowShader		= trap->R_RegisterShaderNoMip( "gfx/effects/sabers/rgb_glow2" );
+	rgbSaberCoreShader		= trap->R_RegisterShaderNoMip( "gfx/effects/sabers/rgb_line" );
+	blackSaberGlowShader	= trap->R_RegisterShaderNoMip( "gfx/effects/sabers/black_glow" );
+	blackSaberCoreShader	= trap->R_RegisterShaderNoMip( "gfx/effects/sabers/black_line" );
+}
+
 void UI_CacheSaberGlowGraphics( void )
 {//FIXME: these get fucked by vid_restarts
 	redSaberGlowShader			= trap->R_RegisterShaderNoMip( "gfx/effects/sabers/red_glow" );
@@ -67,6 +81,7 @@ void UI_CacheSaberGlowGraphics( void )
 	blueSaberCoreShader			= trap->R_RegisterShaderNoMip( "gfx/effects/sabers/blue_line" );
 	purpleSaberGlowShader		= trap->R_RegisterShaderNoMip( "gfx/effects/sabers/purple_glow" );
 	purpleSaberCoreShader		= trap->R_RegisterShaderNoMip( "gfx/effects/sabers/purple_line" );
+	UI_CacheOjpSaberGlowGraphics();
 }
 
 qboolean UI_SaberModelForSaber( const char *saberName, char *saberModel )
@@ -249,6 +264,7 @@ void UI_DoSaber( vec3_t origin, vec3_t dir, float length, float lengthMax, float
 	float radiusmult;
 	float radiusRange;
 	float radiusStart;
+	unsigned char ojpRgba[4] = {255, 255, 255, 255};
 
 	if ( length < 0.5f )
 	{
@@ -291,7 +307,44 @@ void UI_DoSaber( vec3_t origin, vec3_t dir, float length, float lengthMax, float
 			blade = purpleSaberCoreShader;
 			VectorSet( rgb, 0.9f, 0.2f, 1.0f );
 			break;
+		case 7: // SABER_WHITE
+			ojpRgba[0] = 255; ojpRgba[1] = 255; ojpRgba[2] = 255; ojpRgba[3] = 255;
+			goto OjpUse;
+		case 8: // SABER_BLACK
+			ojpRgba[0] = 25; ojpRgba[1] = 25; ojpRgba[2] = 25; ojpRgba[3] = 255;
+			if (blackSaberGlowShader) {
+				glow = blackSaberGlowShader;
+				blade = blackSaberCoreShader;
+			}
+			goto OjpUse;
+		case 9: // SABER_RGB
+		case 10: // SABER_PIMP
+		case 11: // SABER_SCRIPTED
+		{
+			char rgbBuf[64];
+			int r=255, g=255, b=255;
+			trap->Cvar_VariableStringBuffer("rgb_saber1", rgbBuf, sizeof(rgbBuf));
+			if (rgbBuf[0]) {
+				sscanf(rgbBuf, "%i,%i,%i", &r, &g, &b);
+			}
+			ojpRgba[0] = r; ojpRgba[1] = g; ojpRgba[2] = b; ojpRgba[3] = 255;
+		}
+			goto OjpUse;
+		OjpUse:
+			if (!glow) {
+				if (rgbSaberGlowShader) {
+					glow = rgbSaberGlowShader;
+					blade = rgbSaberCoreShader;
+				} else {
+					glow = blueSaberGlowShader;
+					blade = blueSaberCoreShader;
+				}
+			}
+			VectorSet( rgb, 1.0f, 1.0f, 1.0f );
+			break;
 		default:
+			glow = blueSaberGlowShader;
+			blade = blueSaberCoreShader;
 			break;
 	}
 
@@ -322,7 +375,7 @@ void UI_DoSaber( vec3_t origin, vec3_t dir, float length, float lengthMax, float
 	VectorCopy( dir, saber.axis[0] );
 	saber.reType = RT_SABER_GLOW;
 	saber.customShader = glow;
-	saber.shaderRGBA[0] = saber.shaderRGBA[1] = saber.shaderRGBA[2] = saber.shaderRGBA[3] = 0xff;
+	saber.shaderRGBA[0] = ojpRgba[0]; saber.shaderRGBA[1] = ojpRgba[1]; saber.shaderRGBA[2] = ojpRgba[2]; saber.shaderRGBA[3] = ojpRgba[3];
 	//saber.renderfx = rfx;
 
 	trap->R_AddRefEntityToScene( &saber );
