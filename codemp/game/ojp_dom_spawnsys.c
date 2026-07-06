@@ -38,7 +38,8 @@ void ojp_DomSpawn_Respawn(gentity_t *ent)
 	int closestSpawn = -1;
 	float closestDist = 999999.0f;
 
-	int i;`r`n	for (i = 0; i < ojp_numDomSpawns; i++) {
+	int i;
+for (i = 0; i < ojp_numDomSpawns; i++) {
 		if (!ojp_domSpawns[i].inuse) continue;
 		if (ojp_domSpawns[i].team != TEAM_FREE && ojp_domSpawns[i].team != myTeam) continue;
 
@@ -57,4 +58,5 @@ void ojp_DomSpawn_Respawn(gentity_t *ent)
 		VectorCopy(ojp_domSpawns[closestSpawn].angles, ent->client->ps.viewangles);
 	}
 }
+
 

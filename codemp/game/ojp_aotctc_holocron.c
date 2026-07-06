@@ -33,10 +33,12 @@ int ojp_AOTC_AddHolocron(vec3_t origin, int forcePower, int count)
 
 void ojp_AOTC_HolocronUpdate(void)
 {
-	int i;`r`n	for (i = 0; i < ojp_numAotcHolocrons; i++) {
+	int i;
+for (i = 0; i < ojp_numAotcHolocrons; i++) {
 		if (!ojp_aotcHolocrons[i].active) continue;
 
-		int j;`r`n	for (j = 0; j < level.num_entities; j++) {
+		int j;
+for (j = 0; j < level.num_entities; j++) {
 			gentity_t *ent = &g_entities[j];
 			if (!ent->inuse || !ent->client) continue;
 			if (ent->health <= 0) continue;
@@ -53,4 +55,5 @@ void ojp_AOTC_HolocronUpdate(void)
 		}
 	}
 }
+
 

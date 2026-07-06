@@ -12,7 +12,8 @@ void ojp_DomNPC_Update(gentity_t *self)
 	int myTeam = self->client->sess.sessionTeam;
 
 	int numFlags = ojp_Dom_GetNumFlags();
-	int i;`r`n	for (i = 0; i < numFlags; i++) {
+	int i;
+for (i = 0; i < numFlags; i++) {
 		int flagTeam = ojp_Dom_GetFlagTeam(i);
 		vec3_t flagOrigin;
 		ojp_Dom_GetFlagOrigin(i, flagOrigin);
@@ -36,4 +37,5 @@ void ojp_DomNPC_Update(gentity_t *self)
 		}
 	}
 }
+
 

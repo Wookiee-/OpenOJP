@@ -12,7 +12,8 @@ void ojp_NPC_AI_Civilian_Update(gentity_t *self)
 	gentity_t *threat = NULL;
 	float threatDist = CIVILIAN_FLEE_DISTANCE_OJP;
 
-	int i;`r`n	for (i = 0; i < level.num_entities; i++) {
+	int i;
+for (i = 0; i < level.num_entities; i++) {
 		gentity_t *ent = &g_entities[i];
 		if (!ent->inuse || !ent->client) continue;
 		if (ent == self) continue;
@@ -34,4 +35,5 @@ void ojp_NPC_AI_Civilian_Update(gentity_t *self)
 		VectorMA(self->client->ps.velocity, CIVILIAN_FLEE_SPEED_OJP, away, self->client->ps.velocity);
 	}
 }
+
 
