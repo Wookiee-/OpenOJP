@@ -5,11 +5,7 @@ ojp_DynamicMusicGroup_t ojp_DMSData;
 
 static void LoadDMSSongData(char *buffer, char *song, ojp_DynamicMusicSet_t *songData, char *mapname)
 {
-	char SongGroup[DMS_INFO_SIZE_OJP];
-	char transitionGroup[DMS_INFO_SIZE_OJP];
-	char Value[MAX_QPATH];
 	int numTransitions = 0;
-	int numExits = 0;
 	char *transition;
 
 	strcpy(songData->fileName, va("music/%s/%s.mp3", mapname, song));
