@@ -35,6 +35,7 @@ void WP_SetSaber( int entNum, saberInfo_t *sabers, int saberNum, const char *sab
 
 void Cmd_NPC_f( gentity_t *ent );
 void SetTeamQuick(gentity_t *ent, int team, qboolean doBegin);
+void ojp_CheckKillSpam(gentity_t *ent);
 
 /*
 ==================

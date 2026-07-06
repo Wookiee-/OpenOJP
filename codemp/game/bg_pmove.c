@@ -623,6 +623,7 @@ void PM_MoveLock(void)
 	}
 }
 
+#if 0
 static void PM_FallToDeath(void)
 {
 	if (BG_HasAnimation(pm_entSelf->localAnimIndex, BOTH_FALLDEATH1))
@@ -631,6 +632,7 @@ static void PM_FallToDeath(void)
 		PM_SetAnim(SETANIM_LEGS, BOTH_DEATH1, SETANIM_FLAG_OVERRIDE | SETANIM_FLAG_HOLD);
 	pm->ps->eFlags |= EF_DEAD;
 }
+#endif
 
 qboolean BG_KnockDownable(playerState_t *ps)
 {
@@ -3225,7 +3227,6 @@ static void PM_WaterMove( void ) {
 		PM_WaterJumpMove();
 		return;
 	}
-#if 0
 	// jump = head for surface
 	if ( pm->cmd.upmove >= 10 ) {
 		if (pm->ps->velocity[2] > -300) {
@@ -3488,7 +3489,6 @@ static void PM_AirMove( void ) {
 			VectorCopy( pm->ps->moveDir, wishdir );
 			scale = 1.0f;
 		}
-#if 0
 		else
 		{
 			float controlMod = 1.0f;
@@ -8117,7 +8117,6 @@ static void PM_Animate( void ) {
 
 			PM_AddEvent( EV_TAUNT );
 		}
-#if 0
 // Here's an interesting bit.  The bots in TA used buttons to do additional gestures.
 // I ripped them out because I didn't want too many buttons given the fact that I was already adding some for JK2.
 // We can always add some back in if we want though.
@@ -10803,7 +10802,6 @@ void PmoveSingle (pmove_t *pmove) {
 		pm->cmd.rightmove = pm->cmd.upmove = 0;
 	}
 
-#if 0
 	if ((pm->ps->legsAnim) == BOTH_KISSER1LOOP ||
 		(pm->ps->legsAnim) == BOTH_KISSEE1LOOP)
 	{
@@ -11019,7 +11017,6 @@ void PmoveSingle (pmove_t *pmove) {
 		PM_SetPMViewAngle(pm->ps, pm->ps->viewangles, &pm->cmd);
 	}
 
-#if 0
 	if ((pm->ps->legsAnim) == BOTH_KISSER1LOOP ||
 		(pm->ps->legsAnim) == BOTH_KISSEE1LOOP)
 	{
