@@ -2432,7 +2432,7 @@ typedef struct saberFace_s
 } saberFace_t;
 
 //build faces around blade for collision checking -rww
-QINLINE void G_BuildSaberFaces(vec3_t base, vec3_t tip, float radius, vec3_t fwd,
+void G_BuildSaberFaces(vec3_t base, vec3_t tip, float radius, vec3_t fwd,
 										  vec3_t right, int *fNum, saberFace_t **fList)
 {
 	static saberFace_t faces[12];
@@ -2577,7 +2577,7 @@ static QINLINE int G_SabCol_PointRelativeToPlane(vec3_t pos, float *side, float 
 }
 
 //do actual collision check using generated saber "faces"
-QINLINE qboolean G_SaberFaceCollisionCheck(int fNum, saberFace_t *fList, vec3_t atkStart,
+qboolean G_SaberFaceCollisionCheck(int fNum, saberFace_t *fList, vec3_t atkStart,
 											 vec3_t atkEnd, vec3_t atkMins, vec3_t atkMaxs, vec3_t impactPoint)
 {
 	static float planeEq[4];
@@ -2678,7 +2678,7 @@ QINLINE qboolean G_SaberFaceCollisionCheck(int fNum, saberFace_t *fList, vec3_t 
 }
 
 //check for collision of 2 blades -rww
-QINLINE qboolean G_SaberCollide(gentity_t *atk, gentity_t *def, vec3_t atkStart,
+qboolean G_SaberCollide(gentity_t *atk, gentity_t *def, vec3_t atkStart,
 						vec3_t atkEnd, vec3_t atkMins, vec3_t atkMaxs, vec3_t impactPoint)
 {
 	int i, j;
