@@ -8061,6 +8061,28 @@ qboolean ItemParse_cvarFloat( itemDef_t *item, int handle ) {
 	return qfalse;
 }
 
+qboolean ItemParse_cvarInt( itemDef_t *item, int handle ) {
+	editFieldDef_t *editPtr;
+	int defVal, minVal, maxVal;
+
+	Item_ValidateTypeData(item);
+	editPtr = item->typeData.edit;
+
+	if (!editPtr)
+		return qfalse;
+
+	if (PC_String_Parse(handle, &item->cvar) &&
+		PC_Int_Parse(handle, &defVal) &&
+		PC_Int_Parse(handle, &minVal) &&
+		PC_Int_Parse(handle, &maxVal)) {
+		editPtr->defVal = defVal;
+		editPtr->minVal = minVal;
+		editPtr->maxVal = maxVal;
+		return qtrue;
+	}
+	return qfalse;
+}
+
 #ifdef UI_BUILD
 char currLanguage[32][128];
 static const char languageString[32] = "@MENUS_MYLANGUAGE";
@@ -8362,6 +8384,7 @@ keywordHash_t itemParseKeywords[] = {
 	{"cvar",			ItemParse_cvar,				NULL	},
 	{"cvarFloat",		ItemParse_cvarFloat,		NULL	},
 	{"cvarFloatList",	ItemParse_cvarFloatList,	NULL	},
+	{"cvarInt",			ItemParse_cvarInt,			NULL	},
 	{"cvarStrList",		ItemParse_cvarStrList,		NULL	},
 	{"cvarTest",		ItemParse_cvarTest,			NULL	},
 	{"desctext",		ItemParse_descText,			NULL	},
