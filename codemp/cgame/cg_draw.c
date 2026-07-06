@@ -26,6 +26,8 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 
 #include "cg_local.h"
 
+#include "ojp_cg_draw.h"
+
 #include "game/bg_saga.h"
 
 #include "ui/ui_shared.h"

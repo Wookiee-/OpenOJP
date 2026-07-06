@@ -1,4 +1,5 @@
 #include "cg_local.h"
+#include "game/bg_saga.h"
 
 vec3_t ojp_cameramins = { -4, -4, -4 };
 vec3_t ojp_cameramaxs = { 4, 4, 4 };

@@ -1,6 +1,8 @@
 #include "cg_local.h"
 #include "ojp_cg_lights.h"
 
+extern void trap_R_AddLightToScene(const vec3_t org, float intensity, float r, float g, float b);
+
 static ojp_cgLight_t ojp_cgLights[MAX_OJP_LIGHTS];
 
 void ojp_CG_AddLight(vec3_t origin, vec3_t color, float radius, float intensity, int duration)
@@ -29,7 +31,7 @@ for (i = 0; i < MAX_OJP_LIGHTS; i++) {
 			ojp_cgLights[i].active = qfalse;
 			continue;
 		}
-		trap_R_AddLightToScene(ojp_cgLights[i].origin, ojp_cgLights[i].radius, ojp_cgLights[i].intensity,
+		trap_R_AddLightToScene(ojp_cgLights[i].origin, ojp_cgLights[i].radius * ojp_cgLights[i].intensity,
 			ojp_cgLights[i].color[0], ojp_cgLights[i].color[1], ojp_cgLights[i].color[2]);
 	}
 }

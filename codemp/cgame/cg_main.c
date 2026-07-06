@@ -25,7 +25,12 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 // cg_main.c -- initialization and primary entry point for cgame
 #include "cg_local.h"
 
+#include "ojp_cg_camera.h"
+
 #include "ui/ui_shared.h"
+
+// OJP forward declarations
+void ojp_TrueViewInit(void);
 
 NORETURN_PTR void (*Com_Error)( int level, const char *error, ... );
 void (*Com_Printf)( const char *msg, ... );

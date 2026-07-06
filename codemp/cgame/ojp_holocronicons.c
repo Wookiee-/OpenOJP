@@ -1,6 +1,8 @@
 #include "cg_local.h"
 #include "ojp_holocronicons.h"
 
+extern qhandle_t trap_R_RegisterShader(const char *name);
+
 qhandle_t ojp_holocronIconShaders[6];
 
 void ojp_CG_LoadHolocronIcons(void)

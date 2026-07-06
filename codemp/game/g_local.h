@@ -1235,6 +1235,7 @@ void QDECL G_Printf( const char *msg, ... );
 // OJP compatibility: trap functions from g_syscalls.c
 void trap_SendConsoleCommand( int exec_when, const char *text );
 void trap_SendServerCommand( int clientNum, const char *text );
+void trap_Argv( int n, char *buffer, int bufferLength );
 void trap_Cvar_Register( vmCvar_t *cvar, const char *var_name, const char *value, uint32_t flags );
 int trap_FS_FOpenFile( const char *qpath, fileHandle_t *f, fsMode_t mode );
 void trap_FS_Read( void *buffer, int len, fileHandle_t f );

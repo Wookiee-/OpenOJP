@@ -130,4 +130,5 @@ void PM_SetForceJumpZStart(float value);
 void PM_GrabWallForJump(int anim);
 
 void BG_CycleInven(playerState_t *ps, int direction);
+qboolean BG_StabDownAnim(int anim);
 
