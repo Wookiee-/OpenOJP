@@ -1,6 +1,9 @@
 #include "g_local.h"
+#include "bg_local.h"
 #include "qcommon/ojp_shared.h"
 #include "ojp_saberbeh.h"
+
+qboolean ojp_PM_InForceGetUp(playerState_t *ps);
 
 #define MAX_REAL_PASSTHRU 8
 #define REALTRACEDATADEFAULT -9999

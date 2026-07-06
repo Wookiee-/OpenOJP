@@ -1,4 +1,5 @@
 #include "g_local.h"
+#include "bg_local.h"
 #include "w_saber.h"
 
 #define OJP_MAX_REAL_PASSTHRU 8
