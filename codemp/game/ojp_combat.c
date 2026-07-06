@@ -6,7 +6,7 @@
 #include "qcommon/ojp_shared.h"
 #include "ojp_saberbeh.h"
 
-// OJP functions from ojp_anim_utils.c / OpenJK
+// OJP functions
 extern qboolean ojp_BG_SaberInNonIdleDamageMove(playerState_t *ps, int AnimIndex);
 extern qboolean PM_SaberInBounce(int move);
 extern qboolean BG_SaberInTransitionAny(int move);
@@ -166,8 +166,18 @@ void ojp_AnimateKnockdown(gentity_t *self, gentity_t *inflictor)
 		pushDir[2] = 0;
 		VectorNormalize(pushDir);
 		G_Throw(self, pushDir, throwStr);
-		G_Knockdown(self, inflictor, pushDir, throwStr, qtrue);
+		G_Knockdown(self);
 	}
+}
+
+static qboolean BG_InKnockDown(int anim)
+{
+	switch (anim) {
+	case BOTH_KNOCKDOWN1: case BOTH_KNOCKDOWN2: case BOTH_KNOCKDOWN3:
+	case BOTH_KNOCKDOWN4: case BOTH_KNOCKDOWN5:
+		return qtrue;
+	}
+	return qfalse;
 }
 
 void ojp_AnimateStun(gentity_t *self, gentity_t *inflictor, vec3_t impact)
