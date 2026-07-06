@@ -186,7 +186,7 @@ static qboolean BG_InKnockDown(int anim)
 void ojp_AnimateStun(gentity_t *self, gentity_t *inflictor, vec3_t impact)
 {
 	if (self->client->ps.weapon != WP_SABER) {
-		G_Knockdown(self, inflictor, vec3_origin, 300, qtrue);
+		G_Knockdown(self);
 	} else if (!PM_SaberInBrokenParry(self->client->ps.saberMove) && !PM_InKnockDown(&self->client->ps)) {
 		self->client->ps.saberMove = BG_BrokenParryForParry((self->client->ps.saberBlocked));
 		self->client->ps.saberBlocked = BLOCKED_PARRY_BROKEN;
