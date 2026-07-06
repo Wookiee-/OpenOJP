@@ -6,6 +6,9 @@
 #include "qcommon/ojp_shared.h"
 #include "ojp_saberbeh.h"
 
+// OpenJK functions not declared in headers
+extern void G_Knockdown(gentity_t *victim);
+
 // OJP functions
 extern qboolean ojp_BG_SaberInNonIdleDamageMove(playerState_t *ps, int AnimIndex);
 extern qboolean PM_SaberInBounce(int move);
