@@ -1,31 +1,21 @@
 #include "cg_local.h"
 #include "qcommon/ojp_shared.h"
 
+extern vmCvar_t ojp_drawHUDBars;
+
 void ojp_CG_DrawDodge(void)
 {
 	int dodge = cg.predictedPlayerState.stats[STAT_DODGE_OJP];
-	int maxDodge = 100;
-	float frac;
-	int tics;
-	int i;
+	int i, tics;
 
+	if (!ojp_drawHUDBars.integer) return;
 	if (!dodge) return;
 
-	frac = (float)dodge / maxDodge;
-	tics = (int)(frac * 8);
+	tics = dodge / 12;
 	if (tics > 8) tics = 8;
 
 	for (i = 0; i < tics; i++) {
-		float x, y;
-		x = 10 + i * 12;
-		y = 440;
-
-		if (dodge < 30)
-			CG_DrawPic(x, y, 10, 10, cgs.media.redSaberGlowShader);
-		else if (dodge < 60)
-			CG_DrawPic(x, y, 10, 10, cgs.media.yellowSaberGlowShader);
-		else
-			CG_DrawPic(x, y, 10, 10, cgs.media.greenSaberGlowShader);
+		CG_DrawPic(48 + i * 8, SCREEN_HEIGHT - 16, 6, 6, cgs.media.whiteShader);
 	}
 }
 
@@ -33,13 +23,11 @@ void ojp_CG_DrawBalance(void)
 {
 	int mishap = cg.predictedPlayerState.stats[STAT_MISHAP_LEVEL_OJP];
 	int i;
-	float x, y;
 
+	if (!ojp_drawHUDBars.integer) return;
 	if (mishap <= 0) return;
 
 	for (i = 0; i < mishap; i++) {
-		x = 10 + i * 12;
-		y = 455;
-		CG_DrawPic(x, y, 10, 10, cgs.media.redSaberGlowShader);
+		CG_DrawPic(48 + i * 8, SCREEN_HEIGHT - 8, 6, 6, cgs.media.whiteShader);
 	}
 }
