@@ -1084,7 +1084,7 @@ localEntity_t *CG_MakeExplosion( vec3_t origin, vec3_t dir,
 			if ( !(flags & LEF_NO_RANDOM_ROTATE) )
 				ang = rand() % 360;
 			VectorCopy( dir, ex->refEntity.axis[0] );
-			RotateAroundDirection( (matrix3_t)&ex->refEntity.axis, ang );
+			RotateAroundDirection( ex->refEntity.axis, ang );
 		}
 	}
 
