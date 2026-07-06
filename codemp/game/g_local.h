@@ -1252,6 +1252,7 @@ qboolean trap_G2API_IKMove(void *ghoul2, int time, sharedIKMoveParams_t *params)
 void trap_TrueMalloc(void **ptr, int size);
 void trap_TrueFree(void **ptr);
 void trap_Trace(trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentmask);
+void trap_Argv(int n, char *buffer, int bufferLength);
 void trap_Cvar_Update(vmCvar_t *cvar);
 void trap_Cvar_Set(const char *var_name, const char *value);
 int trap_Cvar_VariableIntegerValue(const char *var_name);

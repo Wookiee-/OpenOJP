@@ -1,6 +1,8 @@
 #include "g_local.h"
 #include "b_local.h"
 #include "bg_local.h"
+
+extern qboolean BG_StabDownAnim(int anim);
 #include "qcommon/ojp_shared.h"
 
 qboolean ojp_BG_InLedgeMove(int anim)
