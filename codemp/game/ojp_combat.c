@@ -6,11 +6,12 @@
 #include "qcommon/ojp_shared.h"
 #include "ojp_saberbeh.h"
 
-// OJP functions from ojp_anim_utils.c
+// OJP functions from ojp_anim_utils.c / OpenJK
 extern qboolean ojp_BG_SaberInNonIdleDamageMove(playerState_t *ps, int AnimIndex);
 extern qboolean PM_SaberInBounce(int move);
 extern qboolean BG_SaberInTransitionAny(int move);
 extern qboolean PM_SaberInBrokenParry(int move);
+
 
 #ifndef BUTTON_15
 #define BUTTON_15 BUTTON_ALT_ATTACK
