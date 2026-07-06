@@ -9291,6 +9291,12 @@ int WP_SaberCanBlock(gentity_t *self, vec3_t point, int dflags, int mod, qboolea
 		return 0;
 	}
 
+	// OJP manual block check
+	if (ojp_manualBlock.integer && !ojp_CanBlock(self))
+	{
+		return 0;
+	}
+
 	if (attackStr == 999)
 	{
 		attackStr = 0;

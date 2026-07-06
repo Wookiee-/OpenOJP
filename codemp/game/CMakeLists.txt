@@ -191,6 +191,7 @@ set(MPGameGameFiles
 	"${MPDir}/game/ojp_helpers.c"
 	"${MPDir}/game/ojp_admin.c"
 	"${MPDir}/game/ojp_game_features.c"
+	"${MPDir}/game/ojp_block_system.c"
 	"${MPDir}/game/ojp_ai_tab.c"
 	)
 source_group("game" FILES ${MPGameGameFiles})

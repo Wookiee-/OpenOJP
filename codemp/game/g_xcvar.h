@@ -198,6 +198,7 @@ XCVAR_DEF( g_autoKickKillSpammers,		"0",			NULL,						CVAR_ARCHIVE,									qfal
 XCVAR_DEF( g_autoBanKillSpammers,		"0",			NULL,						CVAR_ARCHIVE,									qfalse )
 XCVAR_DEF( g_autoKickTKSpammers,		"0",			NULL,						CVAR_ARCHIVE,									qfalse )
 XCVAR_DEF( g_autoBanTKSpammers,			"0",			NULL,						CVAR_ARCHIVE,									qfalse )
+XCVAR_DEF( ojp_manualBlock,				"0",			NULL,						CVAR_ARCHIVE,									qfalse )
 XCVAR_DEF( g_saberanimspeed,				"1",			NULL,						CVAR_ARCHIVE,									qtrue )
 XCVAR_DEF( g_dodgeRegenTime,				"1000",			NULL,						CVAR_ARCHIVE,									qtrue )
 XCVAR_DEF( g_mishapRegenTime,				"3000",			NULL,						CVAR_ARCHIVE,									qtrue )
