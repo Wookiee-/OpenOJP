@@ -232,6 +232,7 @@ if(MSVC)
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /arch:SSE2")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
 	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /wd4875")
+	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
 
 	# We don't try to control symbol visibility under MSVC.
 	set(OPENOJP_VISIBILITY_FLAGS "")
