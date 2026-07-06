@@ -77,6 +77,9 @@ typedef enum {
 #define FLAG_FATIGUED_HEAVY_OJP 8
 #define FLAG_DODGEROLL_OJP 10
 
+// Block button constant (bit 15, doesn't conflict with standard buttons)
+#define BUTTON_BLOCK_OJP 32768
+
 // GAME_INLINE
 #ifndef GAME_INLINE
 #if defined(_WIN32)

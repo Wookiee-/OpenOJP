@@ -3452,6 +3452,16 @@ void ClientCommand( int clientNum ) {
 		return;
 	//end rww
 
+	// OJP block command
+	if (!Q_stricmp(cmd, "+block")) {
+		ent->client->pers.blockButton = qtrue;
+		return;
+	}
+	if (!Q_stricmp(cmd, "-block")) {
+		ent->client->pers.blockButton = qfalse;
+		return;
+	}
+
 	command = (command_t *)Q_LinearSearch( cmd, commands, numCommands, sizeof( commands[0] ), cmdcmp );
 	if ( !command )
 	{

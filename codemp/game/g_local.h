@@ -506,6 +506,7 @@ typedef struct clientPersistant_s {
 	char		guid[33];
 	int			ojpLMSLives; // OJP: Last Man Standing lives
 	qboolean	ojpClientPlugIn; // OJP: client has OJP plugin
+	qboolean	blockButton; // OJP: manual block button state
 } clientPersistant_t;
 
 typedef struct renderInfo_s
