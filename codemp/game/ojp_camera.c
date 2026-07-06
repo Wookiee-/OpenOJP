@@ -11,15 +11,8 @@ vec3_t ojp_cameraang;
 
 void ojp_GCam_Update(void)
 {
-	int i;
-	qboolean checkFollow = qfalse;
-	qboolean checkTrack = qfalse;
-
 	if (ojp_client_camera.info_state & CAMERA_ZOOMING_OJP) {
-		float actualFOV_X = ojp_client_camera.FOV;
-		float t = (level.time - ojp_client_camera.FOV_time) * 0.001f;
 		float fovDuration = ojp_client_camera.FOV_duration;
-
 		if (ojp_client_camera.FOV_time + fovDuration < level.time) {
 			ojp_client_camera.info_state &= ~CAMERA_ZOOMING_OJP;
 		}
@@ -49,14 +42,6 @@ void ojp_GCam_Update(void)
 			ojp_client_camera.angles[1] = ojp_client_camera.angles[1] + (ojp_client_camera.angles2[1] - ojp_client_camera.angles[1]) * frac;
 			ojp_client_camera.angles[2] = ojp_client_camera.angles[2] + (ojp_client_camera.angles2[2] - ojp_client_camera.angles[2]) * frac;
 		}
-	}
-
-	if (ojp_client_camera.info_state & CAMERA_FOLLOWING_OJP) {
-		checkFollow = qtrue;
-	}
-
-	if (ojp_client_camera.info_state & CAMERA_TRACKING_OJP) {
-		checkTrack = qtrue;
 	}
 
 	if (ojp_client_camera.info_state & CAMERA_FADING_OJP) {
