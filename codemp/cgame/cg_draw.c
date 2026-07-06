@@ -1185,11 +1185,11 @@ static void CG_DrawSimpleSaberStyle( const centity_t *cent )
 		break;
 	case SS_STRONG:
 		Com_sprintf( num, sizeof( num ), "STRONG" );
-		calcColor = CT_HUD_RED;
+		calcColor = CT_RED;
 		break;
 	case SS_DESANN:
 		Com_sprintf( num, sizeof( num ), "DESANN" );
-		calcColor = CT_HUD_RED;
+		calcColor = CT_RED;
 		break;
 	case SS_TAVION:
 		Com_sprintf( num, sizeof( num ), "TAVION" );
