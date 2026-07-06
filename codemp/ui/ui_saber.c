@@ -61,7 +61,7 @@ static qhandle_t blackSaberCoreShader;
 
 static void UI_CacheOjpSaberGlowGraphics( void )
 {
-	rgbSaberGlowShader		= trap->R_RegisterShaderNoMip( "gfx/effects/sabers/rgb_glow2" );
+	rgbSaberGlowShader		= trap->R_RegisterShaderNoMip( "gfx/effects/sabers/rgb_glow" );
 	rgbSaberCoreShader		= trap->R_RegisterShaderNoMip( "gfx/effects/sabers/rgb_line" );
 	blackSaberGlowShader	= trap->R_RegisterShaderNoMip( "gfx/effects/sabers/black_glow" );
 	blackSaberCoreShader	= trap->R_RegisterShaderNoMip( "gfx/effects/sabers/black_line" );

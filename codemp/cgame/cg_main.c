@@ -645,7 +645,7 @@ static void CG_RegisterSounds( void ) {
 	cgs.media.purpleSaberCoreShader		= trap->R_RegisterShader( "gfx/effects/sabers/purple_line" );
 
 	// OJP saber shaders
-	cgs.media.rgbSaberGlowShader		= trap->R_RegisterShader( "gfx/effects/sabers/rgb_glow2" );
+	cgs.media.rgbSaberGlowShader		= trap->R_RegisterShader( "gfx/effects/sabers/rgb_glow" );
 	cgs.media.rgbSaberCoreShader		= trap->R_RegisterShader( "gfx/effects/sabers/rgb_line" );
 	cgs.media.rgbSaberCore2Shader		= trap->R_RegisterShader( "gfx/effects/sabers/rgb_core" );
 	cgs.media.blackSaberGlowShader		= trap->R_RegisterShader( "gfx/effects/sabers/black_glow" );
