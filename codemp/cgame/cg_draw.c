@@ -8472,8 +8472,6 @@ void CG_DrawActive( stereoFrame_t stereoView ) {
 	// draw status bar and other floating elements
  	CG_Draw2D();
 
-	// OJP directional block HUD
-	ojp_CG_DrawBlockHUD();
 }
 
 

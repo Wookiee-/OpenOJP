@@ -113,7 +113,6 @@ set(MPCGameCgameFiles
 	"${MPDir}/cgame/ojp_cg_trueview.c"
 	"${MPDir}/cgame/ojp_cg_finish.c"
 	"${MPDir}/cgame/ojp_cg_player_ext.c"
-	"${MPDir}/cgame/ojp_cg_blockhud.c"
 	)
 source_group("cgame" FILES ${MPCGameCgameFiles})
 set(MPCGameFiles ${MPCGameFiles} ${MPCGameCgameFiles})
