@@ -256,7 +256,7 @@ void UI_SaberLoadParms( void )
 	WP_SaberLoadParms();
 }
 
-void UI_DoSaber( vec3_t origin, vec3_t dir, float length, float lengthMax, float radius, saber_colors_t color )
+void UI_DoSaber( vec3_t origin, vec3_t dir, float length, float lengthMax, float radius, saber_colors_t color, int saberNum )
 {
 	vec3_t		mid, rgb={1,1,1};
 	qhandle_t	blade = 0, glow = 0;
@@ -321,11 +321,15 @@ void UI_DoSaber( vec3_t origin, vec3_t dir, float length, float lengthMax, float
 		case 10: // SABER_PIMP
 		case 11: // SABER_SCRIPTED
 		{
-			char rgbBuf[64];
 			int r=255, g=255, b=255;
-			trap->Cvar_VariableStringBuffer("rgb_saber1", rgbBuf, sizeof(rgbBuf));
-			if (rgbBuf[0]) {
-				sscanf(rgbBuf, "%i,%i,%i", &r, &g, &b);
+			if (saberNum == 0) {
+				r = (int)trap->Cvar_VariableValue("ui_sab1_r");
+				g = (int)trap->Cvar_VariableValue("ui_sab1_g");
+				b = (int)trap->Cvar_VariableValue("ui_sab1_b");
+			} else {
+				r = (int)trap->Cvar_VariableValue("ui_sab2_r");
+				g = (int)trap->Cvar_VariableValue("ui_sab2_g");
+				b = (int)trap->Cvar_VariableValue("ui_sab2_b");
 			}
 			ojpRgba[0] = r; ojpRgba[1] = g; ojpRgba[2] = b; ojpRgba[3] = 255;
 		}
@@ -625,7 +629,11 @@ void UI_SaberDrawBlade( itemDef_t *item, char *saberName, int saberModel, saberT
 		return;
 	}
 
-	UI_DoSaber( bladeOrigin, axis[0], bladeLength, bladeLength, bladeRadius, bladeColor );
+	{
+		int saberNum = (item->flags & ITF_ISSABER2) ? 1 : saberModel - 1;
+		if (saberNum < 0) saberNum = 0;
+		UI_DoSaber( bladeOrigin, axis[0], bladeLength, bladeLength, bladeRadius, bladeColor, saberNum );
+	}
 }
 
 void UI_GetSaberForMenu( char *saber, int saberNum )
