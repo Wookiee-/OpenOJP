@@ -37,37 +37,3 @@ qboolean ojp_BG_InSlowBounce(playerState_t *ps)
 	return (ps->userInt3 & (1 << FLAG_SLOWBOUNCE_OJP)) ? qtrue : qfalse;
 }
 
-qboolean PM_SaberInBounce(int move)
-{
-	return (move >= LS_BOUNCE && move < LS_BOUNCE + 16) ? qtrue : qfalse;
-}
-
-qboolean BG_SaberInTransitionAny(int move)
-{
-	return (move >= LS_TRANSITION && move < LS_TRANSITION + 32) ? qtrue : qfalse;
-}
-
-qboolean PM_SaberInBrokenParry(int move)
-{
-	return (move == LS_PARRY_BROKEN) ? qtrue : qfalse;
-}
-
-qboolean BG_InKnockDown(int anim)
-{
-	switch (anim) {
-	case BOTH_KNOCKDOWN1: case BOTH_KNOCKDOWN2: case BOTH_KNOCKDOWN3:
-	case BOTH_KNOCKDOWN4: case BOTH_KNOCKDOWN5:
-		return qtrue;
-	}
-	return qfalse;
-}
-
-void G_Knockdown(gentity_t *self, gentity_t *attacker, const vec3_t pushDir, float strength, qboolean breakSaberLock)
-{
-	if (!self || !self->client) return;
-	self->client->ps.forceHandExtend = HANDEXTEND_KNOCKDOWN;
-	self->client->ps.forceHandExtendTime = level.time + 1300;
-	self->client->ps.otherKiller = self->s.number;
-	self->client->ps.otherKillerTime = level.time + 8000;
-	self->client->ps.otherKillerDebounceTime = level.time + 100;
-}
