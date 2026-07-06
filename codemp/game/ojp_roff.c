@@ -73,8 +73,8 @@ for (i = 0; i < ojp_numRoffFiles; i++) {
 	}
 
 	int slot = -1;
-	int i;
-for (i = 0; i < MAX_ROFF_PLAYERS_OJP; i++) {
+	i = 0;
+	for (i = 0; i < MAX_ROFF_PLAYERS_OJP; i++) {
 		if (!ojp_roffPlayers[i].inuse) { slot = i; break; }
 		if (ojp_roffPlayers[i].entNum == entNum) { slot = i; break; }
 	}
