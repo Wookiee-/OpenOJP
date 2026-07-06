@@ -1,17 +1,6 @@
 #include "g_local.h"
 #include "ojp_roff.h"
 
-// Simple hash for ROFF file names
-static int ojp_ROFF_HashKey(const char *string)
-{
-	int hash = 0;
-	int i = 0;
-	while (string[i]) {
-		hash += tolower(string[i]) * (i + 1);
-		i++;
-	}
-	return hash % 64;
-}
 
 #define MAX_ROFF_FILES_OJP 32
 #define MAX_ROFF_PLAYERS_OJP 32

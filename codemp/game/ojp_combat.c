@@ -1,9 +1,16 @@
 #include "g_local.h"
 #include "b_local.h"
+#include "bg_local.h"
 #include "w_saber.h"
 #include "ai_main.h"
 #include "qcommon/ojp_shared.h"
 #include "ojp_saberbeh.h"
+
+// OJP functions from ojp_anim_utils.c
+extern qboolean ojp_BG_SaberInNonIdleDamageMove(playerState_t *ps, int AnimIndex);
+extern qboolean PM_SaberInBounce(int move);
+extern qboolean BG_SaberInTransitionAny(int move);
+extern qboolean PM_SaberInBrokenParry(int move);
 
 #ifndef BUTTON_15
 #define BUTTON_15 BUTTON_ALT_ATTACK
