@@ -2118,7 +2118,7 @@ void Menu_SetItemText(const menuDef_t *menu,const char *itemName, const char *te
 					case ITEM_TYPE_NUMERICFIELD:
 					case ITEM_TYPE_YESNO:
 					case ITEM_TYPE_BIND:
-					case ITEM_TYPE_SLIDER:
+					case ITEM_TYPE_SLIDER: case ITEM_TYPE_INTSLIDER:
 					case ITEM_TYPE_TEXT:
 					{
 						if ( item->typeData.edit )
@@ -3888,7 +3888,7 @@ void Item_StartCapture(itemDef_t *item, int key)
 			}
 			break;
 
-		case ITEM_TYPE_SLIDER:
+		case ITEM_TYPE_SLIDER: case ITEM_TYPE_INTSLIDER:
 		{
 			flags = Item_Slider_OverSlider(item, DC->cursorx, DC->cursory);
 			if (flags & WINDOW_LB_THUMB) {
@@ -4012,7 +4012,7 @@ qboolean Item_HandleKey(itemDef_t *item, int key, qboolean down) {
 	case ITEM_TYPE_BIND:
 		return Item_Bind_HandleKey(item, key, down);
 		break;
-	case ITEM_TYPE_SLIDER:
+	case ITEM_TYPE_SLIDER: case ITEM_TYPE_INTSLIDER:
 		return Item_Slider_HandleKey(item, key, down);
 		break;
 		//case ITEM_TYPE_IMAGE:
@@ -6515,7 +6515,7 @@ void Item_Paint(itemDef_t *item)
 	case ITEM_TYPE_BIND:
 		Item_Bind_Paint(item);
 		break;
-	case ITEM_TYPE_SLIDER:
+	case ITEM_TYPE_SLIDER: case ITEM_TYPE_INTSLIDER:
 		Item_Slider_Paint(item);
 		break;
 	default:
@@ -6802,8 +6802,7 @@ void Item_ValidateTypeData(itemDef_t *item)
 		case ITEM_TYPE_NUMERICFIELD:
 		case ITEM_TYPE_YESNO:
 		case ITEM_TYPE_BIND:
-		case ITEM_TYPE_SLIDER:
-		case ITEM_TYPE_INTSLIDER:
+		case ITEM_TYPE_SLIDER: case ITEM_TYPE_INTSLIDER:
 		{
 			item->typeData.edit = (editFieldDef_t *)UI_Alloc(sizeof(editFieldDef_t));
 			memset(item->typeData.edit, 0, sizeof(editFieldDef_t));
@@ -7968,7 +7967,7 @@ qboolean ItemParse_cvar( itemDef_t *item, int handle )
 		case ITEM_TYPE_NUMERICFIELD:
 		case ITEM_TYPE_YESNO:
 		case ITEM_TYPE_BIND:
-		case ITEM_TYPE_SLIDER:
+		case ITEM_TYPE_SLIDER: case ITEM_TYPE_INTSLIDER:
 		case ITEM_TYPE_TEXT:
 		{
 			if ( item->typeData.edit )
@@ -9552,3 +9551,4 @@ static qboolean Menu_OverActiveItem(menuDef_t *menu, float x, float y) {
 	}
 	return qfalse;
 }
+
