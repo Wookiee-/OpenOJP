@@ -163,6 +163,14 @@ void IN_MLookUp( void ) {
 	}
 }
 
+void IN_BlockDown( void ) {
+	CL_AddReliableCommand( "+block", qfalse );
+}
+
+void IN_BlockUp( void ) {
+	CL_AddReliableCommand( "-block", qfalse );
+}
+
 void IN_GenCMD1( void )
 {
 	cl.gcmdSendValue = qtrue;
@@ -1715,6 +1723,8 @@ static const cmdList_t inputCmds[] =
 	{ "-button14", NULL, IN_Button14Up, NULL },
 	{ "+button15", "Button 15", IN_Button15Down, NULL },
 	{ "-button15", NULL, IN_Button15Up, NULL },
+	{ "+block", "Manual block with saber", IN_BlockDown, NULL },
+	{ "-block", NULL, IN_BlockUp, NULL },
 	{ "+mlook", "Hold to use mouse look", IN_MLookDown, NULL },
 	{ "-mlook", NULL, IN_MLookUp, NULL },
 	{ "sv_saberswitch", "Holster/activate lightsaber", IN_GenCMD1, NULL },
