@@ -40,7 +40,6 @@ void ojp_ROFF_Init(void)
 void ojp_ROFF_Cache(const char *fileName)
 {
 	if (!fileName || !fileName[0]) return;
-	int h = ojp_ROFF_HashKey(fileName);
 
 	int i;
 for (i = 0; i < ojp_numRoffFiles; i++) {

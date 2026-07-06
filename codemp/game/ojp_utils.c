@@ -1,6 +1,9 @@
 #include "g_local.h"
 #include "qcommon/ojp_shared.h"
 
+extern void trap_Trace( trace_t *results, const vec3_t start, const vec3_t mins, const vec3_t maxs, const vec3_t end, int passEntityNum, int contentmask );
+void ojp_AutoSave(void);
+
 qboolean ojp_G_ValidSaberStyle(saber_styles_t style, gentity_t *self)
 {
 	if (!self || !self->client) return qfalse;
