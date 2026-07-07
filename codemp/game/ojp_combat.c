@@ -283,12 +283,33 @@ void ojp_BG_AddFatigue(playerState_t *ps, int fatigue)
 	if (ps->stats[STAT_DODGE_OJP] < 0) ps->stats[STAT_DODGE_OJP] = 0;
 }
 
+void ojp_UpdateDodgeFlags(playerState_t *ps)
+{
+	if (!ps) return;
+	if (ps->stats[STAT_DODGE_OJP] <= DODGE_CRITICALLEVEL_OJP)
+	{
+		ps->userInt3 &= ~(1 << FLAG_DODGE_LIGHT_OJP);
+		ps->userInt3 |= (1 << FLAG_DODGE_CRITICAL_OJP);
+	}
+	else if (ps->stats[STAT_DODGE_OJP] <= DODGE_LIGHTLEVEL_OJP)
+	{
+		ps->userInt3 |= (1 << FLAG_DODGE_LIGHT_OJP);
+		ps->userInt3 &= ~(1 << FLAG_DODGE_CRITICAL_OJP);
+	}
+	else
+	{
+		ps->userInt3 &= ~(1 << FLAG_DODGE_LIGHT_OJP);
+		ps->userInt3 &= ~(1 << FLAG_DODGE_CRITICAL_OJP);
+	}
+}
+
 void ojp_G_DodgeDrain(gentity_t *blocker, gentity_t *attacker, int amount)
 {
 	if (!blocker || !blocker->client) return;
 	blocker->client->ps.stats[STAT_DODGE_OJP] -= amount;
 	if (blocker->client->ps.stats[STAT_DODGE_OJP] < 0)
 		blocker->client->ps.stats[STAT_DODGE_OJP] = 0;
+	ojp_UpdateDodgeFlags(&blocker->client->ps);
 }
 
 qboolean ojp_G_StandardHumanoid(gentity_t *self)

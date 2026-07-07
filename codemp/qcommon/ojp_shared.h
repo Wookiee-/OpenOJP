@@ -76,6 +76,10 @@ typedef enum {
 #define FLAG_PREBLOCK_OJP 9
 #define FLAG_FATIGUED_HEAVY_OJP 8
 #define FLAG_DODGEROLL_OJP 10
+#define FLAG_DODGE_LIGHT_OJP 11
+#define FLAG_DODGE_CRITICAL_OJP 12
+
+#define DODGE_LIGHTLEVEL_OJP 50
 
 // Block button constant (bit 15, doesn't conflict with standard buttons)
 #define BUTTON_BLOCK_OJP 32768
