@@ -25,6 +25,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "w_saber.h"
 #include "ai_main.h"
 #include "ghoul2/G2.h"
+#include "ojp_saberbeh.h"
 
 #define SABER_BOX_SIZE 16.0f
 extern bot_state_t *botstates[MAX_CLIENTS];
@@ -3855,6 +3856,9 @@ static QINLINE qboolean CheckSaberDamage(gentity_t *self, int rSaberNum, int rBl
 	qboolean saberTraceDone = qfalse;
 	qboolean otherUnblockable = qfalse;
 	qboolean tryDeflectAgain = qfalse;
+	qboolean hitSaberBlade = qfalse;
+	ojp_sabmech_t mechSelf;
+	ojp_sabmech_t mechOther;
 
 	gentity_t *otherOwner;
 
@@ -4797,6 +4801,8 @@ static QINLINE qboolean CheckSaberDamage(gentity_t *self, int rSaberNum, int rBl
 			return qtrue;
 		}
 		didHit = qtrue;
+		hitSaberBlade = qtrue;
+		ojp_SabBeh_RunSaberBehavior(self, &mechSelf, otherOwner, &mechOther, tr.endpos, &didHit, hitSaberBlade);
 		self->client->ps.saberIdleWound = level.time + g_saberDmgDelay_Idle.integer;
 
 		if (dmg <= SABER_NONATTACK_DAMAGE)

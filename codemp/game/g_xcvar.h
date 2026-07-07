@@ -202,5 +202,7 @@ XCVAR_DEF( ojp_manualBlock,				"0",			NULL,						CVAR_ARCHIVE,									qfalse )
 XCVAR_DEF( g_saberanimspeed,				"1",			NULL,						CVAR_ARCHIVE,									qtrue )
 XCVAR_DEF( g_dodgeRegenTime,				"1000",			NULL,						CVAR_ARCHIVE,									qtrue )
 XCVAR_DEF( g_mishapRegenTime,				"3000",			NULL,						CVAR_ARCHIVE,									qtrue )
+XCVAR_DEF( ojp_dodgemulti,					"10.0",			NULL,						CVAR_LATCH,										qtrue )
+XCVAR_DEF( g_debugdodge,					"0",			NULL,						CVAR_CHEAT,										qfalse )
 
 #undef XCVAR_DEF
