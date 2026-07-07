@@ -5690,6 +5690,20 @@ qboolean G_RadiusDamage ( vec3_t origin, gentity_t *attacker, float damage, floa
 			if( LogAccuracyHit( ent, attacker ) ) {
 				hitClient = qtrue;
 			}
+			// OJP dodge: check if target dodges splash damage
+			{
+				extern qboolean G_DoDodge(gentity_t *self, gentity_t *shooter, vec3_t dmgOrigin, int hitLoc, int *dmg, int mod);
+				int dodgeDmg = (int) points;
+				if (!G_DoDodge(ent, attacker, origin, -1, &dodgeDmg, mod))
+				{
+					if (dodgeDmg != (int) points)
+						points = (float) dodgeDmg;
+				}
+				else
+				{
+					continue;
+				}
+			}
 			VectorSubtract (ent->r.currentOrigin, origin, dir);
 			// push the center of mass higher than the origin so players
 			// get knocked into the air more

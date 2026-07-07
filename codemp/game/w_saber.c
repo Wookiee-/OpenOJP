@@ -7616,13 +7616,15 @@ static gentity_t *G_KickTrace( gentity_t *ent, vec3_t kickDir, float kickDist, v
 					hitEnt->client->ps.otherKillerTime = level.time + 10000;
 				}
 
-				if (d_saberKickTweak.integer)
 				{
-					G_Damage( hitEnt, ent, ent, kickDir, trace.endpos, kickDamage*0.2f, DAMAGE_NO_KNOCKBACK, MOD_MELEE );
-				}
-				else
-				{
-					G_Damage( hitEnt, ent, ent, kickDir, trace.endpos, kickDamage, DAMAGE_NO_KNOCKBACK, MOD_MELEE );
+					extern qboolean G_DoDodge(gentity_t *self, gentity_t *shooter, vec3_t dmgOrigin, int hitLoc, int *dmg, int mod);
+					int dmg = kickDamage;
+					if (d_saberKickTweak.integer)
+						dmg = (int)(kickDamage * 0.2f);
+					if (!G_DoDodge(hitEnt, ent, trace.endpos, -1, &dmg, MOD_MELEE))
+					{
+						G_Damage( hitEnt, ent, ent, kickDir, trace.endpos, dmg, DAMAGE_NO_KNOCKBACK, MOD_MELEE );
+					}
 				}
 			}
 			if ( hitEnt->client
