@@ -25,6 +25,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "bg_public.h"
 #include "bg_local.h"
 #include "w_saber.h"
+#include "ojp_saberbeh.h"
 
 #if defined(_GAME)
 	#include "g_local.h" // for cvars
@@ -1262,6 +1263,19 @@ void PM_SaberLockBreak( playerState_t *genemy, qboolean victory, int strength )
 	genemy->weaponTime = 0;
 
 	pm->ps->saberLockTime = genemy->saberLockTime = 0;
+	// OJP: drain dodge from the loser
+	if (!victory) {
+		gentity_t *self = (gentity_t *)pm->baseEnt;
+		if (self && self->client) {
+			int winnerNum = genemy->saberLockEnemy;
+			if (winnerNum > 0 && winnerNum < ENTITYNUM_WORLD) {
+				gentity_t *winner = &g_entities[winnerNum];
+				if (winner->inuse && winner->client) {
+					ojp_G_DodgeDrain(self, winner, 10);
+				}
+			}
+		}
+	}
 	pm->ps->saberLockFrame = genemy->saberLockFrame = 0;
 	pm->ps->saberLockEnemy = genemy->saberLockEnemy = 0;
 
