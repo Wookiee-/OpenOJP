@@ -3582,7 +3582,16 @@ void WP_SaberApplyDamage( gentity_t *self )
 		}
 		dflags |= saberKnockbackFlags[i];
 
-		G_Damage( victim, self, self, dmgDir[i], dmgSpot[i], totalDmg[i], dflags, MOD_SABER );
+		{
+			extern qboolean G_DoDodge(gentity_t *self, gentity_t *shooter, vec3_t dmgOrigin, int hitLoc, int *dmg, int mod);
+			int dodgeDmg = totalDmg[i];
+			if (!G_DoDodge(victim, self, dmgSpot[i], -1, &dodgeDmg, MOD_SABER))
+			{
+				if (dodgeDmg != totalDmg[i])
+					totalDmg[i] = dodgeDmg;
+				G_Damage( victim, self, self, dmgDir[i], dmgSpot[i], totalDmg[i], dflags, MOD_SABER );
+			}
+		}
 	}
 }
 

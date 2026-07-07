@@ -209,6 +209,11 @@ void ojp_DoNormalDodge(gentity_t *self, int dodgeAnim, qboolean partial)
 	G_Sound(self, CHAN_BODY, G_SoundIndex("sound/weapons/force/speed.wav"));
 }
 
+qboolean G_DoDodge(gentity_t *self, gentity_t *shooter, vec3_t dmgOrigin, int hitLoc, int *dmg, int mod)
+{
+	return ojp_G_DoDodge(self, shooter, dmgOrigin, hitLoc, dmg, mod);
+}
+
 qboolean ojp_G_DoDodge(gentity_t *self, gentity_t *shooter, vec3_t dmgOrigin, int hitLoc, int *dmg, int mod)
 {
 	InitDodgeCosts_OJP();
