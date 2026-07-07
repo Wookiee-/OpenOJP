@@ -1616,6 +1616,16 @@ void CG_NewClientInfo( int clientNum, qboolean entitiesInitialized ) {
 
 	newInfo.icolor2 = atoi(v);
 
+	// OJP RGB saber colors
+	v = Info_ValueForKey( configstring, "tc1" );
+	if ( v && v[0] ) {
+		ParseRGBSaber( v, newInfo.rgb1 );
+	}
+	v = Info_ValueForKey( configstring, "tc2" );
+	if ( v && v[0] ) {
+		ParseRGBSaber( v, newInfo.rgb2 );
+	}
+
 	// bot skill
 	v = Info_ValueForKey( configstring, "skill" );
 	// players have -1 skill so you can determine the bots from the scoreboard code
@@ -5259,6 +5269,20 @@ int CG_LightVerts( vec3_t normal, int numVerts, polyVert_t *verts )
 		verts[i].modulate[3] = 255;
 	}
 	return qtrue;
+}
+
+static void ParseRGBSaber( const char *str, vec3_t c )
+{
+	int i;
+	const char *p = str;
+	for ( i = 0; i < 3; i++ )
+	{
+		c[i] = atoi( p );
+		while ( *p && *p != ',' && *p != '\\' )
+			p++;
+		if ( *p )
+			p++;
+	}
 }
 
 static void CG_RGBForSaberColor( saber_colors_t color, vec3_t rgb )

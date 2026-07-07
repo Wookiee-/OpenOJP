@@ -2330,6 +2330,8 @@ qboolean ClientUserinfoChanged( int clientNum ) {
 	Q_strcat( buf, sizeof( buf ), va( "st2\\%s\\", client->pers.saber2 ) );
 	Q_strcat( buf, sizeof( buf ), va( "c1\\%s\\", color1 ) );
 	Q_strcat( buf, sizeof( buf ), va( "c2\\%s\\", color2 ) );
+	Q_strcat( buf, sizeof( buf ), va( "tc1\\%s\\", Info_ValueForKey( userinfo, "rgb_saber1" ) ) );
+	Q_strcat( buf, sizeof( buf ), va( "tc2\\%s\\", Info_ValueForKey( userinfo, "rgb_saber2" ) ) );
 	Q_strcat( buf, sizeof( buf ), va( "hc\\%i\\", client->pers.maxHealth ) );
 	if ( ent->r.svFlags & SVF_BOT )
 		Q_strcat( buf, sizeof( buf ), va( "skill\\%s\\", Info_ValueForKey( userinfo, "skill" ) ) );
