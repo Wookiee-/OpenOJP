@@ -1553,6 +1553,7 @@ CG_NewClientInfo
 */
 void WP_SetSaber( int entNum, saberInfo_t *sabers, int saberNum, const char *saberName );
 
+static void ParseRGBSaber( const char *str, vec3_t c );
 void CG_NewClientInfo( int clientNum, qboolean entitiesInitialized ) {
 	clientInfo_t *ci;
 	clientInfo_t newInfo;
