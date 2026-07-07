@@ -653,9 +653,21 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 	// impact damage
 	if (other->takedamage && !isKnockedSaber) {
 		// FIXME: wrong damage direction?
-		if ( ent->damage ) {
+		if ( ent->damage ) 		{
 			vec3_t	velocity;
 			qboolean didDmg = qfalse;
+
+			// OJP dodge: check if the target dodges the projectile
+			if (other->client) {
+				int dmgVal;
+				extern qboolean G_DoDodge(gentity_t *self, gentity_t *shooter, vec3_t dmgOrigin, int hitLoc, int *dmg, int mod);
+				VectorCopy(ent->r.currentOrigin, velocity);
+				dmgVal = ent->damage;
+				if (G_DoDodge(other, &g_entities[ent->r.ownerNum], ent->r.currentOrigin, -1, &dmgVal, ent->methodOfDeath)) {
+					// fully dodged - skip this entity
+					goto skipDamage;
+				}
+			}
 
 			if( LogAccuracyHit( other, &g_entities[ent->r.ownerNum] ) ) {
 				g_entities[ent->r.ownerNum].client->accuracy_hits++;
@@ -719,6 +731,7 @@ void G_MissileImpact( gentity_t *ent, trace_t *trace ) {
 				}
 			}
 		}
+skipDamage:
 
 		if ( ent->s.weapon == WP_DEMP2 )
 		{//a hit with demp2 decloaks people, disables ships

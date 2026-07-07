@@ -671,7 +671,16 @@ static void WP_DisruptorMainFire( gentity_t *ent )
 				ent->client->accuracy_hits++;
 			}
 
-			G_Damage( traceEnt, ent, ent, forward, tr.endpos, damage, DAMAGE_NORMAL, MOD_DISRUPTOR );
+			{
+				extern qboolean G_DoDodge(gentity_t *self, gentity_t *shooter, vec3_t dmgOrigin, int hitLoc, int *dmg, int mod);
+				int dodgeDmg = damage;
+				if (!G_DoDodge(traceEnt, ent, tr.endpos, -1, &dodgeDmg, MOD_DISRUPTOR))
+				{
+					if (dodgeDmg != damage)
+						damage = dodgeDmg;
+					G_Damage( traceEnt, ent, ent, forward, tr.endpos, damage, DAMAGE_NORMAL, MOD_DISRUPTOR );
+				}
+			}
 
 			tent = G_TempEntity( tr.endpos, EV_DISRUPTOR_HIT );
 			tent->s.eventParm = DirToByte( tr.plane.normal );
@@ -930,7 +939,16 @@ void WP_DisruptorAltFire( gentity_t *ent )
 					VectorCopy(traceEnt->client->ps.viewangles, preAng);
 				}
 
-				G_Damage( traceEnt, ent, ent, forward, tr.endpos, damage, DAMAGE_NO_KNOCKBACK, MOD_DISRUPTOR_SNIPER );
+				{
+					extern qboolean G_DoDodge(gentity_t *self, gentity_t *shooter, vec3_t dmgOrigin, int hitLoc, int *dmg, int mod);
+					int dodgeDmg = damage;
+					if (!G_DoDodge(traceEnt, ent, tr.endpos, -1, &dodgeDmg, MOD_DISRUPTOR_SNIPER))
+					{
+						if (dodgeDmg != damage)
+							damage = dodgeDmg;
+						G_Damage( traceEnt, ent, ent, forward, tr.endpos, damage, DAMAGE_NO_KNOCKBACK, MOD_DISRUPTOR_SNIPER );
+					}
+				}
 
 				if (traceEnt->client && preHealth > 0 && traceEnt->health <= 0 && fullCharge &&
 					G_CanDisruptify(traceEnt))
