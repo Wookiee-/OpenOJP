@@ -5286,7 +5286,7 @@ static void ParseRGBSaber( const char *str, vec3_t c )
 	}
 }
 
-static void CG_RGBForSaberColor( saber_colors_t color, vec3_t rgb )
+static void CG_RGBForSaberColor( saber_colors_t color, vec3_t rgb, int cnum, int bnum )
 {
 	switch( color )
 	{
@@ -5312,9 +5312,23 @@ static void CG_RGBForSaberColor( saber_colors_t color, vec3_t rgb )
 			VectorSet( rgb, 1.0f, 1.0f, 1.0f );
 			break;
 		case 8: // SABER_BLACK
-			VectorSet( rgb, 0.1f, 0.1f, 0.1f );
+			VectorSet( rgb, 0.0f, 0.0f, 0.0f );
 			break;
 		case 9: // SABER_RGB
+			if (cnum < MAX_CLIENTS)
+			{
+				int i;
+				clientInfo_t *ci = &cgs.clientinfo[cnum];
+				if (bnum == 0)
+					VectorCopy(ci->rgb1, rgb);
+				else
+					VectorCopy(ci->rgb2, rgb);
+				for (i = 0; i < 3; i++)
+					rgb[i] /= 255;
+			}
+			else
+				VectorSet( rgb, 0.2f, 0.4f, 1.0f );
+			break;
 		case 10: // SABER_PIMP
 		case 11: // SABER_SCRIPTED
 			VectorSet( rgb, 1.0f, 1.0f, 1.0f );
@@ -5324,7 +5338,7 @@ static void CG_RGBForSaberColor( saber_colors_t color, vec3_t rgb )
 	}
 }
 
-static void CG_DoSaberLight( saberInfo_t *saber )
+static void CG_DoSaberLight( saberInfo_t *saber, int cnum, int bnum )
 {
 	vec3_t		positions[MAX_BLADES*2], mid={0}, rgbs[MAX_BLADES*2], rgb={0};
 	float		lengths[MAX_BLADES*2]={0}, totallength = 0, numpositions = 0, dist, diameter = 0;
@@ -5345,8 +5359,7 @@ static void CG_DoSaberLight( saberInfo_t *saber )
 	{
 		if ( saber->blade[i].length >= 0.5f )
 		{
-			//FIXME: make RGB sabers
-			CG_RGBForSaberColor( saber->blade[i].color, rgbs[i] );
+			CG_RGBForSaberColor( saber->blade[i].color, rgbs[i], cnum, bnum );
 			lengths[i] = saber->blade[i].length;
 			if ( saber->blade[i].length*2.0f > diameter )
 			{
@@ -5410,7 +5423,7 @@ static void CG_DoSaberLight( saberInfo_t *saber )
 	}
 }
 
-void CG_DoSaber( vec3_t origin, vec3_t dir, float length, float lengthMax, float radius, saber_colors_t color, int rfx, qboolean doLight )
+void CG_DoSaber( vec3_t origin, vec3_t dir, float length, float lengthMax, float radius, saber_colors_t color, int rfx, qboolean doLight, int cnum, int bnum )
 {
 	vec3_t		mid;
 	qhandle_t	blade = 0, glow = 0;
@@ -5492,7 +5505,7 @@ void CG_DoSaber( vec3_t origin, vec3_t dir, float length, float lengthMax, float
 	if (doLight)
 	{	// always add a light because sabers cast a nice glow before they slice you in half!!  or something...
 		vec3_t rgb={1,1,1};
-		CG_RGBForSaberColor( color, rgb );
+		CG_RGBForSaberColor( color, rgb, cnum, bnum );
 		trap->R_AddLightToScene( mid, (length*1.4f) + (Q_flrand(0.0f, 1.0f)*3.0f), rgb[0], rgb[1], rgb[2] );
 	}
 
@@ -6602,7 +6615,7 @@ JustDoIt:
 		if ( client->saber[saberNum].numBlades < 3
 			&& !(client->saber[saberNum].saberFlags2&SFL2_NO_DLIGHT) )
 		{//hmm, but still add the dlight
-			CG_DoSaberLight( &client->saber[saberNum] );
+			CG_DoSaberLight( &client->saber[saberNum], cent->currentState.clientNum, saberNum );
 		}
 		return;
 	}
@@ -6611,7 +6624,8 @@ JustDoIt:
 	//CG_DoSaber( org_, axis_[0], saberLen, client->saber[saberNum].blade[bladeNum].lengthMax, client->saber[saberNum].blade[bladeNum].radius,
 	//	scolor, renderfx, (qboolean)(saberNum==0&&bladeNum==0) );
 	CG_DoSaber( org_, axis_[0], saberLen, client->saber[saberNum].blade[bladeNum].lengthMax, client->saber[saberNum].blade[bladeNum].radius,
-		scolor, renderfx, (qboolean)(client->saber[saberNum].numBlades < 3 && !(client->saber[saberNum].saberFlags2&SFL2_NO_DLIGHT)) );
+		scolor, renderfx, (qboolean)(client->saber[saberNum].numBlades < 3 && !(client->saber[saberNum].saberFlags2&SFL2_NO_DLIGHT)),
+		cent->currentState.clientNum, saberNum );
 }
 
 int CG_IsMindTricked(int trickIndex1, int trickIndex2, int trickIndex3, int trickIndex4, int client)
@@ -10386,7 +10400,7 @@ stillDoSaber:
 					}
 					if ( ci->saber[l].numBlades > 2 )
 					{//add a single glow for the saber based on all the blade colors combined
-						CG_DoSaberLight( &ci->saber[l] );
+						CG_DoSaberLight( &ci->saber[l], cent->currentState.clientNum, l );
 					}
 
 					l++;
@@ -10597,7 +10611,7 @@ stillDoSaber:
 			}
 			if ( ci->saber[l].numBlades > 2 )
 			{//add a single glow for the saber based on all the blade colors combined
-				CG_DoSaberLight( &ci->saber[l] );
+				CG_DoSaberLight( &ci->saber[l], cent->currentState.clientNum, l );
 			}
 
 			l++;
