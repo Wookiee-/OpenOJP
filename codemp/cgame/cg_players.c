@@ -5478,13 +5478,15 @@ void CG_DoSaber( vec3_t origin, vec3_t dir, float length, float lengthMax, float
 		case 10: // SABER_PIMP
 		case 11: // SABER_SCRIPTED
 		{
-			char rgbBuf[64];
-			int r=255, g=255, b=255;
-			trap->Cvar_VariableStringBuffer("rgb_saber1", rgbBuf, sizeof(rgbBuf));
-			if (rgbBuf[0]) {
-				sscanf(rgbBuf, "%i,%i,%i", &r, &g, &b);
+			if (cnum < MAX_CLIENTS) {
+				clientInfo_t *ci = &cgs.clientinfo[cnum];
+				ojpRgba[0] = (unsigned char)(bnum == 0 ? ci->rgb1[0] : ci->rgb2[0]);
+				ojpRgba[1] = (unsigned char)(bnum == 0 ? ci->rgb1[1] : ci->rgb2[1]);
+				ojpRgba[2] = (unsigned char)(bnum == 0 ? ci->rgb1[2] : ci->rgb2[2]);
+				ojpRgba[3] = 255;
+			} else {
+				ojpRgba[0] = ojpRgba[1] = ojpRgba[2] = 255; ojpRgba[3] = 255;
 			}
-			ojpRgba[0] = r; ojpRgba[1] = g; ojpRgba[2] = b; ojpRgba[3] = 255;
 		}
 			goto UseOjpSaber;
 		UseOjpSaber:
