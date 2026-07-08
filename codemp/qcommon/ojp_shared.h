@@ -13,9 +13,8 @@ typedef int ojp_ivec5_t[5];
 #define SEF_DISARMED_OJP 0x400
 #define SEF_PUSHED_OJP 0x800
 
-// Additional STAT indices
-#define STAT_MISHAP_LEVEL_OJP 8
-#define STAT_DODGE_OJP 9
+// Additional STAT indices (STAT_DODGE_OJP is in bg_public.h statIndex_t enum as index 9)
+#define STAT_MISHAP_LEVEL_OJP 10
 
 // Mishap / Balance system
 #define MISHAPLEVEL_NONE_OJP 0
