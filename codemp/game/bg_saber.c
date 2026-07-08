@@ -1262,7 +1262,7 @@ void PM_SaberLockBreak( playerState_t *genemy, qboolean victory, int strength )
 	genemy->weaponTime = 0;
 
 	pm->ps->saberLockTime = genemy->saberLockTime = 0;
-#ifndef CGAME
+#ifndef _CGAME
 	// OJP: drain dodge from the loser
 	if (!victory) {
 		extern void ojp_G_DodgeDrain(gentity_t *blocker, gentity_t *attacker, int amount);
