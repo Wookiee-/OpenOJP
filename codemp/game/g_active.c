@@ -3538,6 +3538,12 @@ void G_CheckClientTimeouts ( gentity_t *ent )
 	{
 		SetTeam ( ent, "spectator" );
 	}
+
+	// OJP dodge regen
+	{
+		extern void ojp_DodgeRegen(gentity_t *self);
+		ojp_DodgeRegen(ent);
+	}
 }
 
 /*

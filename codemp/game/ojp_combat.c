@@ -323,3 +323,36 @@ qboolean ojp_G_StandardHumanoid(gentity_t *self)
 	if (self->client->ps.weapon == WP_SABER) return qtrue;
 	return qfalse;
 }
+
+extern qboolean ojp_BG_InSlowBounce(playerState_t *ps);
+extern qboolean PM_SaberInBrokenParry(int move);
+extern qboolean PM_InKnockDown(playerState_t *ps);
+
+void ojp_DodgeRegen(gentity_t *self)
+{
+	if (!self || !self->client) return;
+	if (self->client->DodgeDebounce > level.time) return;
+	if (ojp_BG_InSlowBounce(&self->client->ps)) return;
+	if (PM_SaberInBrokenParry(self->client->ps.saberMove)) return;
+	if (PM_InKnockDown(&self->client->ps)) return;
+	if (self->client->ps.forceHandExtend == HANDEXTEND_DODGE) return;
+	if (self->client->ps.saberLockTime > level.time) return;
+	if (self->client->ps.groundEntityNum == ENTITYNUM_NONE) return;
+	if (!ojp_WalkCheck(self)) return;
+
+	if (self->client->ps.fd.forcePower > 25
+		&& self->client->ps.stats[STAT_DODGE_OJP] < 100)
+	{
+		if (100 - self->client->ps.stats[STAT_DODGE_OJP] < 6)
+		{
+			self->client->ps.stats[STAT_DODGE_OJP] = 100;
+		}
+		else
+		{
+			self->client->ps.stats[STAT_DODGE_OJP] += 6;
+		}
+		ojp_UpdateDodgeFlags(&self->client->ps);
+		self->client->ps.fd.forcePower--;
+	}
+	self->client->DodgeDebounce = level.time + g_dodgeRegenTime.integer;
+}
