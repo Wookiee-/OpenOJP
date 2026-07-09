@@ -5472,14 +5472,18 @@ void CG_DoSaber( vec3_t origin, vec3_t dir, float length, float lengthMax, float
 			blade = cgs.media.purpleSaberCoreShader;
 			break;
 		case 7: // SABER_WHITE
-			ojpRgba[0] = 255; ojpRgba[1] = 255; ojpRgba[2] = 255; ojpRgba[3] = 255;
-			goto UseOjpSaber;
-		case 8: // SABER_BLACK
-			ojpRgba[0] = 25; ojpRgba[1] = 25; ojpRgba[2] = 25; ojpRgba[3] = 255;
-			goto UseOjpSaber;
-		case 9: // SABER_RGB
 		case 10: // SABER_PIMP
 		case 11: // SABER_SCRIPTED
+			goto UseOjpSaber;
+		case 8: // SABER_BLACK
+			if (cgs.media.blackSaberGlowShader) {
+				glow = cgs.media.blackSaberGlowShader;
+				blade = cgs.media.rgbSaberCoreShader;
+			} else {
+				goto UseOjpSaber;
+			}
+			break;
+		case 9: // SABER_RGB
 		{
 			if (cnum < MAX_CLIENTS) {
 				clientInfo_t *ci = &cgs.clientinfo[cnum];
