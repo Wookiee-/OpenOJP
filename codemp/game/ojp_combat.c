@@ -275,7 +275,7 @@ qboolean ojp_CanKickEntity(gentity_t *self, gentity_t *target)
 
 void ojp_G_AddMercBalance(gentity_t *self, int amount)
 {
-	self->client->ps.stats[STAT_MISHAP_LEVEL_OJP] -= amount;
+	self->client->ps.stats[STAT_MISHAP_LEVEL_OJP] += amount;
 	if (self->client->ps.stats[STAT_MISHAP_LEVEL_OJP] < 0)
 		self->client->ps.stats[STAT_MISHAP_LEVEL_OJP] = MISHAPLEVEL_NONE_OJP;
 	else if (self->client->ps.stats[STAT_MISHAP_LEVEL_OJP] > MISHAPLEVEL_MAX_OJP)

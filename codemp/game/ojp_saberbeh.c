@@ -26,7 +26,8 @@ static void ClearSabMech(ojp_sabmech_t *sabmech)
 qboolean ojp_SabBeh_RollBalance(gentity_t *self, ojp_sabmech_t *mechSelf, qboolean forceMishap)
 {
 	int randNum;
-	if (self->client->ps.stats[STAT_MISHAP_LEVEL_OJP] <= MISHAPLEVEL_FULL_OJP) {
+	int mishap = self->client->ps.stats[STAT_MISHAP_LEVEL_OJP];
+	if (mishap >= MISHAPLEVEL_FULL_OJP) {
 		mechSelf->doButterFingers = qtrue;
 		return qtrue;
 	}
@@ -37,14 +38,14 @@ qboolean ojp_SabBeh_RollBalance(gentity_t *self, ojp_sabmech_t *mechSelf, qboole
 			return qtrue;
 		}
 	}
-	else if (self->client->ps.stats[STAT_MISHAP_LEVEL_OJP] <= MISHAPLEVEL_HEAVY_OJP) {
+	else if (mishap >= MISHAPLEVEL_HEAVY_OJP) {
 		randNum = Q_irand(0, 99);
 		if (randNum < 0 || forceMishap) {
 			mechSelf->doHeavySlowBounce = qtrue;
 			return qtrue;
 		}
 	}
-	else if (self->client->ps.stats[STAT_MISHAP_LEVEL_OJP] <= MISHAPLEVEL_LIGHT_OJP) {
+	else if (mishap >= MISHAPLEVEL_LIGHT_OJP) {
 		randNum = Q_irand(0, 99);
 		if (randNum < 0 || forceMishap) {
 			mechSelf->doSlowBounce = qtrue;
@@ -62,7 +63,7 @@ void ojp_SabBeh_AddBalance(gentity_t *self, ojp_sabmech_t *mechSelf, int amount,
 {
 	if (!self || !self->client) return;
 
-	self->client->ps.stats[STAT_MISHAP_LEVEL_OJP] -= amount;
+	self->client->ps.stats[STAT_MISHAP_LEVEL_OJP] += amount;
 
 	if (self->client->ps.stats[STAT_MISHAP_LEVEL_OJP] < MISHAPLEVEL_NONE_OJP)
 	{
@@ -87,16 +88,9 @@ void ojp_SabBeh_AddBalance(gentity_t *self, ojp_sabmech_t *mechSelf, int amount,
 void ojp_BG_ReduceMishapLevel(playerState_t *ps)
 {
 	if (!ps) return;
-	if (ps->stats[STAT_MISHAP_LEVEL_OJP] > 0)
+	if (ps->stats[STAT_MISHAP_LEVEL_OJP] > MISHAPLEVEL_NONE_OJP)
 	{
-		if (ps->stats[STAT_MISHAP_LEVEL_OJP] > MISHAPLEVEL_LIGHT_OJP)
-		{
-			ps->stats[STAT_MISHAP_LEVEL_OJP] = MISHAPLEVEL_LIGHT_OJP;
-		}
-		else
-		{
-			ps->stats[STAT_MISHAP_LEVEL_OJP]--;
-		}
+		ps->stats[STAT_MISHAP_LEVEL_OJP]--;
 	}
 }
 
