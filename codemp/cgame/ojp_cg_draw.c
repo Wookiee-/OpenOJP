@@ -1,8 +1,6 @@
 #include "cg_local.h"
 #include "qcommon/ojp_shared.h"
 
-extern vmCvar_t ojp_drawHUDBars;
-
 #define DODGE_MAX_OJP 100
 #define DODGEBAR_H 65.0f
 #define DODGEBAR_W 13.0f
@@ -19,8 +17,6 @@ void ojp_CG_DrawDodge(void)
 	vec4_t aColor;
 	float percent;
 	int dodgeStat;
-
-	if (!ojp_drawHUDBars.integer) return;
 
 	dodgeStat = cg.predictedPlayerState.stats[STAT_DODGE_OJP];
 	if (dodgeStat < 0) dodgeStat = 0;
@@ -63,8 +59,6 @@ void ojp_CG_DrawBalance(void)
 {
 	float percent;
 	int mishapLevel;
-
-	if (!ojp_drawHUDBars.integer) return;
 
 	mishapLevel = cg.predictedPlayerState.stats[STAT_MISHAP_LEVEL_OJP];
 

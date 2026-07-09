@@ -210,4 +210,6 @@ XCVAR_DEF( ojp_holsterdebug,				"0",					NULL,					CVAR_NONE )
 XCVAR_DEF( ojp_holsterdebug_boneindex,		"0",					NULL,					CVAR_NONE )
 XCVAR_DEF( ojp_holsterdebug_posoffset,		"0.0 0.0 0.0",			NULL,					CVAR_NONE )
 XCVAR_DEF( ojp_holsterdebug_angoffset,		"0.0 0.0 0.0",			NULL,					CVAR_NONE )
+XCVAR_DEF( rgb_saber1,						"255,255,255",			NULL,					CVAR_ARCHIVE )
+XCVAR_DEF( rgb_saber2,						"255,255,255",			NULL,					CVAR_ARCHIVE )
 #undef XCVAR_DEF
