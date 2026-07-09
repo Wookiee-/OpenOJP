@@ -5491,8 +5491,9 @@ void CG_DoSaber( vec3_t origin, vec3_t dir, float length, float lengthMax, float
 					goto UseOjpSaber;
 				}
 			}
-			// No valid RGB data - fall through to default blue
 		}
+			glow = cgs.media.blueSaberGlowShader;
+			blade = cgs.media.blueSaberCoreShader;
 			break;
 		UseOjpSaber:
 			if (cgs.media.rgbSaberGlowShader) {
