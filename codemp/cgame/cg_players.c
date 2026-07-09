@@ -1599,6 +1599,9 @@ void CG_NewClientInfo( int clientNum, qboolean entitiesInitialized ) {
 	// build into a temp buffer so the defer checks can use
 	// the old value
 	memset( &newInfo, 0, sizeof( newInfo ) );
+	// Initialize RGB saber values to -1 (no data sentinel)
+	newInfo.rgb1[0] = newInfo.rgb1[1] = newInfo.rgb1[2] = -1.0f;
+	newInfo.rgb2[0] = newInfo.rgb2[1] = newInfo.rgb2[2] = -1.0f;
 
 	// isolate the player's name
 	v = Info_ValueForKey(configstring, "n");
@@ -5480,18 +5483,17 @@ void CG_DoSaber( vec3_t origin, vec3_t dir, float length, float lengthMax, float
 		{
 			if (cnum < MAX_CLIENTS) {
 				clientInfo_t *ci = &cgs.clientinfo[cnum];
-				int r = (int)(bnum == 0 ? ci->rgb1[0] : ci->rgb2[0]);
-				int g = (int)(bnum == 0 ? ci->rgb1[1] : ci->rgb2[1]);
-				int b = (int)(bnum == 0 ? ci->rgb1[2] : ci->rgb2[2]);
-				if (r == 0 && g == 0 && b == 0) {
-					r = g = b = 255;
+				float r = (bnum == 0 ? ci->rgb1[0] : ci->rgb2[0]);
+				float g = (bnum == 0 ? ci->rgb1[1] : ci->rgb2[1]);
+				float b = (bnum == 0 ? ci->rgb1[2] : ci->rgb2[2]);
+				if (r >= 0 && g >= 0 && b >= 0) {
+					ojpRgba[0] = (int)r; ojpRgba[1] = (int)g; ojpRgba[2] = (int)b; ojpRgba[3] = 255;
+					goto UseOjpSaber;
 				}
-				ojpRgba[0] = r; ojpRgba[1] = g; ojpRgba[2] = b; ojpRgba[3] = 255;
-			} else {
-				ojpRgba[0] = ojpRgba[1] = ojpRgba[2] = 255; ojpRgba[3] = 255;
 			}
+			// No valid RGB data - fall through to default blue
 		}
-			goto UseOjpSaber;
+			break;
 		UseOjpSaber:
 			if (cgs.media.rgbSaberGlowShader) {
 				glow = cgs.media.rgbSaberGlowShader;
