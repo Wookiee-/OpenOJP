@@ -4,13 +4,13 @@
 #define DODGE_MAX_OJP 100
 #define DODGEBAR_H 65.0f
 #define DODGEBAR_W 13.0f
-#define DODGEBAR_X 538.0f
-#define DODGEBAR_Y 367.0f
+#define DODGEBAR_X 525.0f
+#define DODGEBAR_Y 350.0f
 
 #define MISHAPBAR_H 65.0f
 #define MISHAPBAR_W 13.0f
-#define MISHAPBAR_X 555.0f
-#define MISHAPBAR_Y 367.0f
+#define MISHAPBAR_X 540.0f
+#define MISHAPBAR_Y 350.0f
 
 void ojp_CG_DrawDodge(void)
 {
