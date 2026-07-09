@@ -29,6 +29,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #include "keycodes.h"
 
 #include "ui/menudef.h"
+#include "../qcommon/ojp_shared.h"
 
 #define MAX_MENUNAME				32
 #define MAX_ITEMTEXT				64
@@ -564,3 +565,15 @@ Ghoul2 Insert End
 */
 
 extern const char *HolocronIcons[NUM_FORCE_POWERS];
+
+// OJP skills system
+typedef struct {
+	int		numRanks;
+	int		uiForceRankID;
+	int		skillNum;
+	int		forceSide;
+	qboolean disabled;
+	int		uiForcePowersRank;
+} ojp_uiRank_t;
+
+extern ojp_uiRank_t ojp_uiRank[NUM_TOTAL_SKILLS_OJP];

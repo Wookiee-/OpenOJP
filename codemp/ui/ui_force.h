@@ -23,6 +23,7 @@ along with this program; if not, see <http://www.gnu.org/licenses/>.
 #pragma once
 
 #include "qcommon/qfiles.h"
+#include "../qcommon/ojp_shared.h"
 
 #define NUM_FORCE_STAR_IMAGES  9
 #define FORCE_NONJEDI	0
@@ -35,9 +36,9 @@ extern int uiMaxRank;
 extern int uiForceUsed;
 extern int uiForceAvailable;
 extern qboolean gTouchedForce;
-extern qboolean uiForcePowersDisabled[NUM_FORCE_POWERS];
-extern int uiForcePowersRank[NUM_FORCE_POWERS];
-extern int uiForcePowerDarkLight[NUM_FORCE_POWERS];
+extern qboolean uiForcePowersDisabled[NUM_TOTAL_SKILLS_OJP];
+extern int uiForcePowersRank[NUM_TOTAL_SKILLS_OJP];
+extern int uiForcePowerDarkLight[NUM_TOTAL_SKILLS_OJP];
 extern int uiSaberColorShaders[NUM_SABER_COLORS];
 // Dots above or equal to a given rank carry a certain color.
 

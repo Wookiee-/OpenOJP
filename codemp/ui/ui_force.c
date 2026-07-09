@@ -30,8 +30,9 @@ FORCE INTERFACE
 
 // use this to get a demo build without an explicit demo build, i.e. to get the demo ui files to build
 #include "ui_local.h"
-#include "qcommon/qfiles.h"
+#include "../qcommon/qfiles.h"
 #include "ui_force.h"
+#include "../qcommon/ojp_shared.h"
 
 int uiForceSide = FORCE_LIGHTSIDE;
 int uiJediNonJedi = -1;
@@ -47,7 +48,7 @@ qboolean gTouchedForce = qfalse;
 
 void Menu_ShowItemByName(menuDef_t *menu, const char *p, qboolean bShow);
 
-qboolean uiForcePowersDisabled[NUM_FORCE_POWERS] = {
+qboolean uiForcePowersDisabled[NUM_TOTAL_SKILLS_OJP] = {
 	qfalse,//FP_HEAL,//instant
 	qfalse,//FP_LEVITATION,//hold/duration
 	qfalse,//FP_SPEED,//duration
@@ -68,7 +69,7 @@ qboolean uiForcePowersDisabled[NUM_FORCE_POWERS] = {
 	qfalse//FP_SABERTHROW,
 };
 
-int uiForcePowersRank[NUM_FORCE_POWERS] = {
+int uiForcePowersRank[NUM_TOTAL_SKILLS_OJP] = {
 	0,//FP_HEAL = 0,//instant
 	1,//FP_LEVITATION,//hold/duration, this one defaults to 1 (gives a free point)
 	0,//FP_SPEED,//duration
@@ -89,7 +90,7 @@ int uiForcePowersRank[NUM_FORCE_POWERS] = {
 	0//FP_SABERTHROW,
 };
 
-int uiForcePowerDarkLight[NUM_FORCE_POWERS] = //0 == neutral
+int uiForcePowerDarkLight[NUM_TOTAL_SKILLS_OJP] = //0 == neutral
 { //nothing should be usable at rank 0..
 	FORCE_LIGHTSIDE,//FP_HEAL,//instant
 	0,//FP_LEVITATION,//hold/duration
@@ -109,7 +110,7 @@ int uiForcePowerDarkLight[NUM_FORCE_POWERS] = //0 == neutral
 	0,//FP_SABER_OFFENSE,
 	0,//FP_SABER_DEFENSE,
 	0//FP_SABERTHROW,
-		//NUM_FORCE_POWERS
+		//NUM_TOTAL_SKILLS_OJP
 };
 
 int uiForceStarShaders[NUM_FORCE_STAR_IMAGES][2];
@@ -260,7 +261,7 @@ void UI_SaveForceTemplate()
 	Com_sprintf(fcfString, sizeof(fcfString), "%i-%i-", uiForceRank, uiForceSide);
 	strPlace = strlen(fcfString);
 
-	while (forcePlace < NUM_FORCE_POWERS)
+	while (forcePlace < NUM_TOTAL_SKILLS_OJP)
 	{
 		Com_sprintf(forceStringValue, sizeof(forceStringValue), "%i", uiForcePowersRank[forcePlace]);
 		//Just use the force digit even if multiple digits. Shouldn't be longer than 1.
@@ -329,7 +330,7 @@ void UpdateForceUsed()
 			int x = 0;
 			qboolean clear = qfalse, update = qfalse;
 			uiJediNonJedi = FORCE_NONJEDI;
-			while ( x < NUM_FORCE_POWERS )
+			while ( x < NUM_TOTAL_SKILLS_OJP )
 			{//if any force power is set, we must be a jedi
 				if ( x == FP_LEVITATION || x == FP_SABER_OFFENSE )
 				{
@@ -361,7 +362,7 @@ void UpdateForceUsed()
 			else if ( clear )
 			{
 				x = 0;
-				while ( x < NUM_FORCE_POWERS )
+				while ( x < NUM_TOTAL_SKILLS_OJP )
 				{//clear all force
 					uiForcePowersRank[x] = 0;
 					x++;
@@ -440,7 +441,7 @@ void UpdateForceUsed()
 	}
 
 	// Make sure that we're still legal.
-	for (curpower=0;curpower<NUM_FORCE_POWERS;curpower++)
+	for (curpower=0;curpower<NUM_TOTAL_SKILLS_OJP;curpower++)
 	{	// Make sure that our ranks are within legal limits.
 		if (uiForcePowersRank[curpower]<0)
 			uiForcePowersRank[curpower]=0;
@@ -500,7 +501,7 @@ void UI_ReadLegalForce(void)
 	Com_sprintf(fcfString, sizeof(fcfString), "%i-%i-", uiForceRank, uiForceSide);
 	strPlace = strlen(fcfString);
 
-	while (forcePlace < NUM_FORCE_POWERS)
+	while (forcePlace < NUM_TOTAL_SKILLS_OJP)
 	{
 		Com_sprintf(forceStringValue, sizeof(forceStringValue), "%i", uiForcePowersRank[forcePlace]);
 		//Just use the force digit even if multiple digits. Shouldn't be longer than 1.
@@ -577,7 +578,7 @@ void UI_ReadLegalForce(void)
 	}
 
 	//clear out the existing powers
-	while (c < NUM_FORCE_POWERS)
+	while (c < NUM_TOTAL_SKILLS_OJP)
 	{
 		uiForcePowersRank[c] = 0;
 		c++;
@@ -586,7 +587,7 @@ void UI_ReadLegalForce(void)
 	uiForceAvailable = forceMasteryPoints[uiForceRank];
 	gTouchedForce = qtrue;
 
-	for (c=0;fcfString[i]&&c<NUM_FORCE_POWERS;c++,i++)
+	for (c=0;fcfString[i]&&c<NUM_TOTAL_SKILLS_OJP;c++,i++)
 	{
 		singleBuf[0] = fcfString[i];
 		singleBuf[1] = 0;
@@ -701,7 +702,7 @@ void UI_UpdateForcePowers()
 
 			i_f = FP_HEAL;
 
-			while (forcePowers[i] && i_f < NUM_FORCE_POWERS)
+			while (forcePowers[i] && i_f < NUM_TOTAL_SKILLS_OJP)
 			{
 				readBuf[0] = forcePowers[i];
 				readBuf[1] = '\0';
@@ -731,7 +732,7 @@ void UI_UpdateForcePowers()
 				i++;
 			}
 
-			if (i_f < NUM_FORCE_POWERS)
+			if (i_f < NUM_TOTAL_SKILLS_OJP)
 			{ //info for all the powers wasn't there..
 				uiForceSide = 0;
 				goto validitycheck;
@@ -747,7 +748,7 @@ validitycheck:
 		uiForceSide = 1;
 		uiForceRank = 1;
 		i = 0;
-		while (i < NUM_FORCE_POWERS)
+		while (i < NUM_TOTAL_SKILLS_OJP)
 		{
 			if (i == FP_LEVITATION)
 			{
@@ -868,7 +869,7 @@ qboolean UI_ForceSide_HandleKey(int flags, float *special, int key, int num, int
 		uiForceSide = num;
 
 		// Resetting power ranks based on if light or dark side is chosen
-		while (x < NUM_FORCE_POWERS)
+		while (x < NUM_TOTAL_SKILLS_OJP)
 		{
 			if (uiForcePowerDarkLight[x] && uiForceSide != uiForcePowerDarkLight[x])
 			{
@@ -928,7 +929,7 @@ qboolean UI_JediNonJedi_HandleKey(int flags, float *special, int key, int num, i
 		if ( !num )
 		{//not a jedi?
 			int myTeam = (int)(trap->Cvar_VariableValue("ui_myteam"));
-			while ( x < NUM_FORCE_POWERS )
+			while ( x < NUM_TOTAL_SKILLS_OJP )
 			{//clear all force powers
 				uiForcePowersRank[x] = 0;
 				x++;
@@ -1099,7 +1100,7 @@ qboolean UI_ForcePowerRank_HandleKey(int flags, float *special, int key, int num
 int gCustRank = 0;
 int gCustSide = 0;
 
-int gCustPowersRank[NUM_FORCE_POWERS] = {
+int gCustPowersRank[NUM_TOTAL_SKILLS_OJP] = {
 	0,//FP_HEAL = 0,//instant
 	1,//FP_LEVITATION,//hold/duration, this one defaults to 1 (gives a free point)
 	0,//FP_SPEED,//duration
@@ -1141,7 +1142,7 @@ void UI_ForceConfigHandle( int oldindex, int newindex )
 	{ //switching out from custom config, so first shove the current values into the custom storage
 		i = 0;
 
-		while (i < NUM_FORCE_POWERS)
+		while (i < NUM_TOTAL_SKILLS_OJP)
 		{
 			gCustPowersRank[i] = uiForcePowersRank[i];
 			i++;
@@ -1156,7 +1157,7 @@ void UI_ForceConfigHandle( int oldindex, int newindex )
 		uiForceUsed = 0;
 		gTouchedForce = qtrue;
 
-		while (i < NUM_FORCE_POWERS)
+		while (i < NUM_TOTAL_SKILLS_OJP)
 		{
 			uiForcePowersRank[i] = gCustPowersRank[i];
 			uiForceUsed += uiForcePowersRank[i];
@@ -1275,7 +1276,7 @@ void UI_ForceConfigHandle( int oldindex, int newindex )
 	}
 
 	//clear out the existing powers
-	while (c < NUM_FORCE_POWERS)
+	while (c < NUM_TOTAL_SKILLS_OJP)
 	{
 		/*
 		if (c==FP_LEVITATION)
@@ -1303,7 +1304,7 @@ void UI_ForceConfigHandle( int oldindex, int newindex )
 	uiForceAvailable = forceMasteryPoints[uiForceRank];
 	gTouchedForce = qtrue;
 
-	for (c=0;fcfBuffer[i]&&c<NUM_FORCE_POWERS;c++,i++)
+	for (c=0;fcfBuffer[i]&&c<NUM_TOTAL_SKILLS_OJP;c++,i++)
 	{
 		singleBuf[0] = fcfBuffer[i];
 		singleBuf[1] = 0;
