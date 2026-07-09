@@ -5480,10 +5480,13 @@ void CG_DoSaber( vec3_t origin, vec3_t dir, float length, float lengthMax, float
 		{
 			if (cnum < MAX_CLIENTS) {
 				clientInfo_t *ci = &cgs.clientinfo[cnum];
-				ojpRgba[0] = (unsigned char)(bnum == 0 ? ci->rgb1[0] : ci->rgb2[0]);
-				ojpRgba[1] = (unsigned char)(bnum == 0 ? ci->rgb1[1] : ci->rgb2[1]);
-				ojpRgba[2] = (unsigned char)(bnum == 0 ? ci->rgb1[2] : ci->rgb2[2]);
-				ojpRgba[3] = 255;
+				int r = (int)(bnum == 0 ? ci->rgb1[0] : ci->rgb2[0]);
+				int g = (int)(bnum == 0 ? ci->rgb1[1] : ci->rgb2[1]);
+				int b = (int)(bnum == 0 ? ci->rgb1[2] : ci->rgb2[2]);
+				if (r == 0 && g == 0 && b == 0) {
+					r = g = b = 255;
+				}
+				ojpRgba[0] = r; ojpRgba[1] = g; ojpRgba[2] = b; ojpRgba[3] = 255;
 			} else {
 				ojpRgba[0] = ojpRgba[1] = ojpRgba[2] = 255; ojpRgba[3] = 255;
 			}
