@@ -4,13 +4,8 @@
 #define DODGE_MAX_OJP 100
 #define DODGEBAR_H 65.0f
 #define DODGEBAR_W 13.0f
-#define DODGEBAR_X 525.0f
-#define DODGEBAR_Y 350.0f
-
-#define MISHAPBAR_H 65.0f
-#define MISHAPBAR_W 13.0f
-#define MISHAPBAR_X 540.0f
-#define MISHAPBAR_Y 350.0f
+#define DODGEBAR_X 538.0f
+#define DODGEBAR_Y 367.0f
 
 void ojp_CG_DrawDodge(void)
 {
@@ -57,27 +52,5 @@ void ojp_CG_DrawDodge(void)
 
 void ojp_CG_DrawBalance(void)
 {
-	float percent;
-	int mishapLevel;
-
-	mishapLevel = cg.predictedPlayerState.stats[STAT_MISHAP_LEVEL_OJP];
-
-	percent = ((float)mishapLevel / MISHAPLEVEL_MAX_OJP) * MISHAPBAR_H;
-	if (percent > MISHAPBAR_H) percent = MISHAPBAR_H;
-	if (percent < 0.1f) percent = 0.1f;
-
-	{
-		vec4_t mColor;
-		// Color based on mishap severity
-		if (mishapLevel >= MISHAPLEVEL_FULL_OJP) {
-			mColor[0] = 1.0f; mColor[1] = 0.0f; mColor[2] = 0.0f;
-		} else if (mishapLevel >= MISHAPLEVEL_HEAVY_OJP) {
-			mColor[0] = 1.0f; mColor[1] = 0.5f; mColor[2] = 0.0f;
-		} else {
-			mColor[0] = 1.0f; mColor[1] = 1.0f; mColor[2] = 0.0f;
-		}
-		mColor[3] = 0.8f;
-
-		CG_FillRect(MISHAPBAR_X, MISHAPBAR_Y + (MISHAPBAR_H - percent), MISHAPBAR_W, MISHAPBAR_H - (MISHAPBAR_H - percent), mColor);
-	}
+	// OJP original used menu tic items for mishap display, not a bar
 }
