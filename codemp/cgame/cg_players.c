@@ -5471,10 +5471,6 @@ void CG_DoSaber( vec3_t origin, vec3_t dir, float length, float lengthMax, float
 			glow = cgs.media.purpleSaberGlowShader;
 			blade = cgs.media.purpleSaberCoreShader;
 			break;
-		case 7: // SABER_WHITE
-		case 10: // SABER_PIMP
-		case 11: // SABER_SCRIPTED
-			goto UseOjpSaber;
 		case 8: // SABER_BLACK
 			if (cgs.media.blackSaberGlowShader) {
 				glow = cgs.media.blackSaberGlowShader;
@@ -6496,9 +6492,9 @@ CheckTrail:
 						case SABER_PURPLE:
 							VectorSet( rgb1, 220.0f, 0.0f, 255.0f );
 							break;
-						case 7: case 8: case 9: case 10: case 11:
+						case 9: // SABER_RGB
 						{
-							if (client) {
+							if (client && cent->currentState.eType != ET_NPC) {
 								vec3_t *rgb = saberNum == 0 ? &client->rgb1 : &client->rgb2;
 								if ((*rgb)[0] >= 0 && (*rgb)[1] >= 0 && (*rgb)[2] >= 0) {
 									VectorCopy(*rgb, rgb1);
