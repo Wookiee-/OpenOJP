@@ -6492,6 +6492,19 @@ CheckTrail:
 						case SABER_PURPLE:
 							VectorSet( rgb1, 220.0f, 0.0f, 255.0f );
 							break;
+						case 7: case 8: case 9: case 10: case 11:
+						{
+							int cnum = cent->currentState.clientNum;
+							if (cnum >= 0 && cnum < MAX_CLIENTS) {
+								clientInfo_t *ci = &cgs.clientinfo[cnum];
+								vec3_t *rgb = saberNum == 0 ? &ci->rgb1 : &ci->rgb2;
+								if ((*rgb)[0] >= 0 && (*rgb)[1] >= 0 && (*rgb)[2] >= 0) {
+									VectorCopy(*rgb, rgb1);
+									break;
+								}
+							}
+						}
+							// fall through to default blue
 						default:
 							VectorSet( rgb1, 0.0f, 64.0f, 255.0f );
 							break;
